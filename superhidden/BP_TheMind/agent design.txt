@@ -1,0 +1,64 @@
+Adaptive algorithm - Pseudocode
+
+    constructor()
+        private_game_state
+        patience
+        shuriken_patience
+        learn_factor
+        shuriken_learn_factor
+    
+    update_game_state(private_game_state)
+        // give time since last card a margin of error (e.g. 20%)
+        this.private_game_state = private_game_state
+    
+    get_action()
+        if (time_since_last_card > shuriken_patience && there are still shurikens)
+            return shuriken
+        
+        time = time_since_last_card
+        diff = difference between top_card and own lowest card
+        ptnc = patience
+        crds = total amount of cards in play
+
+        // the expected average difference between two subsequent cards left in play
+        exp_diff = (decksize - top_card) / crds
+        Combine these to a single value, and compare to a threshold to
+        figure out whether or not to play a card
+        
+        if (time > ptnc * diff / exp_diff)
+            return play
+        
+        return wait
+
+    get_eagerness()
+        return Math.random()
+    
+    reflect(actions)
+        // if I fuck up, patience up
+        if actions[player_id].valid == false
+            patience up by (played_card - lowest skipped_cards) * learn_factor
+        
+        // if someone else fucks up and I should've played, patience down
+        for all actions
+            if skipped_players includes me
+                patience down by (played_card - lowest of my skipped_cards) * learn_factor
+        
+        // if shuriken is played and I should've played, patience down & shuriken patience up
+        if actions[3].shuriken_cards.length
+            if shuriken_cards[me] ==== min(shuriken_cards)
+                patience down by learn_factor
+                shuriken_patience up by shuriken_learn_factor
+
+        // if I requested shuriken, but at least half of other players didn't, shuriken patience up
+        let requests = 0
+        for all players
+            if requested shuriken
+                requests++
+        if requests <= 2 && I did request shuriken
+            shuriken patience up by shuriken_learn_factor
+        
+        // if at least half of other players request shuriken, but you don't, shuriken patience down
+        if requests >= 2 && I didnt request shuriken
+            shuriken patience down by shuriken_learn_factor
+
+        

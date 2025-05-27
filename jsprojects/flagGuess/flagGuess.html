@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<meta charset="utf-8"/>
+<html>
+	<head>
+		<style>
+			body {
+				line-height: 5px;
+				background-color: #374450;
+				color: #fff;
+				font-family: Arial;
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<p class="warning">Note: All flags are stretched to the same 2:3 ratio, to make sure flags with unique aspect ratios are just as challenging as other flags.</p>
+		<canvas id="original" width="10" height="10" style="border:1px solid black" hidden></canvas>
+		<canvas id="myCanvas" width="10" height="10" style="border:1px solid black"></canvas><br>
+		<br>
+		<p id="feedback"></p>
+		<input id="textbox" type="text" onchange="checkAnswer()">
+		<button onclick="idk()">I don't know</button>
+	</body>
+</html>
+
+<script type="text/javascript" src="flagsObj.js"></script>
+<script type="text/javascript">
+var c = document.getElementById("myCanvas");
+var oc = document.getElementById("original");
+
+var ctx = c.getContext("2d");
+var octx = oc.getContext("2d");
+
+var rectangles = [];
+var mutations = [];
+var mutationAmt = 1; //number of mutations
+var acc = 15; //accuracy (higher = less accurate, but faster)
+var setNumber = 0;
+var blockSize = 30; //initial size of blocks
+
+var mutateFrame = 0;
+var img;
+var random;
+var input;
+
+window.onload = function() {
+	img = new Image();
+	initialize();
+}
+
+function initialize() {
+	random = Math.floor(Math.random()*194);
+	img.src = flags[random].img.src;
+	
+	oc.height = 300;
+	c.height = oc.height;
+	
+	oc.width = 450;
+	c.width = oc.width;
+	
+	octx.drawImage(img, 0, 0, oc.width, oc.height);
+	
+	rectangles = [];
+	for (i=0; i<100; i++) {
+		rectangles.push({
+			x: Math.random()*oc.width,
+			y: Math.random()*oc.height,
+			width: blockSize,
+			height: blockSize,
+			red: Math.floor(Math.random()*255),
+			green: Math.floor(Math.random()*255),
+			blue: Math.floor(Math.random()*255),
+			alpha: 1,
+		});
+	}
+	
+	drawRectangles();
+	
+	window.requestAnimationFrame(update);
+	
+}
+
+function update() {
+	score = canvasDifference();
+	index = -1;
+	
+	copyAndMutate();
+	
+	for (q=0; q<mutations.length; q++) {
+		drawMutation(q);
+		tempScore = canvasDifference();
+		if (tempScore <= score) {
+			score = tempScore;
+			index = q;
+			//saveImage();
+		}
+	}
+	
+	if (index != (-1)) {
+		rectangles = JSON.parse(JSON.stringify(mutations[index]));
+	}
+	drawRectangles();
+	
+	if (mutateFrame >= rectangles.length - 1) {
+		mutateFrame = 0;
+	} else {
+		mutateFrame++;
+	}
+	
+	window.requestAnimationFrame(update);
+}
+
+function canvasDifference() {
+	difference = 0;
+	for (i=0; i<c.width; i+=acc) {
+		for (j=0; j<c.height; j+=acc) {
+			imgData = ctx.getImageData(i,j,1,1);
+			oimgData = octx.getImageData(i,j,1,1);
+			difference += Math.abs(imgData.data[0]-oimgData.data[0]); //R channel
+			difference += Math.abs(imgData.data[1]-oimgData.data[1]); //G channel
+			difference += Math.abs(imgData.data[2]-oimgData.data[2]); //B channel
+		}
+	}
+	return difference;
+}
+
+function drawRectangles() {
+	ctx.clearRect(0,0,c.width,c.height);
+	for (i=0; i<rectangles.length; i++) {
+		ctx.fillStyle = "rgb("+rectangles[i].red+","+rectangles[i].green+","+rectangles[i].blue+")";
+		if (i == 0) {
+			ctx.globalAlpha = 1;
+			ctx.fillRect(0, 0, c.width, c.height);
+		} else {
+			ctx.globalAlpha = rectangles[i].alpha;
+			ctx.fillRect(rectangles[i].x,rectangles[i].y,rectangles[i].width,rectangles[i].height);
+		}
+	}
+}
+
+function drawMutation(e) {
+	ctx.fillStyle = "white"
+	ctx.fillRect(0,0,c.width,c.height);
+	for (i=0; i<mutations[e].length; i++) {
+		ctx.fillStyle = "rgb("+mutations[e][i].red+","+mutations[e][i].green+","+mutations[e][i].blue+")";
+		
+		if (i == 0) {
+			ctx.globalAlpha = 1;
+			ctx.fillRect(0, 0, c.width, c.height);
+		} else {
+			ctx.globalAlpha = mutations[e][i].alpha;
+			ctx.fillRect(mutations[e][i].x,mutations[e][i].y,mutations[e][i].width,mutations[e][i].height);
+		}
+	}
+}
+
+function copyAndMutate() {
+	for (i=0; i<mutationAmt; i++) {
+		mutations[i] = JSON.parse(JSON.stringify(rectangles));	
+	}
+	//copy stuff into the other stuff
+	
+	for (i=0; i<mutations.length; i++) {
+		j = mutateFrame;
+		
+		mutations[i][j].x += (40*Math.random() - 20);
+		mutations[i][j].y += (40*Math.random() - 20);
+		mutations[i][j].width += (40*Math.random() - 20);
+		mutations[i][j].height += (40*Math.random() - 20);
+		
+		mutations[i][j].red += Math.floor((Math.random() * 40) - 20);
+		if (mutations[i][j].red < 0) mutations[i][j].red = 0;
+		if (mutations[i][j].red > 255) mutations[i][j].red = 255;
+		
+		mutations[i][j].green += Math.floor((Math.random() * 40) - 20);
+		if (mutations[i][j].green < 0) mutations[i][j].green = 0;
+		if (mutations[i][j].green > 255) mutations[i][j].green = 255;
+		
+		mutations[i][j].blue += Math.floor((Math.random() * 40) - 20);
+		if (mutations[i][j].blue < 0) mutations[i][j].blue = 0;
+		if (mutations[i][j].blue > 255) mutations[i][j].blue = 255;
+		
+		mutations[i][j].alpha += (Math.random()/5 - 0.1);
+		if (mutations[i][j].alpha < 0) mutations[i][j].alpha = 0;
+		if (mutations[i][j].alpha > 1) mutations[i][j].alpha = 1;
+	}
+}
+
+function checkAnswer() {
+	oinput = document.getElementById("textbox").value;
+	//remove punctuation and spaces
+	input = oinput.replace(/[ .,\/#@!$%\^&\*;:{}=\-_`'"~()]/g,"");
+	input = input.toLowerCase();
+	if (flags[random].names.includes(input)) {
+		document.getElementById("feedback").innerHTML = "'" + oinput + "' is correct!";
+		document.getElementById("feedback").style.color = "#75ff7c";
+		console.log(input + " is correct!");
+		initialize();
+	} else {
+		document.getElementById("feedback").innerHTML = "'" + oinput + "' is incorrect.";
+		document.getElementById("feedback").style.color = "#ff7575";
+		console.log(input + " is incorrect.");
+	}
+	document.getElementById("textbox").value = "";
+}
+
+function idk() {
+	document.getElementById("feedback").innerHTML = "That was the flag of " + flags[random].propername + ".";
+	document.getElementById("feedback").style.color = "#b5f0ff";
+	initialize();
+}
+</script>

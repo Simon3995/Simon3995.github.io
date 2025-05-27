@@ -1,0 +1,38 @@
+body {
+    text-align: center;
+    background-color: #303038;
+    color: white;
+    font-family: sans-serif;
+    overflow: auto;
+    white-space: nowrap;
+}
+
+select {
+    background-color: #ffffff33;
+    color: white;
+    border: none;
+    font-size: 12pt;
+}
+
+input {
+    background-color: #ffffff33;
+    color: white;
+    border: none;
+    font-size: 12pt;
+    vertical-align: middle;
+}
+
+canvas {
+    border-radius: 8px;
+}
+
+#morph {
+    width: 500px;
+    margin: 10px 4px;
+}
+
+#morphdisplay {
+    vertical-align: middle;
+    font-family: monospace;
+    font-size: 12pt;
+}

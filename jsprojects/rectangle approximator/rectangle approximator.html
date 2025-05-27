@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<meta charset="utf-8"/>
+<html>
+	<head>
+		<style>
+			body {
+				line-height: 5px;
+				background-color: #374450;
+				color: #fff;
+				font-family: Arial;
+			}
+		</style>
+	</head>
+	<body>
+		<img id="testimg" hidden/>
+		<input id="imageInput" type="file" onchange="loadImage()"/><br><br>
+		<canvas id="scoreGraph" width="600" height="300" style="border:1px solid black"></canvas><br>
+		<p id="score"></p>
+		<canvas id="original" width="0" height="0" style="border:1px solid black"></canvas>
+		<canvas id="myCanvas" width="0" height="0" style="border:1px solid black"></canvas><br>
+		<canvas id="pixeloriginal" width="0" height="0" style="border:1px solid black"></canvas>
+		<canvas id="comview" width="0" height="0" style="border:1px solid black"></canvas>
+		<!--
+		<button onclick="canvasDifference()">canvasDifference</button>
+		<button onclick="drawRectangles()">drawRectangles</button>
+		<button onclick="copyAndMutate()">copyAndMutate</button><br>
+		-->
+	</body>
+</html>
+
+<script type="text/javascript">
+var c = document.getElementById("myCanvas");
+var oc = document.getElementById("original");
+var gc = document.getElementById("scoreGraph");
+var vc = document.getElementById("comview");
+var pc = document.getElementById("pixeloriginal");
+var ctx = c.getContext("2d");
+var octx = oc.getContext("2d");
+var gctx = gc.getContext("2d");
+var vctx = vc.getContext("2d");
+var pctx = pc.getContext("2d");
+var rectangles = [];
+var mutations = [];
+var mutationAmt = 1; //number of mutations
+var acc = 8; //accuracy (higher = less accurate, but faster)
+var setNumber = 0;
+var scoreGraph = [];
+var blockSize = 40; //initial size of blocks
+let stuckness = 0;
+
+var frame = 0;
+var mutateFrame = 0;
+var img = document.getElementById("testimg");
+
+img.onload = function() {
+	initialize();
+}
+
+function initialize() {
+	oc.height = 250;
+	c.height = oc.height;
+	vc.height = oc.height;
+	pc.height = oc.height;
+	
+	oc.width = img.naturalWidth/(img.naturalHeight/250);
+	c.width = oc.width;
+	vc.width = oc.width;
+	pc.width = oc.width;
+
+	octx.fillStyle="black";
+	octx.fillRect(0,0,oc.width,oc.height);
+	octx.drawImage(img, 0, 0, oc.width, oc.height);
+	//ctx.fillRect(0,0,20,20);
+	rectangles = [];
+	for (i=0; i<100; i++) {
+		rectangles.push({
+			x: Math.random()*oc.width,
+			y: Math.random()*oc.height,
+			width: blockSize,
+			height: blockSize,
+			red: Math.floor(Math.random()*255),
+			green: Math.floor(Math.random()*255),
+			blue: Math.floor(Math.random()*255),
+			alpha: 1,
+		});
+	}
+	
+	drawRectangles();
+	scoreGraph = [];
+	drawScoreGraph();
+	
+	window.requestAnimationFrame(update);
+}
+
+/*function saveImage() {
+	var link = document.createElement("a");
+	var image = c.toDataURL("image/png").replace("image/png", "image/octet-stream");
+	link.download = "squares" + setNumber + ".png";
+	link.href = image;
+	link.click();
+}*/
+
+function update() {
+	let improved = false;
+	score = canvasDifference();
+	index = -1;
+	
+	copyAndMutate();
+	
+	for (q=0; q<mutations.length; q++) {
+		drawMutation(q);
+		tempScore = canvasDifference();
+		if (tempScore <= score) {
+			score = tempScore;
+			index = q;
+			//saveImage();
+		}
+	}
+	
+	if (index != (-1)) {
+		rectangles = JSON.parse(JSON.stringify(mutations[index]));
+		improved = true;
+	} else {
+		stuckness++;
+	}
+	drawRectangles();
+	
+	//alert("update function done");
+	document.getElementById("score").innerHTML = "Difference: " + score;
+	
+	if (frame >= 100) {
+		scoreGraph.push(score);
+		frame = 0;
+		drawScoreGraph();
+	} else {
+		frame++;
+	}
+	
+	// only change the rectangle being mutated if an improvement was found
+	if (improved || stuckness > 40) {
+		stuckness = 0;
+		
+		if (mutateFrame >= rectangles.length - 1) {
+			mutateFrame = 0;
+		} else {
+			mutateFrame++;
+		}
+	}
+	
+	window.requestAnimationFrame(update);
+}
+
+function drawScoreGraph() {
+	gctx.fillStyle = "white"
+	gctx.fillRect(0,0,gc.width,gc.height);
+	gctx.beginPath();
+	gctx.strokeStyle = "blue";
+	gctx.lineWidth = 2;
+	
+	gctx.moveTo(0,0);
+	for (p=1; p<scoreGraph.length; p++) {
+		gctx.lineTo(p*(gc.width/(scoreGraph.length-1)),gc.height-((scoreGraph[p]/scoreGraph[0])*gc.height));
+	}
+	gctx.stroke();
+}
+
+function canvasDifference() {
+	difference = 0;
+	for (i=0; i<c.width; i+=acc) {
+		for (j=0; j<c.height; j+=acc) {
+			imgData = ctx.getImageData(i,j,1,1);
+			oimgData = octx.getImageData(i,j,1,1);
+			difference += Math.abs(imgData.data[0]-oimgData.data[0]); //R channel
+			difference += Math.abs(imgData.data[1]-oimgData.data[1]); //G channel
+			difference += Math.abs(imgData.data[2]-oimgData.data[2]); //B channel
+			
+			//update pixel original canvas
+			pctx.fillStyle="rgb("+oimgData.data[0]+","+oimgData.data[1]+","+oimgData.data[2]+")";
+			pctx.fillRect((i/acc)*(pc.width/(c.width/acc)),
+						  (j/acc)*(pc.height/(c.height/acc)),
+						  pc.width/(c.width/acc),
+						  pc.height/(c.height/acc));
+			
+			//update comview canvas
+			vctx.fillStyle="rgb("+imgData.data[0]+","+imgData.data[1]+","+imgData.data[2]+")";
+			vctx.fillRect((i/acc)*(vc.width/(c.width/acc)),
+						  (j/acc)*(vc.height/(c.height/acc)),
+						  vc.width/(c.width/acc),
+						  vc.height/(c.height/acc));
+		}
+	}
+	return difference;
+}
+
+function drawRectangles() {
+	ctx.clearRect(0,0,c.width,c.height);
+	for (i=0; i<rectangles.length; i++) {
+		ctx.fillStyle = "rgb("+rectangles[i].red+","+rectangles[i].green+","+rectangles[i].blue+")";
+		if (i == 0) {
+			ctx.globalAlpha = 1;
+			ctx.fillRect(0, 0, c.width, c.height);
+		} else {
+			ctx.globalAlpha = rectangles[i].alpha;
+			ctx.fillRect(rectangles[i].x,rectangles[i].y,rectangles[i].width,rectangles[i].height);
+		}
+	}
+}
+
+function drawMutation(e) {
+	ctx.fillStyle = "white"
+	ctx.fillRect(0,0,c.width,c.height);
+	for (i=0; i<mutations[e].length; i++) {
+		ctx.fillStyle = "rgb("+mutations[e][i].red+","+mutations[e][i].green+","+mutations[e][i].blue+")";
+		
+		if (i == 0) {
+			ctx.globalAlpha = 1;
+			ctx.fillRect(0, 0, c.width, c.height);
+		} else {
+			ctx.globalAlpha = mutations[e][i].alpha;
+			ctx.fillRect(mutations[e][i].x,mutations[e][i].y,mutations[e][i].width,mutations[e][i].height);
+		}
+	}
+}
+
+function copyAndMutate() {
+	for (i=0; i<mutationAmt; i++) {
+		mutations[i] = JSON.parse(JSON.stringify(rectangles));	
+	}
+	//copy stuff into the other stuff
+	
+	for (i=0; i<mutations.length; i++) {
+		j = mutateFrame;
+		
+		mutations[i][j].x += (40*Math.random() - 20);
+		mutations[i][j].y += (40*Math.random() - 20);
+		mutations[i][j].width += (40*Math.random() - 20);
+		mutations[i][j].height += (40*Math.random() - 20);
+		
+		let oc = octx.getImageData(i*acc,j*acc,1,1).data;
+
+		mutations[i][j].red = (mutations[i][j].red + oc[0]) / 2 + (Math.random() * 10 - 5);
+		if (mutations[i][j].red < 0) mutations[i][j].red = 0;
+		if (mutations[i][j].red > 255) mutations[i][j].red = 255;
+		
+		mutations[i][j].green = (mutations[i][j].green + oc[1]) / 2 + (Math.random() * 10 - 5);
+		if (mutations[i][j].green < 0) mutations[i][j].green = 0;
+		if (mutations[i][j].green > 255) mutations[i][j].green = 255;
+		
+		mutations[i][j].blue = (mutations[i][j].blue + oc[2]) / 2 + (Math.random() * 10 - 5);
+		if (mutations[i][j].blue < 0) mutations[i][j].blue = 0;
+		if (mutations[i][j].blue > 255) mutations[i][j].blue = 255;
+		
+		mutations[i][j].alpha += (Math.random()/5 - 0.1);
+		if (mutations[i][j].alpha < 0) mutations[i][j].alpha = 0;
+		if (mutations[i][j].alpha > 1) mutations[i][j].alpha = 1;
+	}
+}
+
+function saveImage() {
+	var link = document.createElement("a");
+	var image = c.toDataURL("image/png").replace("image/png", "image/octet-stream");
+	link.download = "approx.png";
+	link.href = image;
+	link.click();
+}
+
+function loadImage() {
+	var input = document.getElementById("imageInput");
+	var fReader = new FileReader();
+	fReader.readAsDataURL(input.files[0]);
+	fReader.onloadend = function (evt) {
+		img.src = evt.target.result;
+	}
+}
+</script>

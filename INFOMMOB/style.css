@@ -1,0 +1,93 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+
+canvas, video {
+    transform: translateX(-50%) translateY(-50%) rotateY(180deg);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -100;
+}
+
+canvas {
+    z-index: 0;
+}
+
+button {
+    padding: 5px;
+    border-radius: 5px;
+    background-color: #fffa;
+    border: none;
+}
+
+button:active {
+    transform: translateY(5px);
+}
+
+#gesture, #zoomlevel {
+    position: absolute;
+    border-radius: 5px;
+    bottom: 20px;
+    color: black;
+    background-color: #fffa;
+    padding: 4px 10px;
+    font-family: monospace;
+    font-size: 30px;
+}
+
+#gesture {
+    left: 20px;
+}
+
+#zoomlevel {
+    right: 20px;
+}
+
+#settings_button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 60px;
+    height: 60px;
+}
+
+#capture_button {
+    position: absolute;
+    top: 10px;
+    left: calc(50% - 70px);
+    width: 140px;
+    height: 60px;
+
+    display: none;
+}
+
+#gallery_button {
+    position: absolute;
+    top: 90px;
+    left: 10px;
+    width: 60px;
+    height: 60px;
+
+    display: none;
+}
+
+#settings, #gallery {
+    background-color: #fff4;
+    backdrop-filter: blur(20px);
+    position: absolute;
+    padding: 20px;
+    width: calc(100% - 40px);
+    height: calc(100% - 40px);
+    display: none;
+}

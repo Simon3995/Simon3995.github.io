@@ -1,0 +1,297 @@
+<meta charset="UTF-8">
+<html>
+<head>
+    <title>TWO.js 1.0 Documentation</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="TWO.js"></script>
+
+    <link rel="stylesheet" href="highlight/styles/atom-one-dark-reasonable.min.css">
+    <script src="highlight/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script>
+        // update all demos on this page
+        let update_functions = [];
+        const update = function() {
+            for (let i=0; i<update_functions.length; i++) {
+                update_functions[i]();
+            }
+            requestAnimationFrame(update);
+        }
+        update();
+    </script>
+</head>
+<body>
+    <div id="main">
+        <h1>TWO.js 1.0 Documentation</h1>
+        <p>Download TWO.js <a href="TWO.js" download>here</a>!</p>
+        <p>TWO.js is a small 2D graphics library I made mainly for my own use. Alongside the viewport coordinate system used by default by the Canvas API, TWO.js adds a world coordinate system that is independent of the size and location of the viewport. Functions are provided for rotating, zooming, and moving the camera around this coordinate system. Both coordinate systems can be used simultaneously.</p>
+
+        <h2>0. Initialization</h2>
+        <p>Create a canvas as usual, then use <span class="mono">TWO.getEnhancedContext()</span> to get a CanvasRenderingContext2D object, enhanced with TWO.js functions.</p>
+<pre><code>// create a canvas element
+let c = document.createElement("canvas");
+
+// get 2D context enhanced with TWO.js functions
+let ctx = TWO.getEnhancedContext(c);
+
+// add canvas to document
+document.body.appendChild(c);
+</code></pre>
+        <p>By default, zooming and panning with the mouse is disabled. They can be individually enabled by passing an object with <span class="mono">zooming</span> and/or <span class="mono">panning</span> as the second argument:</p>
+<pre><code>// zooming and panning allowed
+let ctx = TWO.getEnhancedContext(c, {zooming:true, panning:true});
+</code></pre>
+        <p><span style="color:red">NOTE:</span> Zooming and panning require an animation loop to work.</p>
+        <p>Optionally, you can <span class="mono">TWO.maximize()</span> the canvas. This will make the canvas fill the entire viewport, even after resizing the window.</p>
+<pre><code>// make the canvas fill the viewport
+TWO.maximize(c);
+</code></pre>
+        <h2>1. The Camera</h2>
+        <p>The position of the camera is defined as the world coordinates at the center of the canvas. The camera is positioned at the origin (0, 0) by default. Like the regular canvas viewport coordinates, a positive Y coordinate means down.</p>
+        <canvas id="demo1" height="200"></canvas>
+        <script>
+            const c1 = document.getElementById("demo1");
+            const ctx1 = TWO.getEnhancedContext(c1, {panning:true, zooming:true});
+            ctx1.font = "14px Consolas";
+            ctx1.setZoom(10);
+            update_functions.push(function() {
+                ctx1.clearRect(0, 0, c1.width, c1.height);
+                
+                for (let i=-100; i<=100; i++) {
+                    ctx1._fillRect(i-.2, -.2, .4, .4);
+                    ctx1._fillRect(-.2, i-.2, .4, .4);
+                }
+                ctx1.font = "2.5px Consolas";
+                ctx1._fillText("Drag!", 1, -1.5);
+                ctx1.font = "14px Consolas";
+
+                ctx1.fillStyle = "green";
+                ctx1.fillText("cam x: " + ctx1.getCameraPosition().x.toFixed(3), 5, 15);
+                ctx1.fillText("cam y: " + ctx1.getCameraPosition().y.toFixed(3), 5, 30);
+                ctx1.fillStyle = "black";
+            });
+        </script>
+
+        <p>The zoom level is defined as the ratio between the size of an object in world coordinates, and its size in the viewport measured in pixels. When the zoom level is 3, a 20 x 10 rectangle will be 60 x 30 pixels large.</p>
+        <canvas id="demo2" height="200"></canvas>
+        <script>
+            const c2 = document.getElementById("demo2");
+            const ctx2 = TWO.getEnhancedContext(c2, {panning:true, zooming:true});
+            ctx2.font = "14px Consolas";
+            update_functions.push(function() {
+                ctx2.clearRect(0, 0, c1.width, c1.height);
+                
+                ctx2._fillRect(-20,0,40,20);
+                ctx2._fillText("This rectangle is 40 by 20", -100, -20);
+                ctx2._fillText("Scroll to zoom", -60, 45);
+
+                ctx2.fillStyle = "green";
+                ctx2.fillText("zoom: " + ctx2.getZoom().toFixed(3), 5, 15);
+                ctx2.fillStyle = "black";
+            });
+        </script>
+
+        <p>The rotation of the camera is defined as a counterclockwise rotation in radians. The camera position does not change while rotating, so the camera will rotate around its center.</p>
+        <p><span style="color:red">NOTE:</span> The camera itself rotates, not the objects. If the camera rotates counterclockwise, the objects it sees will appear to rotate clockwise.</p>
+        <canvas id="demo3" height="200"></canvas>
+        <script>
+            const c3 = document.getElementById("demo3");
+            const ctx3 = TWO.getEnhancedContext(c3);
+            ctx3.font = "14px Consolas";
+            ctx3.zoom(1);
+            ctx3.setCameraY(-20);
+            let img = new Image();
+            img.src = "monalisa.jpg";
+            update_functions.push(function() {
+                ctx3.clearRect(0, 0, c1.width, c1.height);
+                ctx3._drawImage(img, -50, -90, 100, 120);
+                ctx3._fillText("Click to rotate by π/8", -90, 55);
+                ctx3.fillStyle = "green";
+                ctx3.fillText("cam rotation: "+ctx3.getCameraRotation().toFixed(3), 5, 15);
+                ctx3.fillStyle = "black";
+            });
+            c3.onmousedown = e => {
+                ctx3.rotateCamera(Math.PI/8);
+            }
+        </script>
+
+        <h2>2. Functions</h2>
+        <h3>2.1. World coordinate versions of existing methods</h3>
+        <p>To draw something using world coordinates, call an existing method of CanvasRenderingContext2D, but add an underscore at the beginning of the name. The following methods are supported:</p>
+        <ul>
+            Rectangles
+            <li class="mono">ctx._clearRect()</li>
+            <li class="mono">ctx._fillRect()</li>
+            <li class="mono">ctx._strokeRect()</li><br>
+            Text
+            <li class="mono">ctx._fillText()</li>
+            <li class="mono">ctx._strokeText()</li><br>
+            Paths
+            <li class="mono">ctx._moveTo()</li>
+            <li class="mono">ctx._lineTo()</li>
+            <li class="mono">ctx._bezierCurveTo()</li>
+            <li class="mono">ctx._quadraticCurveTo()</li>
+            <li class="mono">ctx._arc()</li>
+            <li class="mono">ctx._arcTo()</li>
+            <li class="mono">ctx._ellipse()</li>
+            <li class="mono">ctx._rect()</li>
+            <li class="mono">ctx._roundRect()</li>
+            <li class="mono">ctx._stroke()</li><br>
+            Images
+            <li class="mono">ctx._drawImage()</li><br>
+            Transformations
+            <li class="mono">ctx._rotate()</li>
+            <li class="mono">ctx._scale()</li>
+            <li class="mono">ctx._translate()</li>
+            <li class="mono">ctx._transform()</li>
+            <li class="mono">ctx._getTransform()</li>
+            <li class="mono">ctx._setTransform()</li>
+            <li class="mono">ctx._resetTransform()</li>
+        </ul>
+        The arguments required for these methods are the same as the arguments required for the original methods.
+        <h3>2.2. Camera control</h3>
+        <h4>2.2.1. ctx.setCameraPosition(x, y)</h4>
+        <p>Sets the camera position to the point (x, y)</p>
+        <h4>2.2.2. ctx.getCameraPosition()</h4>
+        <p>Returns the camera position in an object with two properties, <span class="mono">x</span> and <span class="mono">y</span>.</p>
+        <h4>2.2.3. ctx.setCameraX(x)</h4>
+        <p>Sets the camera's x coordinate. The y coordinate is left unchanged.</p>
+        <h4>2.2.4. ctx.setCameraY(y)</h4>
+        <p>Sets the camera's y coordinate. The x coordinate is left unchanged.</p>
+        <h4>2.2.5. ctx.translateCamera(x, y)</h4>
+        <p>Translates the camera position by (x, y) in <b>viewport coordinates</b>.</p>
+        <h4>2.2.6. ctx._translateCamera(x, y)</h4>
+        <p>Translates the camera position by (x, y) in <b>world coordinates</b>.</p>
+        <h4>2.2.7. ctx.zoom(n)</h4>
+        <p>Multiplies the current zoom level by <span class="mono">n</span>.</p>
+        <h4>2.2.8. ctx.setZoom(n)</h4>
+        <p>Sets the zoom level to <span class="mono">n</span>.</p>
+        <h4>2.2.9. ctx.getZoom()</h4>
+        <p>Returns the current zoom level.</p>
+        <h4>2.2.10. ctx.rotateCamera(n)</h4>
+        <p>Rotates the camera counterclockwise by <span class="mono">n</span> radians.</p>
+        <h4>2.2.11. ctx.setCameraRotation(n)</h4>
+        <p>Sets the camera rotation to <span class="mono">n</span> radians.</p>
+        <h4>2.2.12. ctx.getCameraRotation()</h4>
+        <p>Returns the current camera rotation in radians.</p>
+
+        <h3>2.3. Coordinate conversion</h3>
+        <h4>2.3.1. ctx.v2w(x, y)</h4>
+        <p>Converts viewport coordinates to world coordinates; returns the world coordinates currently located at viewport coordinates (x, y). Returns an object with two properties, <span class="mono">x</span> and <span class="mono">y</span>.</p>
+        <h4>2.3.2. ctx.w2v(x, y)</h4>
+        <p>Converts world coordinates to viewport coordinates; returns the viewport coordinates currently located at world coordinates (x, y). Returns an object with two properties, <span class="mono">x</span> and <span class="mono">y</span>.</p>
+
+        <h2>3. Examples</h2>
+        <h3>3.1. Drawing in both coordinate systems</h3>
+        <p>Both coordinate systems can be used simultaneously:</p>
+<pre><code>// viewport coordinates
+ctx.fillStyle = "red";
+ctx.fillRect(10, 10, 30, 30);
+
+// world coordinates
+ctx.fillStyle = "dodgerblue";
+ctx._fillRect(-30, -30, 60, 60);
+</code></pre>
+        <canvas id="demo4" height="200"></canvas>
+        <script>
+            const c4 = document.getElementById("demo4");
+            const ctx4 = TWO.getEnhancedContext(c4);
+            
+            ctx4.fillStyle = "red";
+            ctx4.fillRect(10, 10, 30, 30);
+
+            ctx4.fillStyle = "dodgerblue";
+            ctx4._fillRect(-30, -30, 60, 60);
+        </script>
+
+        <h3>3.2. Line width</h3>
+        <p>The line width can be relative to viewport coordinates or world coordinates, depending on which version of the stroke method is called.</p>
+<pre><code>ctx.zoom(5);
+ctx.lineWidth = 2;
+
+// draw left circle
+ctx.beginPath();
+ctx._arc(-13, 0, 10, 0, 2*Math.PI);
+ctx.stroke(); // 2 pixels wide (viewport coordinates)
+
+// draw right circle
+ctx.beginPath();
+ctx._arc(13, 0, 10, 0, 2*Math.PI);
+ctx._stroke(); // 2 units wide (world coordinates)
+</code></pre>
+        <canvas id="demo5" height="200"></canvas>
+        <script>
+            const c5 = document.getElementById("demo5");
+            const ctx5 = TWO.getEnhancedContext(c5);
+            ctx5.zoom(5);
+            ctx5.lineWidth = 2;
+
+            ctx5.beginPath();
+            ctx5._arc(-13, 0, 10, 0, 2*Math.PI);
+            ctx5.stroke();
+
+            ctx5.beginPath();
+            ctx5._arc(13, 0, 10, 0, 2*Math.PI);
+            ctx5._stroke();
+        </script>
+
+        <h3>3.3. Lines between viewport coordinates and world coordinates</h3>
+        <p>Using the example in 3.1, we can draw a line between viewport coordinates and world coordinates as follows:</p>
+<pre><code>// viewport coordinates
+ctx.fillStyle = "red";
+ctx.fillRect(10, 10, 30, 30);
+
+// world coordinates
+ctx.fillStyle = "dodgerblue";
+ctx._fillRect(-30, -30, 60, 60);
+
+ctx.strokeStyle = "lime";
+ctx.lineWidth = 5;
+ctx.beginPath();
+ctx.moveTo(25, 25); // viewport coordinates
+ctx._lineTo(0, 0); // world coordinates
+ctx.stroke();
+</code></pre>
+        <canvas id="demo6" height="200"></canvas>
+        <script>
+            const c6 = document.getElementById("demo6");
+            const ctx6 = TWO.getEnhancedContext(c6);
+            
+            ctx6.fillStyle = "red";
+            ctx6.fillRect(10, 10, 30, 30);
+
+            ctx6.fillStyle = "dodgerblue";
+            ctx6._fillRect(-30, -30, 60, 60);
+
+            ctx6.strokeStyle = "lime";
+            ctx6.lineWidth = 5;
+            ctx6.beginPath();
+            ctx6.moveTo(25, 25); // viewport coordinates
+            ctx6._lineTo(0, 0); // world coordinates
+            ctx6.stroke();
+        </script>
+
+        <h3>3.4. Transformations</h3>
+        <p>The world coordinate system has its own transformation methods:</p>
+<pre><code>ctx._fillRect(-50, -50, 100, 100);
+ctx._rotate(Math.PI/4);
+ctx._scale(3, 0.5);
+ctx.fillStyle = "red";
+ctx._fillRect(-30, -30, 60, 60);
+ctx._resetTransform();
+</code></pre>
+        <canvas id="demo7" height="200"></canvas>
+        <script>
+            const c7 = document.getElementById("demo7");
+            const ctx7 = TWO.getEnhancedContext(c7);
+
+            ctx7._fillRect(-50, -50, 100, 100);
+            ctx7._rotate(Math.PI/4);
+            ctx7._scale(3, 0.5);
+            ctx7.fillStyle = "red";
+            ctx7._fillRect(-30, -30, 60, 60);
+            ctx7._resetTransform();
+        </script>
+    </div>
+</body>
+</html>

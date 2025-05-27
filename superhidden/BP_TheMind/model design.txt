@@ -1,0 +1,73 @@
+Main Event Loop
+    reset all game state information in agents
+    initialize new game (reset lives, shurikens)
+    loop over levels {
+        initialize round (deal cards)
+        loop until all cards have been played, or lives have been depleted {
+            for all agents {
+                update game state info in agent
+                get action from agent (wait, play, shuriken)
+
+                if cardPlayed {
+                    if mistake {
+                        play all cards lower than incorrect card
+                    }
+                    update all agents
+                }
+            }
+
+            if all agents request shuriken {
+                shurikens--;
+                update game state
+                reset shuriken_request
+                reset eagerness
+            }
+
+            compare prev & current game states, learn from mistakes
+        }
+    }
+
+GameState Object
+    {
+        players: int
+        lives: int
+        shurikens: int
+        top_card: int
+        level: int
+        time_since_last_card: int
+        hands: [[int]]
+        last_actions: [string]
+        lowest_possible: [int]
+        shuriken_requests: [bool]
+        eagerness: [float] //maybe
+    }
+
+PrivateGameState Object
+    same as above, but with only target player's hand
+    and with a value for total amount of cards
+
+Agent Object
+    {
+    }
+
+Methods
+    Agent.update_game_state(private_game_state);
+    Agent.get_action();
+    Agent.get_eagerness():
+    Agent.reflect(actions);
+
+Actions Object
+[
+    {
+        player: int
+        action: string/enum
+        valid: bool
+        played_card: int
+        skipped_players: [{
+            id: int
+            cards: [int]
+        }]
+        skipped_cards: [int]
+        shuriken_cards: [int]
+    }
+]

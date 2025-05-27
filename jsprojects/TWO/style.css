@@ -1,0 +1,63 @@
+#main {
+    max-width: 800px;
+    padding: 20px;
+    margin: 15px;
+    background-color: #0099ff22;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: "Atkinson", sans-serif;
+}
+
+h1 {
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+h2 {
+    font-weight: normal;
+    color: rgb(0, 122, 159);
+    margin-bottom: 0px;
+    margin-top: 30px;
+}
+
+h3 {
+    color:rgb(48, 167, 203);
+    font-weight: normal;
+    margin-bottom: 0px;
+}
+
+h4 {
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+
+p {
+    margin-top: 6px;
+    margin-bottom: 8px;
+    line-height: 22px;
+    font-size: 16px;
+}
+
+canvas {
+    display: block;
+    background-color: white;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 5px;
+}
+
+pre, code {
+    white-space: pre-line;
+    border-radius: 10px;
+    font-size: 15px;
+}
+
+.mono {
+    font-family: monospace;
+    color:rgb(0, 122, 159);
+}
+
+@font-face {
+    font-family: "Atkinson";
+    src: url("Atkinson.ttf");
+}

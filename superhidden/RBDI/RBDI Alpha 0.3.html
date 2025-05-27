@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<!--NOTE
+
+RETRO BLOCK DODGER INFINITE
+This game was made by [REDACTED], winner of several game of the second awards
+also winner of the "Best game about squares" award 2015.
+Bug reports are always welcome
+Feature suggestions are also quite welcome
+Internet Explorer users are not welcome.
+
+-->
+<html>
+<head>
+<style>
+#myCanvas {
+border: 1px solid black;
+}
+</style>
+</head>
+<body>
+<audio class="sfx" id="hitsound" src="audio\hit.wav" preload="auto"></audio>
+
+<canvas id="myCanvas" width="500" height="500"></canvas>
+</body>
+</html>
+<script type="text/javascript">
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.fillStyle = "black";
+keys = [];
+enemiesX = [];
+enemiesY = [];
+playerX = 50;
+playerY = 50;
+playerWidth = 10;
+playerHeight = 10;
+velX = 0;
+velY = 0;
+enemiesVelX = [];
+enemiesVelY = [];
+enemyAmt = 1;
+score = 0;
+
+setInterval(defineNewEnemy, 5000);
+
+function defineNewEnemy() {
+enemyAmt++;
+enemiesX[enemyAmt] = 490;
+enemiesY[enemyAmt] = 490;
+if (Math.random() > 0.5) {
+enemiesVelX[enemyAmt] = -3*Math.random() - 1;
+} else {
+enemiesVelX[enemyAmt] = 3*Math.random() + 1;
+}
+
+if (Math.random() > 0.5) {
+enemiesVelY[enemyAmt] = -3*Math.random() - 1;
+} else {
+enemiesVelY[enemyAmt] = 3*Math.random() + 1;
+}
+}
+
+for (a = 1; a <= enemyAmt; a++) {
+enemiesX[a] = 490;
+enemiesY[a] = 490;
+if (Math.random() > 0.5) {
+enemiesVelX[a] = -3*Math.random() - 1;
+} else {
+enemiesVelX[a] = 3*Math.random() + 1;
+}
+
+if (Math.random() > 0.5) {
+enemiesVelY[a] = -3*Math.random() - 1;
+} else {
+enemiesVelY[a] = 3*Math.random() + 1;
+}
+
+//starting coord and velocities of enemies
+}
+
+gameLoopActive = false;
+spaceReleased = false;
+
+function startScreen() {
+gameLoopActive = false;
+ctx.font='20px "Lucida Sans Unicode"';
+ctx.clearRect(0,0,c.width,c.height);
+ctx.fillText("Press [SPACE] to start!",100,100);
+if (keys[32]) {
+
+score = 0;
+enemyAmt = 1;
+
+drawFrame();
+} else {window.requestAnimationFrame(startScreen);}
+}
+
+function gameOverScreen() {
+gameLoopActive = false;
+if (!keys[32]) {spaceReleased = true;}
+ctx.font='20px "Lucida Sans Unicode"';
+ctx.fillStyle="red";
+ctx.fillRect(0,0,c.width,c.height);
+ctx.fillStyle="white";
+ctx.fillText("GAME OVER!",100,100);
+ctx.fillText("[SPACE] to retry.",100,120);
+ctx.fillText("Score: "+score,100,150);
+if (keys[32] && spaceReleased) {
+spaceReleased = false;
+playerX = 50;
+playerY = 50;
+/*velX = 0;
+velY = 0;*/
+for (a = 1; a <= enemyAmt; a++) {
+enemiesX[a] = 450;
+enemiesY[a] = 450;
+enemiesVelX[a] = -3*Math.random() - 1;
+enemiesVelY[a] = -3*Math.random() - 1;
+}
+//reset player and enemy locations and velocities
+
+score = 0;
+enemyAmt = 1;
+
+drawFrame();
+} else {window.requestAnimationFrame(gameOverScreen);}
+}
+
+function drawFrame() {
+gameLoopActive = true;
+ctx.clearRect(0,0,c.width,c.height);
+
+score++;
+ctx.font='15px "Lucida Sans Unicode"';
+ctx.fillStyle="black";
+ctx.fillText("Score: " + score,3,13);
+
+for (a = 1; a <= enemyAmt; a++) {
+
+if (enemiesX[a] <= 0) {
+// hitting the left wall
+enemiesVelX[a] = 3*Math.random() + 1;
+}
+if (enemiesX[a] >= c.width-playerWidth) {
+// hitting the right wall
+enemiesVelX[a] = -3*Math.random() - 1;
+}
+if (enemiesY[a] <= 0) {
+// hitting the top wall
+enemiesVelY[a] = 3*Math.random() + 1;
+}
+if (enemiesY[a] >= c.height-playerHeight) {
+// hitting the bottom wall
+enemiesVelY[a] = -3*Math.random() - 1;
+}
+
+if (enemiesVelX[a]<-10){enemiesVelX[a]=-10;}
+if (enemiesVelY[a]<-10){enemiesVelY[a]=-10;}
+if (enemiesVelX[a]>10){enemiesVelX[a]=10;}
+if (enemiesVelY[a]>10){enemiesVelY[a]=10;}
+//enemy velocity boundaries
+
+enemiesX[a] += enemiesVelX[a];
+enemiesY[a] += enemiesVelY[a];
+//adding enemy velocity to coord
+
+if (enemiesX[a] < 0) {enemiesX[a] = 0;}
+if (enemiesY[a] < 0) {enemiesY[a] = 0;}
+if (enemiesX[a]+playerWidth > c.width) {enemiesX[a] = c.width-playerWidth;}
+if (enemiesY[a]+playerHeight > c.height) {enemiesY[a] = c.height-playerHeight;}
+//enemy boundaries
+
+ctx.fillStyle="red";
+ctx.fillRect(enemiesX[a],enemiesY[a],10,10);
+//alert("X: "+enemiesX[a]+"Y: "+enemiesY[a]);
+//draw enemy
+
+if (Math.abs(playerX-enemiesX[a])<=playerWidth && Math.abs(playerY-enemiesY[a])<=playerHeight) {
+gameOverScreen();
+}
+//test for enemy hit
+
+}
+//end of enemy loop
+
+if (keys[37] && velX > -3) {
+// left arrow key
+velX--;
+}
+if (keys[38] && velY > -3) {
+// up arrow key
+velY--;
+}
+if (keys[39] && velX < 3) {
+// right arrow key
+velX++;
+}
+if (keys[40] && velY < 3) {
+// down arrow key
+velY++;
+} // moving the player
+
+if (velX < -3) {velX = -3;}
+if (velY < -3) {velY = -3;}
+if (velX > 3) {velX = 3;}
+if (velY > 3) {velY = 3;}
+//player velocity boundaries
+
+playerX += velX;
+playerY += velY;
+//adding player velocity to coord
+
+if (playerX < 0) {playerX = 0;}
+if (playerY < 0) {playerY = 0;}
+if (playerX+playerWidth > c.width) {playerX = c.width-playerWidth;}
+if (playerY+playerHeight > c.height) {playerY = c.height-playerHeight;}
+//player boundaries
+
+velX *= 0.9;
+velY *= 0.9;
+//player friction
+
+ctx.fillStyle="black";
+ctx.fillRect(playerX,playerY,playerWidth,playerHeight);
+//draw player
+
+if (gameLoopActive) {window.requestAnimationFrame(drawFrame);}
+}
+window.requestAnimationFrame(startScreen);
+//start game loop
+
+window.addEventListener("keydown",function(e) {
+	keys[e.keyCode] = true;
+}, false);
+window.addEventListener("keyup",function(e) {
+	keys[e.keyCode] = false;
+}, false);
+</script>

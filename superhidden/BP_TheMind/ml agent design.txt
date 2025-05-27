@@ -1,0 +1,40 @@
+Machine Learning algorithm - Pseudocode
+
+/*
+
+input vector:
+- time_since_last_card
+- lowest card in hand
+- last card on the pile
+- level
+- amount of cards still in play
+- amount of remaining lives
+- amount of remaining shurikens
+
+len_input = 7
+
+*/
+
+    constructor()
+        stateLength = random in range 100 - 1000
+        bias = vector filled with ones
+        bias_out = vector filled with ones
+        W_in = matrix filled with ones
+        W_x = matrix filled with ones
+        W_out = matrix filled with ones
+        state = vector filled with zeroes
+    
+    update_game_state(private_game_state)
+        update network with input vector
+        formula = x(n) = tanh(W_x * x(n-1) + W_in * input + bias)
+
+    
+    get_action()
+        return key of largest element in W_out*x(n)+bias
+        (0 = "wait", 1 = "play", 2 = "shuriken")
+
+    
+    reflect(actions)
+        // todo
+
+        

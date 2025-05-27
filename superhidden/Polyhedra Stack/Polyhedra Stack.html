@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Polyhedra Stack</title>
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+		<div id="main"></div>
+		
+		<div id="clickType">
+			<button id="clickType1" onclick="setClickType(1)" title="Add Shapes"></button>
+			<button id="clickType2" onclick="setClickType(2)" title="Delete Branch"></button>
+			<button id="clickType3" onclick="setClickType(3)" title="Move Camera"></button>
+			<button id="clickType4" onclick="setClickType(4)" title="Focus on Object"></button>
+			<button id="clickType5" onclick="setClickType(5)" title="Rotate Branch"></button>
+		</div>
+		<button onclick="resetView()" id="resetViewButton" title="Reset View to Default"></button>
+		
+		<button onclick="toggleTree()" id="treeToggleButton" title="Toggle Tree Structure View"></button>
+		<button onclick="toggleShading()" id="shadingToggleButton" title="Toggle Shading"></button>
+		<button onclick="toggleDebug()" id="debugToggleButton" title="Toggle Coordinate Display"></button>
+		
+		<!-- Version number: Major release, Feature, Tweak -->
+		<div id="version">v0.12.11</div>
+	</body>
+</html>
+
+<!-- Initialization scripts -->
+<script src="three.js/three.min.js"></script>
+<script src="three.js/TrackballControls.js"></script>
+<script src="eventListeners.js"></script>
+<script src="init.js"></script>
+
+<!-- Platonic Solids -->
+<script src="solids/platonic/tetrahedron.js"></script>
+<script src="solids/platonic/cube.js"></script>
+<script src="solids/platonic/octahedron.js"></script>
+<script src="solids/platonic/dodecahedron.js"></script>
+<script src="solids/platonic/icosahedron.js"></script>
+
+<!-- Archimedean Solids -->
+<script src="solids/archimedean/cuboctahedron.js"></script>
+<script src="solids/archimedean/rhombicosidodecahedron.js"></script>
+<script src="solids/archimedean/rhombicuboctahedron.js"></script>
+<script src="solids/archimedean/snub_cube_l.js"></script>
+<script src="solids/archimedean/snub_cube_r.js"></script>
+<script src="solids/archimedean/truncated_cube.js"></script>
+<script src="solids/archimedean/truncated_cuboctahedron.js"></script>
+<script src="solids/archimedean/truncated_icosahedron.js"></script>
+<script src="solids/archimedean/truncated_octahedron.js"></script>
+<script src="solids/archimedean/truncated_tetrahedron.js"></script>
+
+<!-- Prisms and Antiprisms -->
+<script src="solids/prisms/prism_3.js"></script>
+<script src="solids/prisms/prism_5.js"></script>
+<script src="solids/prisms/prism_6.js"></script>
+<script src="solids/prisms/prism_7.js"></script>
+<script src="solids/prisms/prism_8.js"></script>
+<script src="solids/prisms/prism_10.js"></script>
+<script src="solids/prisms/antiprism_4.js"></script>
+<script src="solids/prisms/antiprism_5.js"></script>
+<script src="solids/prisms/antiprism_6.js"></script>
+<script src="solids/prisms/antiprism_7.js"></script>
+<script src="solids/prisms/antiprism_8.js"></script>
+<script src="solids/prisms/antiprism_10.js"></script>
+
+<!-- Johnson Solids -->
+<script src="solids/johnson/J1 square_pyramid.js"></script>
+<script src="solids/johnson/J2 pentagonal_pyramid.js"></script>
+<script src="solids/johnson/J12 triangular_dipyramid.js"></script>
+<script src="solids/johnson/J13 pentagonal_dipyramid.js"></script>
+<script src="solids/johnson/J26 gyrobifastigium.js"></script>
+<script src="solids/johnson/J91 bilunabirotunda.js"></script>
+
+<!-- Catalan -->
+<script src="solids/catalan/rhombic_dodecahedron.js"></script>
+
+<!-- Miscellaneous -->
+<script src="solids/misc/stella_octangula.js"></script>
+
+<!-- Program logic scripts -->
+<script src="shapelogic.js"></script>
+<script src="buttons.js"></script>
+<script src="debug.js"></script>
+<script src="scene.js"></script>
+
+<!-- Main script -->
+<script src="main.js"></script>

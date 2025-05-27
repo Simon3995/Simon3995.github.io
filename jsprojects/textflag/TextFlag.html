@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			html {
+				background-color: #333;
+				color: #fff;
+				font-family: Arial;
+			}
+			
+			canvas {
+				background-color: #fff;
+			}
+			
+			input {
+				width: 994px;
+			}
+			
+			a {
+				color: #dad;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="myCanvas" width="1000" height="600" style="border:1px solid black"></canvas>
+		<br>
+		<textarea id="textInput" rows="5" cols="100"></textarea>
+		
+		<h3>> What does this do?</h3>
+		Based on <a href="https://www.youtube.com/watch?v=wo19Y4tw0l8">this video</a>, this program
+		<ol>
+			<li>Converts text into binary ASCII values</li>
+			<li>Concatenates those binary values into one big binary number</li>
+			<li>Converts that number into hexadecimal</li>
+			<li>Splits that number up into groups of 6 digits (plus a possible leftover)</li>
+			<li>Draws each group of 6 as a hex color</li>
+			<li>Draws any leftover digits as text</li>
+		</ol>
+		Note: red text on a white background means there is not enough text to make any colors.
+	</body>
+</html>
+
+<script type="text/javascript">
+let inputbox = document.getElementById("textInput");
+let c = document.getElementById("myCanvas");
+let ctx = c.getContext("2d");
+
+document.onkeydown = function() {
+	setTimeout(function() { // slight delay
+	
+	ctx.clearRect(0,0,c.width,c.height);
+	
+	let binary = stringToBinary(inputbox.value);
+	let hex = convertBase(binary, 2, 16).toUpperCase();
+	if (binary.startsWith('0000')) hex = "0" + hex;
+	let colors = hex.match(/.{1,6}/g);
+	
+	console.log(colors);
+	
+	if (!colors) return;
+	if (colors[0].length < 6) {
+		ctx.textAlign = "right";
+		ctx.fillStyle = "red";
+		ctx.font = "100px Arial";
+		ctx.fillText("+" + colors[colors.length-1], c.width-20, c.height-20);
+		return;
+	}
+	
+	// draw main flag
+	let rows = 0;
+	let extra = false;
+	if (colors[colors.length-1].length < 6) {
+		rows = colors.length-1;
+		extra = true;
+	} else {
+		rows = colors.length;
+	}
+	
+	for (i=0; i<rows; i++) {
+		ctx.fillStyle = "#" + colors[i];
+		ctx.fillRect(Math.round(i*(c.width/rows)), 0, c.width, c.height);
+	}
+	
+	if (extra) {
+		// draw extra text
+		ctx.textAlign = "right";
+		ctx.fillStyle = "white";
+		ctx.font = "100px Arial";
+		ctx.fillText("+" + colors[colors.length-1], c.width-20, c.height-20);
+	}
+	
+	}, 25); // end delay function
+};
+
+function stringToBinary(string) {
+	let output;
+	let input = string;
+	output = "";
+	for (let i = 0; i < input.length; i++) {
+		output += (input[i].charCodeAt(0).toString(2) + "").padStart(8, '0');
+	}
+	return output;
+}
+
+/*
+	Code below shamelessly stolen from
+	https://stackoverflow.com/a/39338012
+*/
+function convertBase(bigint, inputBase, outputBase) {
+	//takes a bigint string and converts to different base
+	let inputValues = parseBigInt(bigint, inputBase),
+		outputValues = [], //output array, little-endian/lsd order
+		remainder,
+		len = inputValues.length,
+		pos = 0,
+		i;
+	
+	while (pos < len) { //while digits left in input array
+		remainder = 0; //set remainder to 0
+		for (i = pos; i < len; i++) {
+			//long integer division of input values divided by output base
+			//remainder is added to output array
+			remainder = inputValues[i] + remainder * inputBase;
+			inputValues[i] = Math.floor(remainder / outputBase);
+			remainder -= inputValues[i] * outputBase;
+			if (inputValues[i] == 0 && i == pos) {
+				pos++;
+			}
+		}
+		outputValues.push(remainder);
+	}
+	outputValues.reverse(); //transform to big-endian/msd order
+	return formatBigInt(outputValues, outputBase);
+}
+
+function parseBigInt(bigint, base) {
+	//convert bigint string to array of digit values
+	for (var values = [], i = 0; i < bigint.length; i++) {
+		values[i] = parseInt(bigint.charAt(i), base);
+	}
+	return values;
+}
+
+function formatBigInt(values, base) {
+	//convert array of digit values to bigint string
+	for (var bigint = '', i = 0; i < values.length; i++) {
+		bigint += values[i].toString(base);
+	}
+	return bigint;
+}
+</script>

@@ -1,0 +1,95 @@
+html {
+    background-color: #222;
+    text-align: center;
+}
+
+body {
+    font-family: "Consolas", Monospace;
+    font-size: 30px;
+}
+
+a, a:visited {
+    color: aquamarine;
+}
+
+canvas {
+    border-radius: 6px;
+}
+
+.main {
+    margin-top: 50px;
+    color: white;
+    font-family: "Consolas", Monospace;
+    font-size: 35px;
+}
+
+#comparison {
+    color: white;
+    margin-top: 20px;
+}
+
+#guess {
+    font-family: "Consolas", Monospace;
+    font-size: 30px;
+    width: 250px;
+    background-color: #444;
+    border: none;
+    outline: none;
+    margin-top: 15px;
+    color: white;
+}
+
+#warning {
+    margin-top: 20px;
+    color: rgb(239, 91, 108);
+}
+
+#cguess, #canswer {
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
+#q {
+    color: white;
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    background-color: #444;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 10px;
+
+    user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+}
+
+#q:hover {
+    background-color: #666;
+    cursor: pointer;
+}
+
+#info {
+    position: absolute;
+    top: 20px;
+    left: 70px;
+    background-color: #444a;
+    padding: 22px;
+    font-size: 20px;
+    width: 350px;
+    border-radius: 5px;
+    text-align: left;
+    color: white;
+    visibility: hidden;
+}
+
+#chart_container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 400px;
+    height: 250px;
+}

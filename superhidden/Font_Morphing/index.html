@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Text Morphing</title>
+        <link rel="icon" href="data:,"> <!-- Suppress favicon.ico error -->
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <canvas id="canvas" width="900" height="300"></canvas><br>
+        <input type="range" id="morph" name="morph" min="0" max="1" step="0.001" autocomplete="off" /> <span id="morphdisplay">0.00</span><br>
+        <div>
+            <input id="toggle_animate" type="checkbox" autocomplete="off"/> Animate - Speed <input id="anim_speed" type="number" min="0.001" max="0.1" step="0.001" value="0.005" autocomplete="off">, Pause <input id="anim_pause" type="number" min="0" max="200" step="1" value="60" autocomplete="off">
+        </div><br>
+        <div><input id="textinput" type="text"></input> from <select id="fonta" name="fonta" autocomplete="off">
+            <option value="ALFASLAB">Alfa Slab One</option>
+            <option selected value="JUDSON">Judson</option>
+            <option value="ROBOTO">Roboto</option>
+        </select> to <select id="fontb" name="fontb" autocomplete="off">
+            <option value="ALFASLAB">Alfa Slab One</option>
+            <option value="JUDSON">Judson</option>
+            <option selected value="ROBOTO">Roboto</option>
+        </select></div><br>
+
+        <div>Alignment Method: <select id="alignmethod" autocomplete="off">
+            <option selected value="bbox">Bounding Box</option>
+            <option value="maxarea">Jaccard Index</option>
+            <option value="procrustes">Procrustes Superimposition</option>
+        </select></div><br>
+
+        <div>Morphing Method: <select id="morphmethod" autocomplete="off">
+            <option selected value="linear">Linear</option>
+            <option value="voronoi">Voronoi-Hausdorff</option>
+            <option value="physical">Physical</option>
+        </select></div><br>
+
+        <div>Scale: <input id="scale" type="number" min="0.5" max="7" step="0.1" value="2.5" autocomplete="off"></div>
+    </body>
+</html>
+
+<!-- Libraries -->
+<script src="https://opentype.js.org/dist/opentype.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/polygon-clipping@0.15.7/dist/polygon-clipping.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@turf/turf@7.2.0/turf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/munkres-js@1.2.2/munkres.js"></script>
+
+<!-- Local Scripts -->
+<script src="init.js"></script>
+<script src="files.js"></script>
+<script src="math.js"></script>
+
+<!-- Classes -->
+<script src="Glyph.js"></script>
+<script src="GlyphPair.js"></script>
+<script src="GlyphMorph.js"></script>
+<script src="StringMorph.js"></script>
+
+<!-- Precomputed Data -->
+<script src="precomputed/maxarea_alfaslab_judson.js"></script>
+<script src="precomputed/maxarea_alfaslab_roboto.js"></script>
+<script src="precomputed/maxarea_judson_roboto.js"></script>
+
+<!-- Main JS file -->
+<script src="main.js"></script>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Constellation Quiz</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <button id="setrandom" onclick="set_random_target()">SET RANDOM TARGET</button>
+    </body>
+</html>
+
+<script src="three.min.js"></script>
+<script src="files.js"></script>
+<script src="init.js" defer></script>
+<script src="events.js"></script>
+<script src="util.js"></script>
+<script src="camera_rotation.js"></script>
+<script src="main.js" defer></script>
+
+<script type="x-shader/x-vertex" id="vertexshader">
+    attribute float size;
+    varying vec3 vColor;
+
+    void main() {
+        vColor = vec3( 1.0, 1.0, 1.0 );
+        vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+        gl_PointSize = size;
+        gl_Position = projectionMatrix * mvPosition;
+    }
+</script>
+
+<script type="x-shader/x-fragment" id="fragmentshader">
+    uniform vec3 color;
+    uniform sampler2D pointTexture;
+    
+    varying vec3 vColor;
+
+    void main() {
+        gl_FragColor = vec4( color * vColor, 1.0 );
+        gl_FragColor = gl_FragColor * texture2D( pointTexture, gl_PointCoord );
+    }
+</script>

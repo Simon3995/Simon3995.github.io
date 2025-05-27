@@ -1,0 +1,104 @@
+body {
+	background-color: #222;
+	padding: 0;
+	margin: 0;
+	position: relative;
+	overflow: hidden;
+	
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+canvas {
+	background-color: #fff;
+	display: block;
+	margin: 0;
+}
+
+button {
+	position: absolute;
+	width: 50px;
+	height: 50px;
+	border: none;
+	outline: none;
+	border-radius: 3px;
+	transition-duration: 60ms;
+}
+
+button:active {
+	transform: translateY(4px);
+	transition-duration: 60ms;
+}
+
+#clickType {
+	background-color: #f000;
+	position: absolute;
+	top: 20px;
+	left: 20px;
+	width: 50px;
+	height: 50px;
+}
+
+#clickType:hover {
+	width: 400px;
+}
+
+#clickType1 { background-color:#2fa3d4; background-image:url('sprites/add.png'); }
+#clickType2 { background-color:#f25f5c; background-image:url('sprites/remove.png'); }
+#clickType3 { background-color:#70c1b3; background-image:url('sprites/move.png'); }
+#clickType4 { background-color:#ffe066; background-image:url('sprites/center.png'); }
+#clickType5 { background-color:#f9844a; background-image:url('sprites/rotate.png'); }
+
+#clickType1, #clickType2, #clickType3, #clickType4, #clickType5 {
+	left: 0px;
+	transition-duration: 150ms;
+}
+
+#clickType:hover #clickType2 { left: 60px; }
+#clickType:hover #clickType3 { left: 120px; }
+#clickType:hover #clickType4 { left: 180px; }
+#clickType:hover #clickType5 { left: 240px; }
+
+#resetViewButton {
+	top: 80px;
+	left: 20px;
+	background-image: url('sprites/view.png');
+	background-color: #eff7f6;
+}
+
+#treeToggleButton {
+	top: 140px;
+	left: 20px;
+	background-image: url('sprites/tree.png');
+	background-color: #556161;
+}
+
+#shadingToggleButton {
+	top: 200px;
+	left: 20px;
+	background-image: url('sprites/shading.png');
+	background-color: #556161;
+}
+
+#debugToggleButton {
+	top: 260px;
+	left: 20px;
+	background-image: url('sprites/xyz.png');
+	background-color: #556161;
+}
+
+#version {
+	background-color: #fff0;
+	color: #fff;
+	font-family: sans-serif;
+	font-size: 13px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	padding-bottom: 5px;
+	padding-left: 5px;
+}

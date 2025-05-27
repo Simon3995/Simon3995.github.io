@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		html, body {
+			background-color: #374450;
+			color: white;
+			font-family: sans-serif;
+		}
+		a {
+			color: aquamarine;
+		}
+		h2 {
+			margin-bottom: 3px;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="myCanvas" width="700" height="700"></canvas>
+	
+	<div style="width:600px">
+	<h2>Micro Solar System</h2>
+	Extremely simple solar system simulation. Only includes the Sun, Mercury, Venus, Earth, the Moon, and Mars. Speeds and distances are to scale! Sizes are not.
+	<ul>
+		<li>Click to center an object</li>
+		<li>Scroll to zoom</li>
+	</ul>
+	Might help explain <a href="https://en.wikipedia.org/wiki/Apparent_retrograde_motion">Mars' apparent retrograde motion</a> (click Earth to center it and observe Mars' motion as it gets closer).
+	<br><br>
+	P.S. Something fun to try: Movement is calculated in real time. Try opening the console with Ctrl+Shift+J and increasing the mass of the Sun by typing <tt>bodies[0].mass *= 1.5</tt>
+	</div>
+</body>
+</html>
+
+<script src="Body.js" type="text/javascript"></script>
+<script src="Main.js" type="text/javascript"></script>

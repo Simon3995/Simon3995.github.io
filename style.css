@@ -1,0 +1,150 @@
+html {
+	font-family: Atkinson, sans-serif;
+	background-color: #181818;
+	color: #fff;
+}
+
+h1 {
+	font-family: Mustica;
+	filter: drop-shadow(0px 0px 7px #000);
+	text-align: center;
+	font-size: 80px;
+	margin-top: -140px;
+}
+
+h2 {
+	letter-spacing: 1px;
+	margin-bottom: 10px;
+}
+
+h3 {
+	font-weight: normal;
+	margin-top: 5px;
+	margin-bottom: 0px;
+}
+
+a {
+	color: #89a4f0;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #cfdbfc;
+}
+
+audio {
+	height: 30px;
+	width: 100%;
+	filter: invert(100%);
+}
+
+hr {
+	margin-top: 24px;
+	border: 2px solid #555;
+}
+
+th {
+	text-align: left;
+}
+
+td {
+	vertical-align: center;
+	padding-right: 10px;
+}
+
+.jsicon {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+
+.main {
+	background-color: #ffffff10;
+	padding-left: 150px;
+	padding-right: 150px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	margin: auto;
+	width: 600px;
+}
+
+.header {
+	width: 900px;
+	height: 150px;
+	margin: auto;
+	margin-bottom: -5px;
+}
+
+.btn {
+	color: #ffffff;
+	font-size: 18px;
+	background: #ffffff33;
+	padding: 10px 15px 10px 15px;
+	text-decoration: none;
+}
+
+.btn:hover {
+	background: #ffffff66;
+	text-decoration: none;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+.icon {
+	margin-top: -2px;
+	height: 22px;
+	vertical-align: middle;
+}
+
+.iconlink {
+	line-height: 26px;
+}
+
+.subtitle {
+	color: #aaa;
+}
+
+.prog p {
+	margin-top: 2px;
+	margin-bottom: 2px;
+}
+.prog a {
+	font-size: 24px;
+	margin-bottom: 0px;
+}
+.prog {
+	margin-left: 15px;
+}
+
+#bg {
+	width: 100%;
+	height: 150px;
+	object-fit: cover;
+}
+
+#buttonbar {
+	width: 900px;
+	margin: auto;
+	padding-top: 15px;
+	padding-bottom: 9px;
+	background-color: #444;
+	text-align: center;
+}
+
+@font-face {
+	font-family: Mustica;
+	src: url(fonts/Mustica.otf);
+}
+
+@font-face {
+	font-family: Atkinson;
+	src: url(fonts/AtkinsonHyperlegible.ttf);
+}

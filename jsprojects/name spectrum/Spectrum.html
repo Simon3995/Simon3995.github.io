@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+		<p>Name the colors you see to fill out the spectrum. Right click a node to delete it.</p>
+		<canvas id="spectrum" onclick="drawFullSpectrum()" width="1100" height="400">Canvas Error</canvas>
+		<br>
+		<div style="display:inline-block">
+			<p>Node size: <input id="nodesize" min="2" max="60" value="10" type="range"><output>10</output></p>
+			<p>Grid size: <input id="gridsize" min="4" max="50" value="15" type="range"><output>15</output></p>
+			<p>Label size: <input id="labelsize" min="10" max="50" value="20" type="range"><output>20</output></p>
+		</div>
+		<div style="display:inline-block">
+			<p><input id="toggleborders" type="checkbox" checked> Show borders</p>
+			<p><input id="togglelabels" type="checkbox" checked> Show labels</p>
+		</div>
+		<br>
+		<div style="display:inline-block;vertical-align:top">
+			<button class="load" onclick="loadMap()">Load Color Map</button>
+		</div>
+		<canvas id="colorDisplay" width="200" height="200">Canvas Error</canvas>
+		<div style="display:inline-block;vertical-align:top">
+			<button class="save" onclick="saveMap()">Save Color Map</button>
+		</div>
+		<br>
+		<p>This color is called: <input type="text" id="textInput" onchange="inputColor()"></p>
+		<br>
+		<div id="colorList"></div>
+	</body>
+</html>
+
+<script src="main.js"></script>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>RGB Guesser</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="main">
+            <canvas id="canvas" height="300px" width="300px" style="border:3px solid #444"></canvas>
+            <br>
+            # <input id="guess" onchange="guess()">
+        </div>
+
+        <div class="result">
+            <p id="warning" style="display:none"></p>
+
+            <div id="comparison" style="display:none">
+                <div style="display:inline-block">
+                    Your guess
+                    <br>
+                    <canvas id="cguess" width="200" height="200"></canvas>
+                </div>
+                <div style="display:inline-block">
+                    Answer<br>
+                    <canvas id="canswer" width="200" height="200"></canvas>
+                </div>
+                <br>
+                <div id="sml"></div>
+            </div>
+        </div>
+
+        <div id="q">
+            ?
+        </div>
+        <div id="info">
+            Try to guess the hex (hexadecimal) format of the color you see, and you will see how close you are to the correct answer.
+            <br><br>
+            This RGB color guessing game uses the <a href="https://github.com/zschuessler/DeltaE" target="_blank">DeltaE 2000</a> formula to determine color similarity.
+            <br><br>
+            A DeltaE value of less than 1 (or a similarity above 99%) should be imperceptible to the human eye, and will thus lead to a "perfect" rating.
+        </div>
+    </body>
+</html>
+
+<script type="text/javascript" src="deltaE-min.js"></script>
+<script type="text/javascript" src="color.js"></script>
+<script type="text/javascript" src="sound.js"></script>
+
+<script type="text/javascript" src="main.js"></script>

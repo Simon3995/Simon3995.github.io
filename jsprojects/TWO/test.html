@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<html>
+    <head>
+        <title>TWO.js Proof of Concept</title>
+    </head>
+    <body>
+    </body>
+</html>
+
+<script src="TWO.js"></script>
+<script type="text/javascript">
+
+let c = document.createElement("canvas");
+let ctx = TWO.getEnhancedContext(c, {zooming:true, panning:true});
+document.body.appendChild(c);
+TWO.maximize(c);
+ctx.zoom(3);
+ctx.rotateCamera(Math.PI/4);
+
+const draw_coord_dots = function(n) {
+    ctx.fillStyle = "black";
+    for (let i=-n; i<=n; i++) {
+        ctx._fillRect(0-2,10*i-2,4,4);
+        ctx._fillRect(10*i-2,0-2,4,4);
+    }
+}
+
+let img = new Image();
+img.src = "monalisa.jpg";
+
+const update = function() {
+    ctx.clearRect(0, 0, c.width, c.height);
+
+    draw_coord_dots(10);
+    ctx.fillStyle = "orange";
+    ctx._fillText("⭐ TWO.js ⭐", 10, 20);
+    ctx._drawImage(img, 10, -80, 50, 70);
+    ctx._strokeRect(-10, -10, -30, -30);
+
+    ctx._translate(75, -10);
+    ctx._rotate(-Math.PI/2);
+    ctx.lineWidth = 0.3;
+    ctx._strokeText("TWO.js", 0, 0);
+    ctx._resetTransform();
+
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx._moveTo(30, 30);
+    ctx._lineTo(70, 30);
+    ctx._lineTo(30, 50);
+    ctx._stroke();
+
+    ctx.beginPath();
+    ctx._arc(-30, 10, 20, 0, Math.PI);
+    ctx._stroke();
+
+    requestAnimationFrame(update);
+}
+
+update();
+
+</script>

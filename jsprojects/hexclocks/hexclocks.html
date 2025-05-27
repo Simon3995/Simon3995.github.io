@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+		Inspired by <a href="https://www.jacopocolo.com/hexclock/">the original hex clock</a>
+		
+		<h3>True Hex Clock</h3>
+		The current time (HH:MM:SS) is directly converted into a hex color code
+		<div class="clock" id="truehex">
+			#000000
+		</div>
+
+		<h3>Scaled Hex Clock</h3>
+		The red value counts up to FF (255) in 24 hours,<br>
+		The green value counts up to FF (255) in 1 hour,<br>
+		The blue value counts up to FF (255) in 1 minute
+		<div class="clock" id="scaledhex">
+			#000000
+		</div>
+
+		<h3>Full Hex Clock</h3>
+		Counts from 000000 (0) to FFFFFF (~16.8 million) in 24 hours
+		<div class="clock" id="fullhex">
+			#000000
+		</div>
+	</body>
+</html>
+
+<script src="main.js"></script>

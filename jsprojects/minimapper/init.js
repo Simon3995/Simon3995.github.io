@@ -1,0 +1,23 @@
+let c = document.getElementById("canvas");
+let ctx = c.getContext("2d");
+c.width = c.getBoundingClientRect().width;
+c.height = c.getBoundingClientRect().height;
+
+let img_input = document.getElementById("bgimg");
+let rx = 0;         // real coordinates at center of viewport
+let ry = 0;
+let mousex = 0;
+let mousey = 0;
+let zoom = 40;      // ratio (viewport coordinates / real coordinates)
+let mousedown = false;
+let mousemoved = false;
+let paintcolor = "#e23d32";
+let bg_color = "#444546f8";
+let borders = true;
+let innerborders = true;
+let tooltip = true;
+let ttt = 0; // tooltip timer
+let Map = null;
+let chunkmenu = [];
+let bg_chunk = null;
+let last_removed = null;

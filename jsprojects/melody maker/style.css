@@ -1,0 +1,79 @@
+canvas {
+	border: 1px solid black;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+body {
+	background-color: #222;
+	text-align: center;
+	color: white;
+	font-family: sans-serif;
+}
+
+a {
+	color: aquamarine;
+}
+
+button {
+	border-radius: 5px;
+	border: none;
+	font-family: Open Sans;
+	font-size: 20px;
+
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 6px;
+	padding-bottom: 6px;
+	
+	margin-left: 3px;
+	margin-right: 3px;
+	
+ 	display: inline-block;
+	cursor: pointer;
+}
+
+button:active {
+	position: relative;
+	top: 2px;
+}
+
+.saveButton {
+	background-color: #64e3ae;
+	margin-left: 50px;
+}
+
+.saveButton:hover {
+	background-color: #50ba8e;
+}
+
+.loadButton {
+	background-color: #69a5e0;
+}
+
+.loadButton:hover {
+	background-color: #5688ba;
+}
+
+.resetButton {
+	background-color: #e65364;
+}
+
+.resetButton:hover {
+	background-color: #b53e4b;
+}
+
+.transposeUp {
+	margin-left: 50px;
+}
+
+.unselectable {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}

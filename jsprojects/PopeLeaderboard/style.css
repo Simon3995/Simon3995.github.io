@@ -1,0 +1,27 @@
+html {
+    font-family: sans-serif;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+td, th {
+    padding: 5px 20px;
+}
+
+td:first-child, th:first-child {
+    text-align: right;
+}
+
+tr#current {
+    background-color: #91aeff;
+}
+
+tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+tr:nth-child(even) {
+    background-color: #ddd;
+}

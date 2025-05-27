@@ -1,0 +1,181 @@
+* {
+	margin: 0;
+	padding: 0;
+    font-size: 16px;
+    overflow: hidden;
+
+    user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+}
+
+body, html {
+	height: 100%;
+    font-family: sans-serif;
+}
+
+#canvas {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+#menu {
+    backdrop-filter: blur(5px);
+    background-color: #0004;
+    position: absolute;
+    padding: 15px;
+    left: 10px;
+    top: 10px;
+    border-radius: 5px;
+    text-align: center;
+    color: white;
+}
+
+#menu:hover ~ #tooltip {
+    opacity: 0;
+}
+
+h1 {
+    font-size: 22px;
+    font-weight: normal;
+}
+
+h2 {
+    font-size: 20px;
+    font-weight: normal;
+    color: #fffb;
+}
+
+#accordion {
+    cursor: pointer;
+    background-color: #fff2;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+h3:hover {
+    color: #eee;
+}
+
+p {
+    font-size: 18px;
+    margin-top: 8px;
+}
+
+.chunklabel {
+    margin-left: 5px;
+    text-overflow: ellipsis;
+    width: 133px;
+    background-color: #fff2;
+    padding: 3px;
+    border: none;
+    border-radius: 3px;
+    color: white;
+}
+
+select {
+    width: 175px;
+    margin-top: 8px;
+    border: 1px solid white;
+    border-radius: 3px;
+    font-size: 15px;
+    padding: 1px;
+    background-color: #fffe;
+    cursor: pointer;
+}
+
+input[type=checkbox], label {
+    cursor: pointer;
+}
+
+input[type=text] {
+    cursor: text;
+}
+
+hr {
+    border: 1px dashed #fff8;
+    margin-top: 10px;
+    margin-bottom: 6px;
+}
+
+#paintcolor {
+    width: 175px;
+    height: 40px;
+    transform: scale(103%);
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.leftalign {
+    text-align: left;
+}
+
+.chunkmenu_option {
+    cursor: pointer;
+}
+
+.colorbutton {
+    width: 25px;
+    height: 25px;
+    border: none;
+    border-radius: 3px;
+    margin-left: 5px;
+    margin-top: 5px;
+    cursor: pointer;
+
+    color: white;
+    text-shadow: 1px 1px 3px black;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.colorbutton:nth-of-type(6n+1) {
+    margin-left: 0px;
+}
+
+.colorbutton:hover {
+    border-radius:5px;
+}
+
+.colorbutton:active {
+    transform: scale(90%);
+}
+
+#chunkmenu .colorbutton {
+    margin-left: 0px;
+}
+
+#tooltip {
+    position: absolute;
+    background-color: #fff8;
+    font-weight: bold;
+    padding: 3px 5px;
+    border-radius: 5px;
+    backdrop-filter: blur(5px);
+    box-shadow: 0px 0px 7px #0006;
+    pointer-events: none;
+}
+
+#menu:hover ~ #tooltip {
+    visibility: hidden;
+}
+
+#tooltip:hover {
+    visibility: hidden;
+}
+
+#version {
+    position: absolute;
+    z-index: 1;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    bottom: 5px;
+    left: 5px;
+    text-shadow: 1px 1px 1px black;
+    padding: 3px;
+}

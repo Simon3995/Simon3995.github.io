@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<title>Melody Generator RNN</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<canvas id="myCanvas"></canvas>
+	<div id="buttonBar">
+		<button onclick="startTraining()">Start Training</button>
+		<button onclick="stopTraining()">Stop Training</button>
+		<button onclick="startGenerating()">Generate Melody</button>
+		<hr>
+		<button onclick="initNetwork()">Init New Network</button>
+		<button onclick="loadNetwork()">Load Network</button>
+		<button onclick="saveNetwork()">Save Network</button>
+		<label for="fileinput" class="inputlabel">
+			Load Training Data
+		</label>
+		<input id="fileinput" type="file" onchange="loadData()" multiple></input>
+		<hr>
+		<button onclick="addPrecision(10)">Precision +10</button>
+		<button onclick="addPrecision(1)">Precision +1</button>
+		<button onclick="addPrecision(-1)">Precision -1</button>
+		<button onclick="addPrecision(-10)">Precision -10</button>
+	</div>
+	<div id="log"></div>
+	
+	<h2>How does this work?</h2>
+	<div style="width:800px">
+	<p>This program was made for a university assignment. It uses a type of recurrent neural network to generate melodies. Without going too much into the theory, here's what to do if you want to try it yourself:</p>
+	<ol>
+		<li>Create a dataset using the melody creator (or just download the dataset we made from there)</li>
+		<li>In this program, initialize a new network</li>
+		<li>Load the training data (you can select multiple files)</li>
+		<li>Start training</li>
+		<li>Keep an eye on the sum of cost values. Try to get it as low as possible. I recommend setting the precision very low at first, and turning it up later when the sum stops decreasing.</li>
+		<li>Once you can't seem to get the sum of cost values any lower, stop the training and generate a new melody.</li>
+		<li>Go back to the melody creator and load your new AI generated melody!</li>
+	</ol>
+	</div>
+</body>
+
+<!-- SCRIPTS -->
+<script src="NN.js"></script>
+<script src="matrix.js"></script>
+<script src="log.js"></script>
+<script src="train.js"></script>
+<script src="fileSavingLoading.js"></script>
+<script src="graphics.js"></script>
+
+<script src="main.js"></script>

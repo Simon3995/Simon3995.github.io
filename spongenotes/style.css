@@ -1,0 +1,50 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+html, body {
+    overscroll-behavior: none;
+    overflow: hidden;
+    touch-action: none;
+}
+
+.title {
+    font-family: 'Atkinson', sans-serif;
+    font-size: 26pt;
+    position: absolute;
+    top: 3px;
+    right: 10px;
+    letter-spacing: -0.15cap;
+    z-index: 1;
+    color: white;
+    user-select: none;
+}
+
+.highlight {
+    animation: hlColor 10s infinite linear;
+    letter-spacing: -0.1cap;
+}
+
+@keyframes hlColor {
+    0% {
+        color: #fc6b03;
+    }
+    50% {
+        color: #fcba03;
+    }
+    100% {
+        color: #fc6b03;
+    }
+}
+
+@font-face {
+    font-family: "Atkinson";
+    src: url("Atkinson-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Atkinson";
+    src: url("Atkinson-Bold.ttf");
+    font-weight: bold;
+}

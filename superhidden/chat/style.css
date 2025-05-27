@@ -1,0 +1,6 @@
+#chatbox {
+    border: 1px solid black;
+    height: 400px;
+    overflow: auto;
+    word-wrap: break-word;
+}

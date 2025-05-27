@@ -1,0 +1,79 @@
+<meta charset="utf-8">
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+        <title>MiniMapper</title>
+    </head>
+    <body>
+        <div id="version">v0.3</div>
+        
+        <canvas id="canvas"></canvas>
+        <div id="menu">
+            <h1 id="title0"></h1>
+            <h2 id="title1"></h2>
+            
+            <select id="mapselect">
+                <optgroup label="Asia">
+                    <option value="srilanka_districts">Sri Lanka - Districts</option>
+                </optgroup>
+                <optgroup label="Europe">
+                    <option value="belgium_provinces">Belgium - Provinces</option>
+                    <option value="germany_states">Germany - States</option>
+                    <option value="ireland_counties">Ireland - Counties</option>
+                    <option value="liechtenstein_municipalities">Liechtenstein - Municipalities</option>
+                    <option value="netherlands_provinces" selected>Netherlands - Provinces</option>
+                    <option value="sweden_counties">Sweden - Counties</option>
+                    <option value="ukraine_oblasts">Ukraine - Oblasts</option>
+                </optgroup>
+            </select>
+            <hr>
+            <input type="color" id="paintcolor"></input>
+            <div id="palette"></div>
+            <select id="paletteselect">
+                <optgroup label="General">
+                    <option value="standard">Standard Palette</option>
+                    <option value="vibrant">Vibrant Palette</option>
+                    <option value="pastel">Pastel Palette</option>
+                </optgroup>
+                <optgroup label="Seasonal">
+                    <option value="spring">Spring Palette</option>
+                    <option value="summer">Summer Palette</option>
+                    <option value="autumn">Autumn Palette</option>
+                    <option value="winter">Winter Palette</option>
+                </optgroup>
+            </select>
+
+            <hr>
+
+            <div id="chunkmenu" class="leftalign"></div>
+
+            <hr>
+
+            <div id="accordion">
+                <h3>Settings</h3>
+                <div class="leftalign">
+                    <label><input type="checkbox" id="toggle_tooltip" checked> Tooltip</label><br>
+                    <label><input type="checkbox" id="toggle_borders" checked> Borders</label><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<label id="innerborders_label"><input type="checkbox" id="toggle_innerborders" checked> Inner Borders</label>
+                </div>
+            </div>
+        </div>
+
+        <div id="tooltip" hidden></div>
+    </body>
+</html>
+
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js" integrity="sha256-eTyxS0rkjpLEo16uXTS0uVCS4815lc40K2iVpWDvdSY=" crossorigin="anonymous"></script>
+
+<!-- program scripts -->
+<script src="init.js"></script>
+<script src="graphics.js"></script>
+<script src="eventListeners.js"></script>
+<script src="util.js"></script>
+<script src="files.js"></script>
+<script src="ui.js"></script>
+<script src="palettes.js"></script>
+
+<script src="main.js"></script>

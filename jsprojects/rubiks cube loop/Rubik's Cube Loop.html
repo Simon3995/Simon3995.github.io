@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		html {
+			background-color: #223;
+		}
+		canvas {
+			background-color: #fff;
+		}
+	</style>
+</head>
+<body>
+<canvas id="myCanvas" width="1020" height="780" style="border:1px solid black"></canvas>
+</body>
+</html>
+
+<script type="text/javascript">
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+var sc = 6; //magnification factor
+
+var movesMade = 0;
+var algLoops = 0;
+
+var sides = [];
+sides[2] = ["red","red","red","red","red","red","red","red","red"];
+//front
+sides[3] = ["yellow","yellow","yellow","yellow","yellow","yellow","yellow","yellow","yellow"];
+//right
+sides[0] = ["blue","blue","blue","blue","blue","blue","blue","blue","blue"];
+//up
+sides[1] = ["white","white","white","white","white","white","white","white","white"];
+//left
+sides[5] = ["green","green","green","green","green","green","green","green","green"];
+//down
+sides[4] = ["orange","orange","orange","orange","orange","orange","orange","orange","orange"];
+//back
+
+var input = prompt("Please input algorithm, separated by spaces. Write double moves as R R instead of R2.");
+var algorithm = input.split(" ");
+var currentMove = 0;
+var solved = false;
+
+function update() {
+	if (!solved) {
+		makeMove(algorithm[currentMove]);
+		movesMade++;
+		currentMove++;
+		if (currentMove >= algorithm.length) {
+			currentMove = 0;
+			algLoops++;
+			
+			if (isSolved()) {
+				solved = true;
+			}
+		}
+	}
+	
+	drawCube();
+	
+	setTimeout(function(){
+		window.requestAnimationFrame(update);
+	}, 10);
+}
+window.requestAnimationFrame(update);
+
+function isSolved() {
+	var solved = true;
+	for (i=0; i<=5; i++) {
+		for (j=0; j<=7; j++) {
+			if (sides[i][j] != sides[i][j+1]) {
+				solved = false;
+			}
+		}
+	}
+	return solved;
+}
+
+function drawCube() {
+	ctx.clearRect(0,0,c.width,c.height);
+
+	//front
+	drawFace(2,50,50);
+	//right
+	drawFace(3,90,50);
+	//up
+	drawFace(0,50,10);
+	//left
+	drawFace(1,10,50);
+	//down
+	drawFace(5,50,90);
+	//back
+	drawFace(4,130,50);
+	
+	ctx.fillStyle="black";
+	ctx.font = "20px monospace";
+	ctx.fillText("FRONT",50*sc,83*sc);
+	ctx.fillText("LEFT",10*sc,83*sc);
+	ctx.fillText("TOP",50*sc,43*sc);
+	ctx.fillText("BOTTOM",50*sc,123*sc);
+	ctx.fillText("RIGHT",90*sc,83*sc);
+	ctx.fillText("BACK",130*sc,83*sc);
+	
+	ctx.fillText("Algorithm Loops: " + algLoops, 90*sc,95*sc);
+	ctx.fillText("Total Moves: " + movesMade, 90*sc,100*sc);
+	ctx.fillText("Algorithm: " + algorithm, 90*sc,105*sc);
+}
+
+function drawFace(face,x,y) {
+	ctx.fillStyle=sides[face][0];
+	
+	ctx.fillRect(x*sc,y*sc,10*sc,10*sc);
+	ctx.fillStyle=sides[face][1];
+	ctx.fillRect((x+10)*sc,y*sc,10*sc,10*sc);
+	ctx.fillStyle=sides[face][2];
+	ctx.fillRect((x+20)*sc,y*sc,10*sc,10*sc);
+	ctx.fillStyle=sides[face][3];
+	ctx.fillRect(x*sc,(y+10)*sc,10*sc,10*sc);
+	ctx.fillStyle=sides[face][4];
+	ctx.fillRect((x+10)*sc,(y+10)*sc,10*sc,10*sc);
+	ctx.fillStyle=sides[face][5];
+	ctx.fillRect((x+20)*sc,(y+10)*sc,10*sc,10*sc);
+	ctx.fillStyle=sides[face][6];
+	ctx.fillRect(x*sc,(y+20)*sc,10*sc,10*sc);
+	ctx.fillStyle=sides[face][7];
+	ctx.fillRect((x+10)*sc,(y+20)*sc,10*sc,10*sc);
+	ctx.fillStyle=sides[face][8];
+	ctx.fillRect((x+20)*sc,(y+20)*sc,10*sc,10*sc);
+	
+	ctx.beginPath();
+	ctx.lineWidth=2;
+	
+	ctx.moveTo(x*sc,y*sc);
+	ctx.lineTo((x+30)*sc,y*sc);
+	ctx.lineTo((x+30)*sc,(y+30)*sc);
+	ctx.lineTo(x*sc,(y+30)*sc);
+	ctx.lineTo(x*sc,y*sc);
+	
+	ctx.moveTo((x)*sc,(y+10)*sc);
+	ctx.lineTo((x+30)*sc,(y+10)*sc);
+	ctx.moveTo((x)*sc,(y+20)*sc);
+	ctx.lineTo((x+30)*sc,(y+20)*sc);
+	ctx.moveTo((x+10)*sc,(y)*sc);
+	ctx.lineTo((x+10)*sc,(y+30)*sc);
+	ctx.moveTo((x+20)*sc,(y)*sc);
+	ctx.lineTo((x+20)*sc,(y+30)*sc);
+	
+	ctx.stroke();
+}
+
+function makeMove(move) {
+	if (move == "F") {  //DONE
+		temp = sides[2][0];
+		sides[2][0] = sides[2][6];
+		sides[2][6] = sides[2][8];
+		sides[2][8] = sides[2][2];
+		sides[2][2] = temp;
+		temp = sides[2][1];
+		sides[2][1] = sides[2][3];
+		sides[2][3] = sides[2][7];
+		sides[2][7] = sides[2][5];
+		sides[2][5] = temp;
+		temp = sides[0][7];
+		sides[0][7] = sides[1][5];
+		sides[1][5] = sides[5][1];
+		sides[5][1] = sides[3][3];
+		sides[3][3] = temp;
+		temp = sides[0][6];
+		sides[0][6] = sides[1][8];
+		sides[1][8] = sides[5][2];
+		sides[5][2] = sides[3][0];
+		sides[3][0] = temp;
+		temp = sides[0][8];
+		sides[0][8] = sides[1][2];
+		sides[1][2] = sides[5][0];
+		sides[5][0] = sides[3][6];
+		sides[3][6] = temp;
+	}
+	if (move == "F'") { //DONE
+		temp = sides[2][0];
+		sides[2][0] = sides[2][2];
+		sides[2][2] = sides[2][8];
+		sides[2][8] = sides[2][6];
+		sides[2][6] = temp;
+		temp = sides[2][1];
+		sides[2][1] = sides[2][5];
+		sides[2][5] = sides[2][7];
+		sides[2][7] = sides[2][3];
+		sides[2][3] = temp;
+		temp = sides[0][7];
+		sides[0][7] = sides[3][3];
+		sides[3][3] = sides[5][1];
+		sides[5][1] = sides[1][5];
+		sides[1][5] = temp;
+		temp = sides[0][6];
+		sides[0][6] = sides[3][0];
+		sides[3][0] = sides[5][2];
+		sides[5][2] = sides[1][8];
+		sides[1][8] = temp;
+		temp = sides[0][8];
+		sides[0][8] = sides[3][6];
+		sides[3][6] = sides[5][0];
+		sides[5][0] = sides[1][2];
+		sides[1][2] = temp;
+	}
+	if (move == "R") {  //DONE
+		temp = sides[3][0];
+		sides[3][0] = sides[3][6];
+		sides[3][6] = sides[3][8];
+		sides[3][8] = sides[3][2];
+		sides[3][2] = temp;
+		temp = sides[3][1];
+		sides[3][1] = sides[3][3];
+		sides[3][3] = sides[3][7];
+		sides[3][7] = sides[3][5];
+		sides[3][5] = temp;
+		temp = sides[0][5];
+		sides[0][5] = sides[2][5];
+		sides[2][5] = sides[5][5];
+		sides[5][5] = sides[4][3];
+		sides[4][3] = temp;
+		temp = sides[0][8];
+		sides[0][8] = sides[2][8];
+		sides[2][8] = sides[5][8];
+		sides[5][8] = sides[4][0];
+		sides[4][0] = temp;
+		temp = sides[0][2];
+		sides[0][2] = sides[2][2];
+		sides[2][2] = sides[5][2];
+		sides[5][2] = sides[4][6];
+		sides[4][6] = temp;
+	}
+	if (move == "R'") { //DONE
+		temp = sides[3][0];
+		sides[3][0] = sides[3][2];
+		sides[3][2] = sides[3][8];
+		sides[3][8] = sides[3][6];
+		sides[3][6] = temp;
+		temp = sides[3][1];
+		sides[3][1] = sides[3][5];
+		sides[3][5] = sides[3][7];
+		sides[3][7] = sides[3][3];
+		sides[3][3] = temp;
+		temp = sides[0][5];
+		sides[0][5] = sides[4][3];
+		sides[4][3] = sides[5][5];
+		sides[5][5] = sides[2][5];
+		sides[2][5] = temp;
+		temp = sides[0][8];
+		sides[0][8] = sides[4][0];
+		sides[4][0] = sides[5][8];
+		sides[5][8] = sides[2][8];
+		sides[2][8] = temp;
+		temp = sides[0][2];
+		sides[0][2] = sides[4][6];
+		sides[4][6] = sides[5][2];
+		sides[5][2] = sides[2][2];
+		sides[2][2] = temp;
+	}
+	if (move == "U") {  //DONE
+		temp = sides[0][0];
+		sides[0][0] = sides[0][6];
+		sides[0][6] = sides[0][8];
+		sides[0][8] = sides[0][2];
+		sides[0][2] = temp;
+		temp = sides[0][1];
+		sides[0][1] = sides[0][3];
+		sides[0][3] = sides[0][7];
+		sides[0][7] = sides[0][5];
+		sides[0][5] = temp;
+		temp = sides[4][1];
+		sides[4][1] = sides[1][1];
+		sides[1][1] = sides[2][1];
+		sides[2][1] = sides[3][1];
+		sides[3][1] = temp;
+		temp = sides[4][2];
+		sides[4][2] = sides[1][2];
+		sides[1][2] = sides[2][2];
+		sides[2][2] = sides[3][2];
+		sides[3][2] = temp;
+		temp = sides[4][0];
+		sides[4][0] = sides[1][0];
+		sides[1][0] = sides[2][0];
+		sides[2][0] = sides[3][0];
+		sides[3][0] = temp;
+	}
+	if (move == "U'") { //DONE
+		temp = sides[0][0];
+		sides[0][0] = sides[0][2];
+		sides[0][2] = sides[0][8];
+		sides[0][8] = sides[0][6];
+		sides[0][6] = temp;
+		temp = sides[0][1];
+		sides[0][1] = sides[0][5];
+		sides[0][5] = sides[0][7];
+		sides[0][7] = sides[0][3];
+		sides[0][3] = temp;
+		temp = sides[4][1];
+		sides[4][1] = sides[3][1];
+		sides[3][1] = sides[2][1];
+		sides[2][1] = sides[1][1];
+		sides[1][1] = temp;
+		temp = sides[4][2];
+		sides[4][2] = sides[3][2];
+		sides[3][2] = sides[2][2];
+		sides[2][2] = sides[1][2];
+		sides[1][2] = temp;
+		temp = sides[4][0];
+		sides[4][0] = sides[3][0];
+		sides[3][0] = sides[2][0];
+		sides[2][0] = sides[1][0];
+		sides[1][0] = temp;
+	}
+	if (move == "L") {  //DONE
+		temp = sides[1][0];
+		sides[1][0] = sides[1][6];
+		sides[1][6] = sides[1][8];
+		sides[1][8] = sides[1][2];
+		sides[1][2] = temp;
+		temp = sides[1][1];
+		sides[1][1] = sides[1][3];
+		sides[1][3] = sides[1][7];
+		sides[1][7] = sides[1][5];
+		sides[1][5] = temp;
+		temp = sides[0][3];
+		sides[0][3] = sides[4][5];
+		sides[4][5] = sides[5][3];
+		sides[5][3] = sides[2][3];
+		sides[2][3] = temp;
+		temp = sides[0][0];
+		sides[0][0] = sides[4][8];
+		sides[4][8] = sides[5][0];
+		sides[5][0] = sides[2][0];
+		sides[2][0] = temp;
+		temp = sides[0][6];
+		sides[0][6] = sides[4][2];
+		sides[4][2] = sides[5][6];
+		sides[5][6] = sides[2][6];
+		sides[2][6] = temp;
+	}
+	if (move == "L'") { //DONE
+		temp = sides[1][0];
+		sides[1][0] = sides[1][2];
+		sides[1][2] = sides[1][8];
+		sides[1][8] = sides[1][6];
+		sides[1][6] = temp;
+		temp = sides[1][1];
+		sides[1][1] = sides[1][5];
+		sides[1][5] = sides[1][7];
+		sides[1][7] = sides[1][3];
+		sides[1][3] = temp;
+		temp = sides[0][3];
+		sides[0][3] = sides[2][3];
+		sides[2][3] = sides[5][3];
+		sides[5][3] = sides[4][5];
+		sides[4][5] = temp;
+		temp = sides[0][0];
+		sides[0][0] = sides[2][0];
+		sides[2][0] = sides[5][0];
+		sides[5][0] = sides[4][8];
+		sides[4][8] = temp;
+		temp = sides[0][6];
+		sides[0][6] = sides[2][6];
+		sides[2][6] = sides[5][6];
+		sides[5][6] = sides[4][2];
+		sides[4][2] = temp;
+	}
+	if (move == "D") {  //DONE
+		temp = sides[5][0];
+		sides[5][0] = sides[5][6];
+		sides[5][6] = sides[5][8];
+		sides[5][8] = sides[5][2];
+		sides[5][2] = temp;
+		temp = sides[5][1];
+		sides[5][1] = sides[5][3];
+		sides[5][3] = sides[5][7];
+		sides[5][7] = sides[5][5];
+		sides[5][5] = temp;
+		temp = sides[2][7];
+		sides[2][7] = sides[1][7];
+		sides[1][7] = sides[4][7];
+		sides[4][7] = sides[3][7];
+		sides[3][7] = temp;
+		temp = sides[2][6];
+		sides[2][6] = sides[1][6];
+		sides[1][6] = sides[4][6];
+		sides[4][6] = sides[3][6];
+		sides[3][6] = temp;
+		temp = sides[2][8];
+		sides[2][8] = sides[1][8];
+		sides[1][8] = sides[4][8];
+		sides[4][8] = sides[3][8];
+		sides[3][8] = temp;
+	}
+	if (move == "D'") { //DONE
+		temp = sides[5][0];
+		sides[5][0] = sides[5][2];
+		sides[5][2] = sides[5][8];
+		sides[5][8] = sides[5][6];
+		sides[5][6] = temp;
+		temp = sides[5][1];
+		sides[5][1] = sides[5][5];
+		sides[5][5] = sides[5][7];
+		sides[5][7] = sides[5][3];
+		sides[5][3] = temp;
+		temp = sides[2][7];
+		sides[2][7] = sides[3][7];
+		sides[3][7] = sides[4][7];
+		sides[4][7] = sides[1][7];
+		sides[1][7] = temp;
+		temp = sides[2][6];
+		sides[2][6] = sides[3][6];
+		sides[3][6] = sides[4][6];
+		sides[4][6] = sides[1][6];
+		sides[1][6] = temp;
+		temp = sides[2][8];
+		sides[2][8] = sides[3][8];
+		sides[3][8] = sides[4][8];
+		sides[4][8] = sides[1][8];
+		sides[1][8] = temp;
+	}
+	if (move == "B") {  //DONE
+		temp = sides[4][0];
+		sides[4][0] = sides[4][6];
+		sides[4][6] = sides[4][8];
+		sides[4][8] = sides[4][2];
+		sides[4][2] = temp;
+		temp = sides[4][1];
+		sides[4][1] = sides[4][3];
+		sides[4][3] = sides[4][7];
+		sides[4][7] = sides[4][5];
+		sides[4][5] = temp;
+		temp = sides[0][1];
+		sides[0][1] = sides[3][5];
+		sides[3][5] = sides[5][7];
+		sides[5][7] = sides[1][3];
+		sides[1][3] = temp;
+		temp = sides[0][2];
+		sides[0][2] = sides[3][8];
+		sides[3][8] = sides[5][6];
+		sides[5][6] = sides[1][0];
+		sides[1][0] = temp;
+		temp = sides[0][0];
+		sides[0][0] = sides[3][2];
+		sides[3][2] = sides[5][8];
+		sides[5][8] = sides[1][6];
+		sides[1][6] = temp;
+	}
+	if (move == "B'") { //DONE
+		temp = sides[4][0];
+		sides[4][0] = sides[4][2];
+		sides[4][2] = sides[4][8];
+		sides[4][8] = sides[4][6];
+		sides[4][6] = temp;
+		temp = sides[4][1];
+		sides[4][1] = sides[4][5];
+		sides[4][5] = sides[4][7];
+		sides[4][7] = sides[4][3];
+		sides[4][3] = temp;
+		temp = sides[0][1];
+		sides[0][1] = sides[1][3];
+		sides[1][3] = sides[5][7];
+		sides[5][7] = sides[3][5];
+		sides[3][5] = temp;
+		temp = sides[0][2];
+		sides[0][2] = sides[1][0];
+		sides[1][0] = sides[5][6];
+		sides[5][6] = sides[3][8];
+		sides[3][8] = temp;
+		temp = sides[0][0];
+		sides[0][0] = sides[1][6];
+		sides[1][6] = sides[5][8];
+		sides[5][8] = sides[3][2];
+		sides[3][2] = temp;
+	}
+}
+</script>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<html>
+	<head>
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body class="unselectable">
+		<canvas id="c"></canvas><br>
+		<button onclick="play()">▶ PLAY</button>
+		<button onclick="stop()">◼ STOP</button>
+		<button class="saveButton" onclick="saveMelody()">SAVE</button>
+		<button class="loadButton" onclick="loadMelody()">LOAD</button>
+		<button class="resetButton" onclick="resetMelody()">RESET</button>
+		<button class="transposeUp" onclick="transposeUp()">▲ UP</button>
+		<button class="transposeDown" onclick="transposeDown()">▼ DOWN</button>
+		
+		<br><br>
+		Download the dataset we made for the assignment <a href="melodies.zip" download>here</a> (32 KB).
+	</body>
+</html>
+<script src="sound.js"></script>
+<script src="canvas.js"></script>
+<script src="eventListeners.js"></script> 
+
+<script src="main.js"></script>

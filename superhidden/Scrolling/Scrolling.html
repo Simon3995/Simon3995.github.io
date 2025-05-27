@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<audio class="sfx" id="tick" src="tick.mp3" preload="auto"></audio>
+<html>
+<body>
+<canvas id="myCanvas" style="border:1px solid black"></canvas>
+</body>
+</html>
+
+<script type="text/javascript">
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+
+	c.width = 300;
+	c.height = 500;
+	currentItem = 0;
+	totalItems = 30;
+	maxItem = totalItems-1;
+	itemFit = 10;
+	boxLocation = 0;
+	listScroll = 0;
+	visListScroll = 0;
+	animationDelay = 10;
+	
+	function update() {
+		ctx.clearRect(0,0,c.width,c.height);
+		
+		//maximum listScroll = (c.height/itemFit)*maxItem - c.height;
+		listScroll = ((c.height/itemFit)*totalItems - c.height) * ((currentItem/maxItem)+currentItem)/totalItems;
+		visListScroll = (((animationDelay-1)*visListScroll) + listScroll)/animationDelay;
+		
+		for (i=0;i<=maxItem;i++) {
+			if(Math.abs(i-currentItem) < 2*itemFit) {
+				ctx.fillStyle = "hsl(" + i*(360/totalItems) + ", 100%, 50%)";
+				ctx.fillRect(0,(c.height/itemFit)*i - visListScroll,c.width,c.height/itemFit);
+				ctx.strokeStyle = "hsl(" + i*(360/totalItems) + ", 100%, 40%)";
+				ctx.lineWidth = 4;
+				ctx.strokeRect(0,(c.height/itemFit)*i - visListScroll,c.width,c.height/itemFit);
+				ctx.fillStyle = "white";
+				ctx.font = "30px Courier";
+				ctx.fillText(i, 20, (c.height/itemFit)*i - visListScroll + 35);
+				//alert("list item " + i + " has just been drawn");
+			}
+		}
+		
+		ctx.lineWidth = 2;
+		boxLocation = ((animationDelay-1)*boxLocation + ((c.height-(c.height/itemFit))/maxItem)*currentItem)/animationDelay;
+		ctx.strokeStyle = "black";
+		ctx.lineWidth = 2;
+		ctx.strokeRect(0,boxLocation,c.width,c.height/itemFit);
+		
+		window.requestAnimationFrame(update);
+	}
+	
+	window.requestAnimationFrame(update);
+	
+	window.addEventListener("keydown", function(evt) {
+		if(evt.keyCode == 38) {
+			if(currentItem > 0) {
+				currentItem--;
+				playOsc(200 + 600*currentItem/maxItem);
+			}
+		} else if(evt.keyCode == 40) {
+			if(currentItem < maxItem) {
+				currentItem++;
+				playOsc(200 + 600*currentItem/maxItem);
+			}
+		}
+		
+	}, false);
+	
+	function playOsc(freq) {
+		var audioCtx = new AudioContext();
+		var oscillator = audioCtx.createOscillator();
+		oscillator.type = 'square';
+		oscillator.connect(audioCtx.destination); // Connect to speakers
+		oscillator.frequency.value = freq;
+		oscillator.volume.value = 0.1;
+		oscillator.start(0);
+		setTimeout(function(){
+			oscillator.stop();
+			audioCtx.close();
+		},100);
+	}
+	
+	/*
+	There is 50 items in a list that is large enough to show 10 items at a time.
+	The height of the canvas in pixels is 500
+	This means a single item must be 50 pixels high. (Canvas Height / Item Fit)
+	The FULL list is 50*50 = 2500 pixels high
+	From first item to last item the list moves 2500-500 = 2000 pixels
+	This means it moves up and down 2000/50 = 40 pixels up and down with every tap
+	*/
+</script>
