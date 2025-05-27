@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="style.css">
+	</head>
+	<body>
+		<p id="info"></p>
+		<br>
+		<canvas id="myCanvas" width="500" height="500"></canvas>
+		<br>
+		<a id="ball" class="myButton" onclick="setType('ball')">BALL</a>
+		<a id="wall" class="myButton" onclick="setType('wall')">WALL</a>
+		<a id="hole" class="myButton" onclick="setType('hole')">HOLE</a>
+		<a id="arc" class="myButton" onclick="setType('arc')">ARC</a>
+		<a id="size" class="myButton" onclick="setType('size')">FIELD SIZE</a>
+		<a id="grid" class="myButton" onclick="toggleGrid()">TOGGLE GRID</a>
+		<a id="delete" class="myButton" onclick="setType('delete')">DELETE</a>
+		<br><br>
+		<a id="save" class="myButton" onclick="saveLevel()">SAVE LEVEL</a>
+		<a id="load" class="myButton" onclick="loadLevel()">LOAD LEVEL</a>
+		<br><br>
+		<p id="wallcount"></p>
+		<p id="holecount"></p>
+		<p id="arccount"></p>
+		<p id="gridsize"></p>
+	</body>
+</html>
+
+<script src="graphics.js"></script>
+<script src="eventListeners.js"></script>
+<script src="util.js"></script>
+<script src="main.js"></script>
+<script src="savingLoading.js"></script>

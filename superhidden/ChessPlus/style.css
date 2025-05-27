@@ -1,0 +1,24 @@
+body {
+	line-height: 0;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	background-color: #222;
+	
+	user-select: none;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-o-user-select: none;
+}
+
+.stack {
+	position: relative;
+	display: inline-block;
+}
+
+.stack canvas {
+	position: absolute;
+	left: 0;
+	top: 0;
+}

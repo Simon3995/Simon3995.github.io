@@ -1,0 +1,42 @@
+canvas {
+	border: 1px solid black;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.wrapper {
+	position: relative;
+	margin: 60px;
+	width: min-content;
+	background-color: red;
+}
+
+body {
+	background-color: #374450;
+	text-align: center;
+}
+
+.myButton {
+	position: absolute;
+	top: -50px;
+	width: 100px;
+
+	background-color: #fff;
+	display: inline-block;
+	cursor: pointer;
+	color: #000;
+	font-family: Arial;
+	font-size: 14px;
+	font-weight: bold;
+	padding: 10px 14px;
+	text-decoration: none;
+}
+
+.myButton:hover {
+	background-color: #EEFCFF;
+}
+
+.myButton:active {
+	background-color: #FFF;
+}
