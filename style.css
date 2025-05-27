@@ -35,7 +35,6 @@ a:hover {
 audio {
 	height: 30px;
 	width: 100%;
-	filter: invert(100%);
 }
 
 hr {
