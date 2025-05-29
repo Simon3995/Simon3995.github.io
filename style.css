@@ -48,13 +48,15 @@ th {
 
 td {
 	vertical-align: center;
-	padding-right: 10px;
 }
 
 .jsicon {
-    width: 150px;
-    height: 150px;
+    width: 140px;
+    height: 140px;
     object-fit: cover;
+	margin: 5px 0px;
+	border-radius: 8px;
+	filter: drop-shadow(0px 0px 8px #000000dd);
 }
 
 .main {
