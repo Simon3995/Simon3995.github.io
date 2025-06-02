@@ -10,6 +10,7 @@ h1 {
 	text-align: center;
 	font-size: 80px;
 	margin-top: -140px;
+	transition-duration: 200ms;
 }
 
 h2 {
@@ -21,6 +22,12 @@ h3 {
 	font-weight: normal;
 	margin-top: 5px;
 	margin-bottom: 0px;
+}
+
+span {
+	display: inline-block;
+	transform-origin: center;
+	transition-duration: 200ms;
 }
 
 a {
@@ -90,13 +97,7 @@ td {
 }
 
 .noselect {
-  -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Old versions of Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome, Edge, Opera and Firefox */
+	user-select: none;
 }
 
 .icon {
