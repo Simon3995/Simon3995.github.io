@@ -1,0 +1,90 @@
+html {
+    background-color: #222;
+}
+
+body {
+    padding-top: 20px;
+    padding-left: 40px;
+    font-family: "Consolas", monospace;
+    overflow: auto;
+    white-space: nowrap;
+}
+
+h1 {
+    color: white;
+    letter-spacing: 6px;
+}
+
+p {
+    color: white;
+    font-size: 18px;
+}
+
+select {
+    background-color: #333;
+    color: white;
+    font-size: 18px;
+    font-family: "Consolas", monospace;
+}
+
+option {
+    background-color: #333;
+}
+
+button {
+    padding: 6px 8px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 4px;
+    border: none;
+    margin-right: 10px;
+}
+
+button:hover {
+    filter: brightness(110%);
+}
+
+button:active {
+    transform: translateY(2px);
+}
+
+#downloadbutton {
+    background-color: rgb(77, 210, 77);
+}
+
+#pausebutton {
+    background-color: rgb(97, 173, 221);
+}
+
+#abortbutton {
+    background-color: rgb(255, 133, 133);
+}
+
+progress {
+    width: 1000px;
+    height: 30px;
+    border-radius: 0px;
+}
+
+progress::-webkit-progress-bar {
+    background-color: #444;
+}
+
+progress::-webkit-progress-value {
+    background-color: rgb(77, 210, 77);
+}
+
+#loading {
+    position: relative;
+    width: 0px;
+    height: 40px;
+    display: inline-block;
+    top: 8px;
+    margin-right: 0px;
+    transition-duration: .5s;
+    opacity: 0%;
+}
+
+#info {
+    margin-bottom: 8px;
+}

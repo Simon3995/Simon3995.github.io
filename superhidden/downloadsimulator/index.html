@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Download Simulator</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="loading.css">
+    </head>
+    <body>
+        <h1>DOWNLOAD SIMULATOR v1.0</h1>
+        <p>Download speed: <select id="speedselect">
+            <option value="4">Person reading out individual ones and zeroes (4 bps)</option>
+            <option value="56000">Maximum theoretical speed of dial-up internet (56 kbps)</option>
+        </select></p>
+        <p>File to download: <select id="fileselect">
+            <option value="320000">Super Mario Bros. [NES] (40 kB)</option>
+            <option value="5072000000">Stardew Valley (634 MB)</option>
+        </select></p>
+        <button onclick="start()" id="downloadbutton">DOWNLOAD</button>
+        <button onclick="pause()" id="pausebutton">PAUSE</button>
+        <button onclick="abort()" id="abortbutton">ABORT</button>
+        <p id="info">No download active.</p>
+        <div id="loading" class="spinner"></div><progress id="progress" max="100" value="0"></progress>
+    </body>
+</html>
+
+<script src="util.js"></script>
+<script src="main.js"></script>
