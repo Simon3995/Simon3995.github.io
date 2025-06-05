@@ -21,6 +21,7 @@ setInterval(function() {
         dl.progress += dl.speed * delta_t;
         let percentage = 100 * Math.round(dl.progress) / dl.target;
         progress_bar.value = percentage;
+        let remaining_s = (dl.target - dl.progress) / dl.speed;
 
         // check if finished
         if (dl.progress >= dl.target) {
@@ -34,8 +35,10 @@ setInterval(function() {
         document.title = `Downloading... (${percentage.toFixed(1)}%)`;
         info.innerHTML = `Downloading... `;
         info.innerHTML += `${byte_format(Math.round(dl.progress))} of ${byte_format(dl.target)}`;
+        info.innerHTML += ` (${percentage.toFixed(2)}%)`;
+        info.innerHTML += ` - ${format_duration(remaining_s * (1 + 0.06*(Math.random()-0.5)))} remaining`;
     }
-}, 300)
+}, 500)
 
 function start() {
     dl.active = true;
@@ -49,6 +52,7 @@ function start() {
 function pause() {
     dl.active = false;
     let load = document.getElementById("loading");
+    let percentage = 100 * Math.round(dl.progress) / dl.target;
     load.style.width = "0px";
     load.style.marginRight = "0px";
     load.style.opacity = "0%";
@@ -56,9 +60,10 @@ function pause() {
     document.title = "Download Simulator";
     info.innerHTML = "Paused. ";
     info.innerHTML += `${byte_format(Math.round(dl.progress))} of ${byte_format(dl.target)}`;
+    info.innerHTML += ` (${percentage.toFixed(2)}%)`;
 }
 
-function abort() {
+function reset() {
     dl.active = false;
     dl.finished = false;
     dl.progress = 0;
@@ -77,4 +82,5 @@ document.getElementById("speedselect").onchange = e => {
 
 document.getElementById("fileselect").onchange = e => {
     dl.target = e.target.value;
+    reset();
 }

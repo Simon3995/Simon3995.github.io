@@ -9,15 +9,34 @@
         <h1>DOWNLOAD SIMULATOR v1.0</h1>
         <p>Download speed: <select id="speedselect">
             <option value="4">Person reading out individual ones and zeroes (4 bps)</option>
+            <option value="39">Approximate transmission rate of human speech (39 bps)</option>
+            <option value="300">Average 1985 dial-up connection (300 bps)</option>
             <option value="56000">Maximum theoretical speed of dial-up internet (56 kbps)</option>
+            <option value="732200">Bluetooth 1.0 (1999) maximum data transfer rate (732.2 kbps)</option>
+            <option value="3000000">Average early 2010s internet connection (3 Mbps)</option>
+            <option value="90400000">My own download speed as I'm making this (90.4 Mbps)</option>
+            <option value="336450000">Average 2025 download speed in Singapore (336.5 Mbps)</option>
+            <option value="6900000000">Maximum theoretical speed of WiFi 5 (6.9 Gbps)</option>
+            <option value="46000000000">Maximum theoretical speed of WiFi 7 (46 Gbps)</option>
+            <option value="20000000000000">Data transfer rate of undersea glass fiber cable (20 Tbps)</option>
         </select></p>
         <p>File to download: <select id="fileselect">
+            <option value="8">The letter "A" (1 B)</option>
+            <option value="184">This description (23 B)</option>
+            <option value="15200">Lyrics to Bohemian Rhapsody in plain text (1.9 kB)</option>
             <option value="320000">Super Mario Bros. [NES] (40 kB)</option>
+            <option value="3200000">Average 1080p JPG wallpaper (400 kB)</option>
+            <option value="32000000">4 minute MP3 song in medium quality (4 MB)</option>
+            <option value="240000000">Nintendogs (DS) (30 MB)</option>
             <option value="5072000000">Stardew Valley (634 MB)</option>
+            <option value="22400000000">Linux Mint 22.1 Cinnamon (2.8 GB)</option>
+            <option value="952000000000">Red Dead Redemption 2 (Steam) (119 GB)</option>
+            <option value="14640000000000">Archive of all Nintendo 3DS games (1.83 TB)</option>
+            <option value="175000000000000000000000">Estimated size of the internet in 2025 (175 ZB)</option>
         </select></p>
         <button onclick="start()" id="downloadbutton">DOWNLOAD</button>
         <button onclick="pause()" id="pausebutton">PAUSE</button>
-        <button onclick="abort()" id="abortbutton">ABORT</button>
+        <button onclick="reset()" id="abortbutton">RESET</button>
         <p id="info">No download active.</p>
         <div id="loading" class="spinner"></div><progress id="progress" max="100" value="0"></progress>
     </body>
