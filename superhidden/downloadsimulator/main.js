@@ -10,7 +10,6 @@ dl.target = Number(document.getElementById("fileselect").value);
 dl.speed = Number(document.getElementById("speedselect").value);
 let progress_bar = document.getElementById("progress");
 let info = document.getElementById("info");
-
 let prev_time = new Date();
 
 setInterval(function() {
@@ -36,9 +35,9 @@ setInterval(function() {
         info.innerHTML = `Downloading... `;
         info.innerHTML += `${byte_format(Math.round(dl.progress))} of ${byte_format(dl.target)}`;
         info.innerHTML += ` (${percentage.toFixed(2)}%)`;
-        info.innerHTML += ` - ${format_duration(remaining_s * (1 + 0.06*(Math.random()-0.5)))} remaining`;
+        info.innerHTML += ` - ${format_duration(remaining_s)} remaining`;
     }
-}, 500)
+}, 200);
 
 function start() {
     dl.active = true;

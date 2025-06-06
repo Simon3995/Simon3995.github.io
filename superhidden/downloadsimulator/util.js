@@ -31,5 +31,5 @@ function format_duration(seconds) {
         }
     }
 
-    return parts.length > 0 ? "About " + parts.join(' ') : '0 s';
+    return parts.length > 0 ? parts.join(' ') : '0 s';
 }

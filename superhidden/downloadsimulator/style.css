@@ -3,8 +3,8 @@ html {
 }
 
 body {
-    padding-top: 20px;
-    padding-left: 40px;
+    padding-top: 10px;
+    padding-left: 35px;
     font-family: "Consolas", monospace;
     overflow: auto;
     white-space: nowrap;
@@ -12,7 +12,7 @@ body {
 
 h1 {
     color: white;
-    letter-spacing: 6px;
+    letter-spacing: 2px;
 }
 
 p {
@@ -25,6 +25,7 @@ select {
     color: white;
     font-size: 18px;
     font-family: "Consolas", monospace;
+    border: none;
 }
 
 option {
