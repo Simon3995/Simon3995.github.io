@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
         requestAnimationFrame(loop_4);
         for (let i = 0; i < chars.length; i++) {
             let x = Number(new Date()) / 8e2;
-            chars[i].style.transform = `rotate3d(0, 0, 1, ${2*theta(x - i/3)}rad)`;
+            chars[i].style.transform = `translateY(${-10 + 8*theta(1.5*x - i/3)}px)`;
         }
     });
 
