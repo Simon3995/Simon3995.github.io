@@ -3,7 +3,7 @@ let dists = [];
 dists.push({
 	year: 9999,
 	involved: [
-      	{name:"SP",amt:7},
+      	{name:"SP",amt:6},
 		{name:"PvdD",amt:6},
 		{name:"GL-PvdA",amt:27},
 		{name:"DENK",amt:4},
@@ -13,11 +13,11 @@ dists.push({
 		{name:"NSC",amt:2},
 		{name:"CDA",amt:18},
 		{name:"BBB",amt:3},
-		{name:"VVD",amt:28},
+		{name:"VVD",amt:26},
 		{name:"SGP",amt:3},
-		{name:"JA21", amt:3},
-		{name:"PVV",amt:29},
-		{name:"FvD",amt:3},
+		{name:"JA21",amt:3},
+		{name:"PVV",amt:31},
+		{name:"FvD",amt:4},
 	],
 	coalition: [],
 });
