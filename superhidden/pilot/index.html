@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Text Morphing - Pilot Study</title>
+        <style>
+            body {
+                background-color: #ddd;
+                font-family: sans-serif;
+                padding-left: 10px;
+            }
+            p {
+                color: blue;
+                width: 700px;
+            }
+            .indent {
+                margin-left: 40px;
+            }
+        </style>
+    </head>
+
+    <!--
+        1. AJ-procrustes-physical
+        2. JR-procrustes-linear
+        3. RA-bbox-linear
+        4. JA-bbox-physical
+        5. RA-jaccard-linear
+        6. JR-bbox-physical
+        7. RA-procrustes-linear
+        8. AR-procrustes-physical
+        9. AJ-procrustes-linear
+        10. RJ-procrustes-physical
+        11. AR-bbox-physical
+        12. RJ-jaccard-linear
+        13. AJ-jaccard-linear
+        14. JA-bbox-linear
+        15. JR-jaccard-physical
+        16. RA-jaccard-physical
+        17. JR-bbox-linear
+        18. AJ-jaccard-physical
+    -->
+
+    <body>
+        <h1>Text Morphing - Pilot Study</h1>
+        <p>Welcome to this short pilot study about font morphing methods!</p>
+        <p>In each of the following questions, you wil see a series of images symbolising a morph between two fonts. The first and last images are the source and target fonts respectively, and the middle image is the exact halfway point AKA the <b>"Intermediate Font"</b> of the morph between them.</p>
+        <p>You will be asked a few questions about each of these morphs. Please keep track of your answers and send them back to me (Simon) when you are done!</p>
+        <p>The questionnaire consists of a total of 18 questions, each with three subquestions (a, b, c).</p>
+
+        <!-- QUESTION -->
+        <div class="shuffle">
+            <h2>1. Please take a look at the following font morph:</h2>
+            <img src="imgs/alfaslab_standard.png">
+            <img src="imgs/alfaslab_judson_procrustes_physical.png">
+            <img src="imgs/judson_standard.png">
+            
+            <p><b>a)</b> How visually pleasing do you find the intermediate font?</p>
+            <div class="indent">
+                1 - Not visually pleasing at all<br>
+                2 - Just a little bit visually pleasing<br>
+                3 - Fairly visually pleasing<br>
+                4 - Quite visually pleasing<br>
+                5 - Extremely visually pleasing
+            </div>
+
+            <p><b>b)</b> How legible do you find the intermediate font?</p>
+            <div class="indent">
+                1 - I cannot read it at all<br>
+                2 - It's difficult to read<br>
+                3 - It's a bit uncomfortable to read<br>
+                4 - It's fairly easy to read<br>
+                5 - It's very easy to read
+            </div>
+            
+            <p>Visually, the intermediate font should lie inbetween the other two fonts. We say that the intermediate font appears to <b>"belong"</b> between the other two fonts if it seems to be maximally similar and equally similar to both other fonts. An intermediate font that doesn't look like either other font doesn't belong, and a font that looks a lot like one of the fonts but not the other also doesn't belong.</p>
+            <p><b>c)</b> How well does the intermediate font seem to belong between the other two fonts?</p>
+            <div class="indent">
+                1 - It doesn't seem to belong at all<br>
+                2 - It seems to belong just a little bit<br>
+                3 - It seems to belong fairly well<br>
+                4 - It seems to belong quite well<br>
+                5 - It seems to belong perfectly
+            </div>
+        </div>
+
+        <!-- QUESTION -->
+        <div class="shuffle">
+            <h2>2. Please take a look at the following font morph:</h2>
+            <img src="imgs/judson_standard.png">
+            <img src="imgs/judson_roboto_procrustes_linear.png">
+            <img src="imgs/roboto_standard.png">
+            <p><b>a)</b> How visually pleasing do you find the intermediate font?</p>
+            <div class="indent">
+                1 - Not visually pleasing at all<br>
+                2 - Just a little bit visually pleasing<br>
+                3 - Fairly visually pleasing<br>
+                4 - Quite visually pleasing<br>
+                5 - Extremely visually pleasing
+            </div>
+            <p><b>b)</b> How legible do you find the intermediate font?</p>
+            <div class="indent">
+                1 - I cannot read it at all<br>
+                2 - It's difficult to read<br>
+                3 - It's a bit uncomfortable to read<br>
+                4 - It's fairly easy to read<br>
+                5 - It's very easy to read
+            </div>
+            <p><b>c)</b> How well does the intermediate font seem to belong between the other two fonts?</p>
+            <div class="indent">
+                1 - It doesn't seem to belong at all<br>
+                2 - It seems to belong just a little bit<br>
+                3 - It seems to belong fairly well<br>
+                4 - It seems to belong quite well<br>
+                5 - It seems to belong perfectly
+            </div>
+        </div>
+
+        <!-- QUESTION -->
+        <div class="shuffle">
+            <h2>3. Please take a look at the following font morph:</h2>
+            <img src="imgs/roboto_standard.png">
+            <img src="imgs/alfaslab_roboto_bbox_linear.png">
+            <img src="imgs/alfaslab_standard.png">
+            <p><b>a)</b> How visually pleasing do you find the intermediate font?</p>
+            <div class="indent">
+                1 - Not visually pleasing at all<br>
+                2 - Just a little bit visually pleasing<br>
+                3 - Fairly visually pleasing<br>
+                4 - Quite visually pleasing<br>
+                5 - Extremely visually pleasing
+            </div>
+            <p><b>b)</b> How legible do you find the intermediate font?</p>
+            <div class="indent">
+                1 - I cannot read it at all<br>
+                2 - It's difficult to read<br>
+                3 - It's a bit uncomfortable to read<br>
+                4 - It's fairly easy to read<br>
+                5 - It's very easy to read
+            </div>
+            <p><b>c)</b> How well does the intermediate font seem to belong between the other two fonts?</p>
+            <div class="indent">
+                1 - It doesn't seem to belong at all<br>
+                2 - It seems to belong just a little bit<br>
+                3 - It seems to belong fairly well<br>
+                4 - It seems to belong quite well<br>
+                5 - It seems to belong perfectly
+            </div>
+        </div>
+
+        <!-- QUESTION -->
+        <div class="shuffle">
+            <h2>4. Please take a look at the following font morph:</h2>
+            <img src="imgs/judson_standard.png">
+            <img src="imgs/alfaslab_judson_bbox_physical.png">
+            <img src="imgs/alfaslab_standard.png">
+            <p><b>a)</b> How visually pleasing do you find the intermediate font?</p>
+            <div class="indent">
+                1 - Not visually pleasing at all<br>
+                2 - Just a little bit visually pleasing<br>
+                3 - Fairly visually pleasing<br>
+                4 - Quite visually pleasing<br>
+                5 - Extremely visually pleasing
+            </div>
+            <p><b>b)</b> How legible do you find the intermediate font?</p>
+            <div class="indent">
+                1 - I cannot read it at all<br>
+                2 - It's difficult to read<br>
+                3 - It's a bit uncomfortable to read<br>
+                4 - It's fairly easy to read<br>
+                5 - It's very easy to read
+            </div>
+            <p><b>c)</b> How well does the intermediate font seem to belong between the other two fonts?</p>
+            <div class="indent">
+                1 - It doesn't seem to belong at all<br>
+                2 - It seems to belong just a little bit<br>
+                3 - It seems to belong fairly well<br>
+                4 - It seems to belong quite well<br>
+                5 - It seems to belong perfectly
+            </div>
+        </div>
+
+        <!-- QUESTION -->
+        <div class="shuffle">
+            <h2>5. Please take a look at the following font morph:</h2>
+            <img src="imgs/roboto_standard.png">
+            <img src="imgs/alfaslab_roboto_jaccard_linear.png">
+            <img src="imgs/alfaslab_standard.png">
+            <p><b>a)</b> How visually pleasing do you find the intermediate font?</p>
+            <div class="indent">
+                1 - Not visually pleasing at all<br>
+                2 - Just a little bit visually pleasing<br>
+                3 - Fairly visually pleasing<br>
+                4 - Quite visually pleasing<br>
+                5 - Extremely visually pleasing
+            </div>
+            <p><b>b)</b> How legible do you find the intermediate font?</p>
+            <div class="indent">
+                1 - I cannot read it at all<br>
+                2 - It's difficult to read<br>
+                3 - It's a bit uncomfortable to read<br>
+                4 - It's fairly easy to read<br>
+                5 - It's very easy to read
+            </div>
+            <p><b>c)</b> How well does the intermediate font seem to belong between the other two fonts?</p>
+            <div class="indent">
+                1 - It doesn't seem to belong at all<br>
+                2 - It seems to belong just a little bit<br>
+                3 - It seems to belong fairly well<br>
+                4 - It seems to belong quite well<br>
+                5 - It seems to belong perfectly
+            </div>
+        </div>
+
+        <!-- QUESTION -->
+        <div class="shuffle">
+            <h2>6. Please take a look at the following font morph:</h2>
+            <img src="imgs/judson_standard.png">
+            <img src="imgs/judson_roboto_bbox_physical.png">
+            <img src="imgs/roboto_standard.png">
+            <p><b>a)</b> How visually pleasing do you find the intermediate font?</p>
+            <div class="indent">
+                1 - Not visually pleasing at all<br>
+                2 - Just a little bit visually pleasing<br>
+                3 - Fairly visually pleasing<br>
+                4 - Quite visually pleasing<br>
+                5 - Extremely visually pleasing
+            </div>
+            <p><b>b)</b> How legible do you find the intermediate font?</p>
+            <div class="indent">
+                1 - I cannot read it at all<br>
+                2 - It's difficult to read<br>
+                3 - It's a bit uncomfortable to read<br>
+                4 - It's fairly easy to read<br>
+                5 - It's very easy to read
+            </div>
+            <p><b>c)</b> How well does the intermediate font seem to belong between the other two fonts?</p>
+            <div class="indent">
+                1 - It doesn't seem to belong at all<br>
+                2 - It seems to belong just a little bit<br>
+                3 - It seems to belong fairly well<br>
+                4 - It seems to belong quite well<br>
+                5 - It seems to belong perfectly
+            </div>
+        </div>
+
+        <!-- QUESTION -->
+        <div class="shuffle">
+            <h2>7. Please take a look at the following font morph:</h2>
+            <img src="imgs/roboto_standard.png">
+            <img src="imgs/alfaslab_roboto_procrustes_linear.png">
+            <img src="imgs/alfaslab_standard.png">
+            <p><b>a)</b> How visually pleasing do you find the intermediate font?</p>
+            <div class="indent">
+                1 - Not visually pleasing at all<br>
+                2 - Just a little bit visually pleasing<br>
+                3 - Fairly visually pleasing<br>
+                4 - Quite visually pleasing<br>
+                5 - Extremely visually pleasing
+            </div>
+            <p><b>b)</b> How legible do you find the intermediate font?</p>
+            <div class="indent">
+                1 - I cannot read it at all<br>
+                2 - It's difficult to read<br>
+                3 - It's a bit uncomfortable to read<br>
+                4 - It's fairly easy to read<br>
+                5 - It's very easy to read
+            </div>
+            <p><b>c)</b> How well does the intermediate font seem to belong between the other two fonts?</p>
+            <div class="indent">
+                1 - It doesn't seem to belong at all<br>
+                2 - It seems to belong just a little bit<br>
+                3 - It seems to belong fairly well<br>
+                4 - It seems to belong quite well<br>
+                5 - It seems to belong perfectly
+            </div>
+        </div>
+
+        <!-- QUESTION -->
+        <div class="shuffle">
+            <h2>8. Please take a look at the following font morph:</h2>
+            <img src="imgs/alfaslab_standard.png">
+            <img src="imgs/alfaslab_roboto_procrustes_physical.png">
+            <img src="imgs/roboto_standard.png">
+            <p><b>a)</b> How visually pleasing do you find the intermediate font?</p>
+            <div class="indent">
+                1 - Not visually pleasing at all<br>
+                2 - Just a little bit visually pleasing<br>
+                3 - Fairly visually pleasing<br>
+                4 - Quite visually pleasing<br>
+                5 - Extremely visually pleasing
+            </div>
+            <p><b>b)</b> How legible do you find the intermediate font?</p>
+            <div class="indent">
+                1 - I cannot read it at all<br>
+                2 - It's difficult to read<br>
+                3 - It's a bit uncomfortable to read<br>
+                4 - It's fairly easy to read<br>
+                5 - It's very easy to read
+            </div>
+            <p><b>c)</b> How well does the intermediate font seem to belong between the other two fonts?</p>
+            <div class="indent">
+                1 - It doesn't seem to belong at all<br>
+                2 - It seems to belong just a little bit<br>
+                3 - It seems to belong fairly well<br>
+                4 - It seems to belong quite well<br>
+                5 - It seems to belong perfectly
+            </div>
+        </div>
+
+        <!-- QUESTION -->
+        <div class="shuffle">
+            <h2>9. Please take a look at the following font morph:</h2>
+            <img src="imgs/alfaslab_standard.png">
+            <img src="imgs/alfaslab_judson_procrustes_linear.png">
+            <img src="imgs/judson_standard.png">
+            <p><b>a)</b> How visually pleasing do you find the intermediate font?</p>
+            <div class="indent">
+                1 - Not visually pleasing at all<br>
+                2 - Just a little bit visually pleasing<br>
+                3 - Fairly visually pleasing<br>
+                4 - Quite visually pleasing<br>
+                5 - Extremely visually pleasing
+            </div>
+            <p><b>b)</b> How legible do you find the intermediate font?</p>
+            <div class="indent">
+                1 - I cannot read it at all<br>
+                2 - It's difficult to read<br>
+                3 - It's a bit uncomfortable to read<br>
+                4 - It's fairly easy to read<br>
+                5 - It's very easy to read
+            </div>
+            <p><b>c)</b> How well does the intermediate font seem to belong between the other two fonts?</p>
+            <div class="indent">
+                1 - It doesn't seem to belong at all<br>
+                2 - It seems to belong just a little bit<br>
+                3 - It seems to belong fairly well<br>
+                4 - It seems to belong quite well<br>
+                5 - It seems to belong perfectly
+            </div>
+        </div>
+
+        <!-- QUESTION -->
+        <div class="shuffle">
+            <h2>10. Please take a look at the following font morph:</h2>
+            <img src="imgs/roboto_standard.png">
+            <img src="imgs/judson_roboto_procrustes_physical.png">
+            <img src="imgs/judson_standard.png">
+            <p><b>a)</b> How visually pleasing do you find the intermediate font?</p>
+            <div class="indent">
+                1 - Not visually pleasing at all<br>
+                2 - Just a little bit visually pleasing<br>
+                3 - Fairly visually pleasing<br>
+                4 - Quite visually pleasing<br>
+                5 - Extremely visually pleasing
+            </div>
+            <p><b>b)</b> How legible do you find the intermediate font?</p>
+            <div class="indent">
+                1 - I cannot read it at all<br>
+                2 - It's difficult to read<br>
+                3 - It's a bit uncomfortable to read<br>
+                4 - It's fairly easy to read<br>
+                5 - It's very easy to read
+            </div>
+            <p><b>c)</b> How well does the intermediate font seem to belong between the other two fonts?</p>
+            <div class="indent">
+                1 - It doesn't seem to belong at all<br>
+                2 - It seems to belong just a little bit<br>
+                3 - It seems to belong fairly well<br>
+                4 - It seems to belong quite well<br>
+                5 - It seems to belong perfectly
+            </div>
+        </div>
+
+        <!-- QUESTION -->
+        <div class="shuffle">
+            <h2>11. Please take a look at the following font morph:</h2>
+            <img src="imgs/alfaslab_standard.png">
+            <img src="imgs/alfaslab_roboto_bbox_physical.png">
+            <img src="imgs/roboto_standard.png">
+            <p><b>a)</b> How visually pleasing do you find the intermediate font?</p>
+            <div class="indent">
+                1 - Not visually pleasing at all<br>
+                2 - Just a little bit visually pleasing<br>
+                3 - Fairly visually pleasing<br>
+                4 - Quite visually pleasing<br>
+                5 - Extremely visually pleasing
+            </div>
+            <p><b>b)</b> How legible do you find the intermediate font?</p>
+            <div class="indent">
+                1 - I cannot read it at all<br>
+                2 - It's difficult to read<br>
+                3 - It's a bit uncomfortable to read<br>
+                4 - It's fairly easy to read<br>
+                5 - It's very easy to read
+            </div>
+            <p><b>c)</b> How well does the intermediate font seem to belong between the other two fonts?</p>
+            <div class="indent">
+                1 - It doesn't seem to belong at all<br>
+                2 - It seems to belong just a little bit<br>
+                3 - It seems to belong fairly well<br>
+                4 - It seems to belong quite well<br>
+                5 - It seems to belong perfectly
+            </div>
+        </div>
+
+        <!-- QUESTION -->
+        <div class="shuffle">
+            <h2>12. Please take a look at the following font morph:</h2>
+            <img src="imgs/roboto_standard.png">
+            <img src="imgs/judson_roboto_jaccard_linear.png">
+            <img src="imgs/judson_standard.png">
+            <p><b>a)</b> How visually pleasing do you find the intermediate font?</p>
+            <div class="indent">
+                1 - Not visually pleasing at all<br>
+                2 - Just a little bit visually pleasing<br>
+                3 - Fairly visually pleasing<br>
+                4 - Quite visually pleasing<br>
+                5 - Extremely visually pleasing
+            </div>
+            <p><b>b)</b> How legible do you find the intermediate font?</p>
+            <div class="indent">
+                1 - I cannot read it at all<br>
+                2 - It's difficult to read<br>
+                3 - It's a bit uncomfortable to read<br>
+                4 - It's fairly easy to read<br>
+                5 - It's very easy to read
+            </div>
+            <p><b>c)</b> How well does the intermediate font seem to belong between the other two fonts?</p>
+            <div class="indent">
+                1 - It doesn't seem to belong at all<br>
+                2 - It seems to belong just a little bit<br>
+                3 - It seems to belong fairly well<br>
+                4 - It seems to belong quite well<br>
+                5 - It seems to belong perfectly
+            </div>
+        </div>
+
+        <!-- QUESTION -->
+        <div class="shuffle">
+            <h2>13. Please take a look at the following font morph:</h2>
+            <img src="imgs/alfaslab_standard.png">
+            <img src="imgs/alfaslab_judson_jaccard_linear.png">
+            <img src="imgs/judson_standard.png">
+            <p><b>a)</b> How visually pleasing do you find the intermediate font?</p>
+            <div class="indent">
+                1 - Not visually pleasing at all<br>
+                2 - Just a little bit visually pleasing<br>
+                3 - Fairly visually pleasing<br>
+                4 - Quite visually pleasing<br>
+                5 - Extremely visually pleasing
+            </div>
+            <p><b>b)</b> How legible do you find the intermediate font?</p>
+            <div class="indent">
+                1 - I cannot read it at all<br>
+                2 - It's difficult to read<br>
+                3 - It's a bit uncomfortable to read<br>
+                4 - It's fairly easy to read<br>
+                5 - It's very easy to read
+            </div>
+            <p><b>c)</b> How well does the intermediate font seem to belong between the other two fonts?</p>
+            <div class="indent">
+                1 - It doesn't seem to belong at all<br>
+                2 - It seems to belong just a little bit<br>
+                3 - It seems to belong fairly well<br>
+                4 - It seems to belong quite well<br>
+                5 - It seems to belong perfectly
+            </div>
+        </div>
+
+        <!-- QUESTION -->
+        <div class="shuffle">
+            <h2>14. Please take a look at the following font morph:</h2>
+            <img src="imgs/judson_standard.png">
+            <img src="imgs/alfaslab_judson_bbox_linear.png">
+            <img src="imgs/alfaslab_standard.png">
+            <p><b>a)</b> How visually pleasing do you find the intermediate font?</p>
+            <div class="indent">
+                1 - Not visually pleasing at all<br>
+                2 - Just a little bit visually pleasing<br>
+                3 - Fairly visually pleasing<br>
+                4 - Quite visually pleasing<br>
+                5 - Extremely visually pleasing
+            </div>
+            <p><b>b)</b> How legible do you find the intermediate font?</p>
+            <div class="indent">
+                1 - I cannot read it at all<br>
+                2 - It's difficult to read<br>
+                3 - It's a bit uncomfortable to read<br>
+                4 - It's fairly easy to read<br>
+                5 - It's very easy to read
+            </div>
+            <p><b>c)</b> How well does the intermediate font seem to belong between the other two fonts?</p>
+            <div class="indent">
+                1 - It doesn't seem to belong at all<br>
+                2 - It seems to belong just a little bit<br>
+                3 - It seems to belong fairly well<br>
+                4 - It seems to belong quite well<br>
+                5 - It seems to belong perfectly
+            </div>
+        </div>
+
+        <!-- QUESTION -->
+        <div class="shuffle">
+            <h2>15. Please take a look at the following font morph:</h2>
+            <img src="imgs/judson_standard.png">
+            <img src="imgs/judson_roboto_jaccard_physical.png">
+            <img src="imgs/roboto_standard.png">
+            <p><b>a)</b> How visually pleasing do you find the intermediate font?</p>
+            <div class="indent">
+                1 - Not visually pleasing at all<br>
+                2 - Just a little bit visually pleasing<br>
+                3 - Fairly visually pleasing<br>
+                4 - Quite visually pleasing<br>
+                5 - Extremely visually pleasing
+            </div>
+            <p><b>b)</b> How legible do you find the intermediate font?</p>
+            <div class="indent">
+                1 - I cannot read it at all<br>
+                2 - It's difficult to read<br>
+                3 - It's a bit uncomfortable to read<br>
+                4 - It's fairly easy to read<br>
+                5 - It's very easy to read
+            </div>
+            <p><b>c)</b> How well does the intermediate font seem to belong between the other two fonts?</p>
+            <div class="indent">
+                1 - It doesn't seem to belong at all<br>
+                2 - It seems to belong just a little bit<br>
+                3 - It seems to belong fairly well<br>
+                4 - It seems to belong quite well<br>
+                5 - It seems to belong perfectly
+            </div>
+        </div>
+
+        <!-- QUESTION -->
+        <div class="shuffle">
+            <h2>16. Please take a look at the following font morph:</h2>
+            <img src="imgs/roboto_standard.png">
+            <img src="imgs/alfaslab_roboto_jaccard_physical.png">
+            <img src="imgs/alfaslab_standard.png">
+            <p><b>a)</b> How visually pleasing do you find the intermediate font?</p>
+            <div class="indent">
+                1 - Not visually pleasing at all<br>
+                2 - Just a little bit visually pleasing<br>
+                3 - Fairly visually pleasing<br>
+                4 - Quite visually pleasing<br>
+                5 - Extremely visually pleasing
+            </div>
+            <p><b>b)</b> How legible do you find the intermediate font?</p>
+            <div class="indent">
+                1 - I cannot read it at all<br>
+                2 - It's difficult to read<br>
+                3 - It's a bit uncomfortable to read<br>
+                4 - It's fairly easy to read<br>
+                5 - It's very easy to read
+            </div>
+            <p><b>c)</b> How well does the intermediate font seem to belong between the other two fonts?</p>
+            <div class="indent">
+                1 - It doesn't seem to belong at all<br>
+                2 - It seems to belong just a little bit<br>
+                3 - It seems to belong fairly well<br>
+                4 - It seems to belong quite well<br>
+                5 - It seems to belong perfectly
+            </div>
+        </div>
+
+        <!-- QUESTION -->
+        <div class="shuffle">
+            <h2>17. Please take a look at the following font morph:</h2>
+            <img src="imgs/judson_standard.png">
+            <img src="imgs/judson_roboto_bbox_linear.png">
+            <img src="imgs/roboto_standard.png">
+            <p><b>a)</b> How visually pleasing do you find the intermediate font?</p>
+            <div class="indent">
+                1 - Not visually pleasing at all<br>
+                2 - Just a little bit visually pleasing<br>
+                3 - Fairly visually pleasing<br>
+                4 - Quite visually pleasing<br>
+                5 - Extremely visually pleasing
+            </div>
+            <p><b>b)</b> How legible do you find the intermediate font?</p>
+            <div class="indent">
+                1 - I cannot read it at all<br>
+                2 - It's difficult to read<br>
+                3 - It's a bit uncomfortable to read<br>
+                4 - It's fairly easy to read<br>
+                5 - It's very easy to read
+            </div>
+            <p><b>c)</b> How well does the intermediate font seem to belong between the other two fonts?</p>
+            <div class="indent">
+                1 - It doesn't seem to belong at all<br>
+                2 - It seems to belong just a little bit<br>
+                3 - It seems to belong fairly well<br>
+                4 - It seems to belong quite well<br>
+                5 - It seems to belong perfectly
+            </div>
+        </div>
+
+        <!-- QUESTION -->
+        <div class="shuffle">
+            <h2>18. Please take a look at the following font morph:</h2>
+            <img src="imgs/alfaslab_standard.png">
+            <img src="imgs/alfaslab_judson_jaccard_physical.png">
+            <img src="imgs/judson_standard.png">
+            <p><b>a)</b> How visually pleasing do you find the intermediate font?</p>
+            <div class="indent">
+                1 - Not visually pleasing at all<br>
+                2 - Just a little bit visually pleasing<br>
+                3 - Fairly visually pleasing<br>
+                4 - Quite visually pleasing<br>
+                5 - Extremely visually pleasing
+            </div>
+            <p><b>b)</b> How legible do you find the intermediate font?</p>
+            <div class="indent">
+                1 - I cannot read it at all<br>
+                2 - It's difficult to read<br>
+                3 - It's a bit uncomfortable to read<br>
+                4 - It's fairly easy to read<br>
+                5 - It's very easy to read
+            </div>
+            <p><b>c)</b> How well does the intermediate font seem to belong between the other two fonts?</p>
+            <div class="indent">
+                1 - It doesn't seem to belong at all<br>
+                2 - It seems to belong just a little bit<br>
+                3 - It seems to belong fairly well<br>
+                4 - It seems to belong quite well<br>
+                5 - It seems to belong perfectly
+            </div>
+        </div>
+
+        <br><hr>
+
+        <p>That concludes the questionnaire, thank you for participating!</p><br><br>
+    </body>
+</html>
+
+<script type="text/javascript"></script>
