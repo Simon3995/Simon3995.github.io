@@ -92,7 +92,7 @@ const drawYearMenu = function() {
       	ctx.fillStyle = "#0390fc";
 		ctx.font = "bold 16px Arial";
 		ctx.textAlign = "center";
-		ctx.fillText((lang=="nl")?"Peilingwijzer 30 juli 2025":"Polling Average 30th July 2025", c.width/2, 440);
+		ctx.fillText((lang=="nl")?"Peilingwijzer 3 september 2025":"Polling Average 3 September 2025", c.width/2, 440);
 		
 		// draw year text
 		ctx.fillStyle = "#0390fc";
