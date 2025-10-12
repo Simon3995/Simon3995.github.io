@@ -10,6 +10,7 @@ dists.push({
 		{name:"Volt",amt:4},
 		{name:"D66",amt:13},
 		{name:"CU",amt:3},
+		{name:"50PLUS",amt:1},
 		{name:"CDA",amt:24},
 		{name:"BBB",amt:4},
 		{name:"VVD",amt:14},
