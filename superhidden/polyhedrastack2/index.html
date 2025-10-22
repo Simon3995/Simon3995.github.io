@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Polyhedra Stack</title>
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+		<div class="row">
+			<div id="main" class="column">
+				<div id="clickType">
+					<button class="squarebutton" id="clickType0" title="Add Shapes (A)"></button>
+					<button class="squarebutton" id="clickType1" title="Delete Branch (D)"></button>
+					<button class="squarebutton" id="clickType2" title="Viewing Mode (V)"></button>
+					<button class="squarebutton" id="clickType3" title="Focus on Object (F)"></button>
+					<button class="squarebutton" id="clickType4" title="Rotate Branch (R)"></button>
+				</div>
+
+				<button class="squarebutton" id="resetViewButton" title="Reset View to Default"></button>
+			</div>
+
+			<button class="squarebutton" id="sidebarToggle" title="Toggle Sidebar">
+				<img src="sprites/chevron.png" id="sidebarchevron">
+			</button>
+			<div id="sidebar" class="column">
+				<!-- SIDEBAR TABS -->
+				<div class="nav">
+					<button class="navbutton active">Polyhedra</button>
+					<button class="navbutton">Themes</button>
+					<button class="navbutton">Tools</button>
+					<button class="navbutton">Settings</button>
+				</div>
+
+				<!-- POLYHEDRA MENU -->
+				<div id="Polyhedra" class="tabcontent">
+					<h1>Select Polyhedron</h1>
+					<div id="polyhedralist"></div>
+				</div>
+
+				<!-- THEMES MENU -->
+				<div id="Themes" class="tabcontent" style="display: none">
+					<h1>Select Theme</h1>
+					<select name="Themes" id="themeselect" autocomplete="off">
+						<option selected value="Basic Dark">Basic Dark</option>
+						<option value="Basic Light">Basic Light</option>
+						<option value="Translucent Dark">Translucent Dark</option>
+						<option value="Translucent Light">Translucent Light</option>
+						<option value="Wireframe Dark">Wireframe Dark</option>
+						<option value="Wireframe Light">Wireframe Light</option>
+						<option value="Normal Shading">Normal Shading</option>
+					</select>
+				</div>
+
+				<!-- TOOLS MENU -->
+				<div id="Tools" class="tabcontent" style="display: none">
+					<h1>Import / Export</h1>
+					<button class="optionsbutton" id="downloadOBJ" title="Export as OBJ">Export as OBJ</button><br>
+					<button class="optionsbutton" id="downloadJSON" title="Export as JSON">Export as JSON</button><br>
+					<button class="optionsbutton" id="importJSON" title="Import from JSON">Import from JSON</button>
+				</div>
+
+				<!-- SETTINGS MENU -->
+				<div id="Settings" class="tabcontent" style="display: none">
+					<p>Settings menu goes here</p>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+
+<script type="importmap">
+	{
+	  "imports": {
+		"three": "https://cdn.jsdelivr.net/npm/three@v0.173.0/build/three.module.js",
+		"three/addons/": "https://cdn.jsdelivr.net/npm/three@v0.173.0/examples/jsm/"
+	  }
+	}
+</script>
+
+<script type="module" src="main.js"></script>
