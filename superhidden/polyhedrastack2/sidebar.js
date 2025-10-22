@@ -71,7 +71,7 @@ export const generate_polyhedra_list = function() {
             
             // create button image
             let img = document.createElement("img");
-            img.src = `/sprites/solids/${shape.name}.png`;
+            img.src = `./sprites/solids/${shape.name}.png`;
             img.classList.add('polyimg');
 
             // add classes
