@@ -1,48 +1,57 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Home | Menger Sponge</title>
-		<link rel="stylesheet" href="style.css">
-		<script src="/home_script.js"></script>
-	</head>
-	<body>
-		<!-- HEADER -->
-		<div class="header noselect">
-			<img id="bg" src="imgs/mengersponge_bg.jpg">
-			<h1 id="title">Menger&nbsp;Sponge</h1>
+
+<head>
+	<title>Home | Menger Sponge</title>
+	<link rel="stylesheet" href="style.css">
+	<script src="/home_script.js"></script>
+</head>
+
+<body>
+	<!-- HEADER -->
+	<div class="header noselect">
+		<img id="bg" src="imgs/mengersponge_bg.jpg">
+		<h1 id="title">Menger&nbsp;🎃&nbsp;Sponge</h1>
+	</div>
+
+	<!-- BUTTON BAR -->
+	<div id="buttonbar">
+		<a class="btn selected" href="/">Home</a>
+		<a class="btn" href="/music">Music</a>
+		<a class="btn" href="/jsprojects">JS Projects</a>
+		<a class="btn" href="/gamedev">Game Dev</a>
+		<!--<a class="btn" href="/contact">Contact</a>-->
+	</div>
+
+	<!-- CONTENT -->
+	<div class="main">
+		<p style="margin:20px 70px 30px; line-height:22px">
+			Welcome to <a href>mengersponge.website</a>. Menger Sponge is a collaboration of <a
+				href="https://irratix.bandcamp.com/">Irratix</a> and <a
+				href="https://panorrrama.bandcamp.com/">Panorrrama</a>.
+			This site is for all kinds of projects we're working on, from music, to programming, to game development, to
+			whatever else we feel like.
+		</p>
+		<div style="background-color:#fff1; padding:10px; text-align:center; border-radius:6px; margin-bottom:20px">
+			<h3>LATEST RELEASE</h3>
+			<iframe id="youtube_video" style="margin-top:10px; width:500px; height:281px; border-radius:6px"
+				title="YouTube video player" frameborder="0"
+				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+				allowfullscreen></iframe>
 		</div>
-		
-		<!-- BUTTON BAR -->
-		<div id="buttonbar">
-			<a class="btn" href="/">Home</a>
-			<a class="btn" href="/music">Music</a>
-			<a class="btn" href="/wipmusic">WIP Music</a>
-			<a class="btn" href="/jsprojects">JS Projects</a>
-          	<!--<a class="btn" href="/contact">Contact</a>-->
-		</div>
-		
-		<!-- CONTENT -->
-		<div class="main">
-			<p style="margin:20px 70px 30px; line-height:22px">
-				Welcome to <a href>mengersponge.website</a>. Menger Sponge is a collaboration of <a href="https://irratix.bandcamp.com/">Irratix</a> and <a href="https://panorrrama.bandcamp.com/">Panorrrama</a>.
-				This site is for all kinds of projects we're working on, from music, to programming, to game development, to whatever else we feel like.
-			</p>
-			<div style="background-color:#fff1; padding:10px; text-align:center; border-radius:6px; margin-bottom:20px">
-				<h3>LATEST RELEASE</h3>
-				<iframe id="youtube_video" style="margin-top:10px; width:500px; height:281px; border-radius:6px" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-			</div>
-		</div>
-	</body>
+	</div>
+</body>
+
 </html>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript">
 	let channelID = "UCZp_0RmiCAsFeD5VfDNzVRA";
 	let reqURL = "https://www.youtube.com/feeds/videos.xml?channel_id=";
-	$.getJSON("https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(reqURL)+channelID, function(data) {
-	   let link = data.items[0].link;
-	   let id = link.substr(link.indexOf("=")+1);
-	$("#youtube_video").attr("src","https://youtube.com/embed/"+id + "?controls=1&showinfo=1&rel=0");
+	$.getJSON("https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(reqURL) + channelID, function (data) {
+		let link = data.items[0].link;
+		let id = link.substr(link.indexOf("=") + 1);
+		$("#youtube_video").attr("src", "https://youtube.com/embed/" + id + "?controls=1&showinfo=1&rel=0");
 	});
 </script>
 
