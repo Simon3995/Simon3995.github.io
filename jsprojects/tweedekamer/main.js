@@ -10,7 +10,7 @@ let seats = [];
 let mouseX = 0;
 let mouseY = 0;
 
-let currentYear = 2023;		// i think you can guess what this one does
+let currentYear = 2025;		// i think you can guess what this one does
 let seatAmt;
 let highlighted = null;		// party hovered over in table
 let coalition = false;		// coalition view toggled
