@@ -1,7 +1,53 @@
-let title, chars, loops = [];
+let title, emoji, chars, loops = [];
+
+let emoji_calendar = {
+    // JANUARY
+    "0101":"🎆",
+
+    // FEBRUARY
+    "0211":"🎂", "0214":"🌹", "0221":"🌌", "0229":"🦘",
+
+    // MARCH
+    "0301":"🌱", "0310":"🍄", "0317":"🍀", "0328":"🧑‍🚀",
+
+    // APRIL
+    "0401":"🃏", "0420":"🥚", "0421":"🐇", "0422":"🌍", "0427":"👑", "0430":"🐈",
+
+    // MAY
+    "0501":"⚒️", "0503":"🐟", "0504":"🇳🇱", "0505":"🇳🇱", "0514":"👽",
+
+    // JUNE
+    "0601":"🏳️‍🌈", "0619":"⛓️‍💥",
+
+    // JULY
+    "0704":"🍔", "0706":"🎩", "0711":"🎂",
+
+    // SEPTEMBER
+    "0901":"🍂", "0911":"✈️",
+
+    // OCTOBER
+    "1004":"🐕", "1031":"🎃",
+
+    // NOVEMBER
+    "1101":"💀", "1102":"💀", "1103":"🍁", "1104":"🌧️", "1111":"🏮",
+
+    // DECEMBER
+    "1201":"❄️", "1204":"👞", "1205":"🎁", "1216":"🏛️", "1225":"🎄", "1226":"🎁", "1228":"☃️",
+}
 
 document.addEventListener("DOMContentLoaded", function () {
     title = document.getElementById("title");
+    emoji = document.getElementById("dailyemoji");
+
+    // let today = new Date();
+    // let today_DD = today.getDate();
+    // if (today_DD < 10) today_DD = "0" + today_DD;
+    // let today_MM = today.getMonth() + 1;
+    // if (today_MM < 10) today_MM = "0" + today_MM;
+    // let MMDD = "" + today_MM + today_DD;
+    // let today_emoji = emoji_calendar[MMDD];
+    // emoji.innerHTML = today_emoji ? today_emoji : "🧽";
+
     
     // horizontal wave animation
     loops.push(function loop_0() {
