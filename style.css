@@ -147,6 +147,19 @@ td {
 	text-align: center;
 }
 
+.gamedevtable th, .gamedevtable td {
+	padding: 2px;
+}
+
+.gamedevtable {
+	margin-top: 20px;
+	padding: 10px;
+	background-color: #ffffff18;
+	border-radius: 8px;
+}
+
+span.nobr { white-space: norwap; }
+
 @font-face {
 	font-family: Mustica;
 	src: url(fonts/Mustica.otf);
