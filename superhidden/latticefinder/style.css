@@ -1,0 +1,16 @@
+html {
+    background-color: #444;
+}
+
+canvas {
+    background-color: #fff;
+    height: 900px;
+    width: 900px;
+}
+
+p {
+    color: white;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 24px;
+    margin: 0;
+}
