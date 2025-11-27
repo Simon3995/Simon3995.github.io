@@ -153,7 +153,8 @@ td {
 
 .gamedevtable th,
 .gamedevtable td {
-	padding: 2px;
+	padding: 4px 10px;
+	border: 2px solid #fff4;
 }
 
 .gamedevtable {
@@ -161,6 +162,7 @@ td {
 	padding: 10px;
 	background-color: #ffffff18;
 	border-radius: 8px;
+	border-collapse: collapse;
 }
 
 span.nobr {
