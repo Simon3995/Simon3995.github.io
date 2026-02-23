@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+        <title>Global Playlist</title>
+    </head>
+    <body>
+        <h1>Global Playlist</h1>
+        <div id="status">Connecting... (May take a minute cause I'm using the shitty free tier on render.com)</div>
+
+        <div id="player-wrapper">
+            <div id="player"></div>
+            <div id="player-overlay"></div>
+            <button id="unmute-btn" onclick="unmute()"></button>
+        </div>
+
+        <div class="controls">
+            <input type="text" id="videoUrl" placeholder="Paste YouTube URL here...">
+            <button id="add-btn" onclick="submitVideo()">Add to Playlist</button>
+            <button id="sync-btn" onclick="syncWithServer()">Retry Sync</button>
+        </div>
+
+        <div id="dashboard">
+            <div id="now-playing-details">
+                <p>Started: <span id="start-time">-</span></p>
+                <p>Ends: <span id="end-time">-</span></p>
+            </div>
+
+            <div id="queue-stats">
+                <p>Videos in Queue: <span id="queue-count">0</span></p>
+                <p>Queue finishes at: <span id="full-queue-finish">-</span></p>
+            </div>
+
+            <h3>Upcoming:</h3>
+            <div>
+                <ul id="upcoming-list"></ul>
+            </div>
+        </div>
+    </body>
+</html>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
+<script src="./main.js"></script>
