@@ -96,6 +96,8 @@ function updateUI(state) {
     }
 }
 
+setInterval(updateUI, 1000);
+
 function loadVideo(id, startSeconds) {
     if (!player) {
         player = new YT.Player('player', {
