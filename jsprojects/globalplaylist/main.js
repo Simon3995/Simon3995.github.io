@@ -1,6 +1,7 @@
 let player;
 const BACKEND_URL = "https://global-playlist.onrender.com";
 const socket = io(BACKEND_URL);
+let state;
 debug();
 
 // youtube api calls this when ready
@@ -10,9 +11,9 @@ function onYouTubeIframeAPIReady() {
 
 async function syncWithServer() {
     const response = await fetch(`${BACKEND_URL}/state`);
-    const state = await response.json();
+    state = await response.json();
 
-    updateUI(state);
+    updateUI();
 }
 
 function formatTime(ms) {
@@ -53,7 +54,7 @@ function formatFullDuration(totalSeconds) {
     return parts.join(' ');
 }
 
-function updateUI(state) {
+function updateUI() {
     const statusEl = document.getElementById('status');
     const upcomingList = document.getElementById('upcoming-list');
     
