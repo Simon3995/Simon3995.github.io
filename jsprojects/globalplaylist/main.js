@@ -130,6 +130,7 @@ function loadVideo(id, startSeconds) {
     }
 }
 
+// called when video stops playing
 function onPlayerStateChange(event) {
     // check if the video has ended (0 = ended)
     if (event.data === YT.PlayerState.ENDED) {
