@@ -2,7 +2,7 @@ let player;
 const BACKEND_URL = "https://global-playlist.onrender.com";
 const socket = io(BACKEND_URL);
 let state;
-debug();
+//debug();
 
 // youtube api calls this when ready
 function onYouTubeIframeAPIReady() {
