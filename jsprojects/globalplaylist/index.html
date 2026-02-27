@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+        <title>Global Playlist</title>
+    </head>
+    <body>
+        <h1>Global Playlist</h1>
+        <div id="status">Connecting...</div>
+
+        <div id="player-wrapper">
+            <div id="player"></div>
+            <div id="player-overlay"></div>
+            <button id="unmute-btn" onclick="unmute()"></button>
+        </div>
+
+        <div class="controls">
+            <input type="text" id="videoUrl" placeholder="Paste YouTube URL here...">
+            <button id="add-btn" onclick="submitVideo()">Add to Playlist</button>
+            <button id="sync-btn" onclick="syncWithServer()">Retry Sync</button>
+        </div>
+
+        <div id="dashboard">
+            <div class="left-column">
+                <h3>Stats</h3>
+                <p>Current video started: <span id="start-time">-</span></p>
+                <p>Current video ends: <span id="end-time">-</span></p>
+                <p>Videos in queue: <span id="queue-count">0</span></p>
+                <p>Queue ends: <span id="full-queue-finish">-</span></p>
+                <p>Videos played: <span id="played-count">0</span></p>
+                <p>Playing uninterrupted for: <span id="uninterrupted-time">-</span></p> 
+            </div>
+
+            <div class="right-column">
+                <h3>Up next</h3>
+                <div id="upcoming-list"></div>
+            </div>
+        </div>
+    </body>
+</html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.8.1/socket.io.js"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
+<script src="./main.js"></script>

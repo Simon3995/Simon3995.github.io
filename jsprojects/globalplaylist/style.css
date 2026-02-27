@@ -1,0 +1,140 @@
+html {
+    color: white;
+    background-color: #1f1d24;
+    font-family: sans-serif;
+}
+
+body {
+    text-align: center;
+}
+
+h1 {
+    color: #a487e9;
+    margin-bottom: 10px;
+}
+
+h3 {
+    color: #a487e9;
+    margin: 0px
+}
+
+ul {
+    margin: 6px;
+}
+
+p {
+    margin: 6px 0px;
+}
+
+button {
+    font-size: 16px;
+    background-color: #ffffff20;
+    padding: 4px 5px;
+    border: none;
+    color: white;
+}
+
+#unmute-btn {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    width: 40px;
+    height: 40px;
+    background-color: crimson;
+    background-image: url(./imgs/mute.svg);
+    background-size: contain;
+    border-radius: 10%;
+    z-index: 10;
+}
+
+#status {
+    margin-bottom: 15px;
+}
+
+.controls {
+    margin: 10px 0px;
+}
+
+#add-btn {
+    background-color: #346434;
+}
+
+#sync-btn {
+    background-color: #3476ad;
+}
+
+#player-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 640px;
+    height: 390px;
+    background-color: black;
+}
+
+#player-wrapper iframe {
+    transition: opacity 0.3s ease;
+}
+
+.video-hidden iframe {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#player-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    cursor: default;
+}
+
+#videoUrl {
+    width: 300px;
+    font-size: 16px;
+    color: white;
+    border: none;
+    background-color: #ffffff20;
+    padding: 4px 5px;
+}
+
+#dashboard {
+    display: flex;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    gap: 20px;
+    box-sizing: border-box;
+    padding: 10px;
+    background-color: #ffffff10;
+}
+
+.left-column, .right-column {
+    flex: 1;
+    width: 50%;
+    text-align: left;
+}
+
+.timestamp {
+    color: #77a2ff;
+    font-weight: bold;
+}
+
+.title {
+    color: #4fffca;
+    font-weight: bold;
+}
+
+.author {
+    color: #ffc65c;
+    font-weight: bold;
+}
+
+#upcoming-list {
+    list-style: none;
+}
+
+ul {
+    padding: 0;
+}
