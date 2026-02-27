@@ -59,7 +59,7 @@ function updateUI(state) {
     
     // 1. Current Video Info
     if (state.type === 'video' && state.current) {
-        statusEl.innerText = `Now playing: <span class="title">${state.current.title}</span> by <span class="author">${state.current.channel}</span>`;
+        statusEl.innerHTML = `Now playing: <span class="title">${state.current.title}</span> by <span class="author">${state.current.channel}</span>`;
         document.getElementById('start-time').innerText = formatTime(state.current.startTime);
         document.getElementById('end-time').innerText = formatTime(state.current.endTime);
         loadVideo(state.current.youtube_id, state.current.seekTo);
@@ -71,22 +71,29 @@ function updateUI(state) {
     // 2. Queue Stats
     document.getElementById('queue-count').innerText = state.totalQueued || 0;
     document.getElementById('full-queue-finish').innerText = state.overallEndTime ? formatTime(state.overallEndTime) : "-";
+    document.getElementById("played-count").innerHTML = state.totalPlayed;
 
     // 3. Upcoming List
     upcomingList.innerHTML = "";
     if (state.upcoming && state.upcoming.length > 0) {
         state.upcoming.forEach(vid => {
             const li = document.createElement('p');
-            li.innerText = `<span class="timestamp">[${formatTime(vid.startTime)}]</span> ${vid.title}`;
+            li.innerHTML = `<span class="timestamp">[${formatTime(vid.startTime)}]</span> ${vid.title}`;
             upcomingList.appendChild(li);
         });
     } else {
         upcomingList.innerHTML = "<p>No videos scheduled</p>";
     }
 
-    // other shit i guess
-    document.getElementById("played-count").innerHTML = state.totalPlayed;
-    document.getElementById("uninterrupted-time").innerHTML = formatFullDuration(state.uninterruptedSec);
+    // 4. Streak Length
+    streakElement = document.getElementById("uninterrupted-time");
+    if (!state.streakStart) {
+        streakElement.innerText = "0s";
+    } else {
+        const now = Date.now();
+        const diffInSeconds = Math.floor((now - state.streakStart) / 1000);
+        streakElement.innerText = diffInSeconds > 0 ? formatFullDuration(diffInSeconds) : "0s";
+    }
 }
 
 function loadVideo(id, startSeconds) {
