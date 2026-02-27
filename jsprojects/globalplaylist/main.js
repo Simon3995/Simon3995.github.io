@@ -14,6 +14,7 @@ async function syncWithServer() {
     state = await response.json();
 
     updateUI();
+    loadVideo(state.current.youtube_id, state.current.seekTo);
 }
 
 function formatTime(ms) {
@@ -63,7 +64,6 @@ function updateUI() {
         statusEl.innerHTML = `Now playing: <span class="title">${state.current.title}</span> by <span class="author">${state.current.channel}</span>`;
         document.getElementById('start-time').innerText = formatTime(state.current.startTime);
         document.getElementById('end-time').innerText = formatTime(state.current.endTime);
-        loadVideo(state.current.youtube_id, state.current.seekTo);
     } else {
         document.getElementById('start-time').innerText = "-";
         document.getElementById('end-time').innerText = "-";
