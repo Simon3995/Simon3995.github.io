@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Thumbnail Maker</title>
+        <style>
+            body {
+                background-color: #444;
+            }
+
+            canvas {
+                border: 1px solid white;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="main"></div>
+    </body>
+</html>
+
+<script type="importmap">
+	{
+	  "imports": {
+		"three": "https://cdn.jsdelivr.net/npm/three@v0.173.0/build/three.module.js",
+		"three/addons/": "https://cdn.jsdelivr.net/npm/three@v0.173.0/examples/jsm/"
+	  }
+	}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
+import { LineSegments2 } from 'three/addons/lines/LineSegments2.js';
+import { mesh_to_face_objects, mesh_to_line_segments, mesh_to_triangles } from './util.js';
+import Shapes from './shapes.js';
+import normal_shading from './themes/normal_shading.js';
+
+let init_shape = "Pentagonal Bipyramid";
+
+// three.js setup
+export const Scene = {
+	raycaster: new THREE.Raycaster(),
+	scene: new THREE.Scene(),
+	camera: new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.01, 1000),
+	renderer: new THREE.WebGLRenderer({antialias: false, preserveDrawingBuffer: true}),
+	pointer: new THREE.Vector2(),
+	controls: {},
+    theme: normal_shading,
+}
+
+// start a new scene from a single shape
+export const create_shape = function(shape_name) {
+    const shape = Shapes[shape_name];
+
+    // initialize geometry
+    const geom = new THREE.BufferGeometry();
+    geom.setAttribute('position', new THREE.BufferAttribute(new Float32Array(mesh_to_triangles(shape)), 3));
+    const edge_mat = Scene.theme.line_material;
+    const edge_geom = new THREE.EdgesGeometry(geom);
+    const line_segments = new LineSegments2(edge_geom, edge_mat);
+
+    // initialize faces
+    const face_objs = mesh_to_face_objects(shape);
+    const face_mat = Scene.theme.default;
+    for (const face_obj of face_objs) {
+        line_segments.attach(new THREE.Mesh(face_obj, face_mat));
+    }
+
+    line_segments.userData.name = shape_name;
+
+    return line_segments;
+}
+
+export const save = function() {
+    const link = document.createElement("a");
+    link.download = `${init_shape}.png`;
+    link.href = Scene.renderer.domElement.toDataURL();
+    link.target = "_blank";
+    link.click();
+}
+
+let button = document.createElement("button");
+button.onclick = save;
+button.innerHTML = "Save Thumbnail";
+document.getElementById("main").appendChild(button);
+
+document.body.appendChild(Scene.renderer.domElement);
+let controls = new TrackballControls(Scene.camera, Scene.renderer.domElement);
+controls.rotateSpeed = 0.5;
+controls.zoomSpeed = .5;
+controls.panSpeed = 0.1;
+controls.dynamicDampingFactor = 1;
+Scene.controls = controls;
+Scene.camera.position.z = 20;
+Scene.camera.fov = 10;
+Scene.alpha = true;
+Scene.renderer.setSize(300, 300, false);
+Scene.camera.aspect = 1;
+Scene.renderer.setClearColor(0x000000, 0);
+Scene.camera.updateProjectionMatrix();
+
+const animate = function() {
+    const camera = Scene.camera;
+    camera.updateMatrixWorld();
+    Scene.renderer.render(Scene.scene, camera);
+    Scene.controls.update();
+    requestAnimationFrame(animate);
+}
+
+let shape = create_shape(init_shape);
+Scene.scene.add(shape);
+console.log("Scene", Scene);
+animate();
+</script>
