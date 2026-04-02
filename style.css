@@ -53,9 +53,9 @@ th {
 	text-align: left;
 }
 
-td {
+/* td {
 	vertical-align: center;
-}
+} */
 
 .selected {
 	border-bottom: 3px solid white;
