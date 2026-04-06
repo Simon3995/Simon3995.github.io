@@ -1,7 +1,7 @@
 // init
 const c = document.getElementById("canvas");
 const ctx = c.getContext("2d");
-let cur_tml, cur_plm, cur_hlt = null, party_imgs, mouse_x, mouse_y;
+let cur_tml, cur_plm, cur_hlt = [], party_imgs, mouse_x, mouse_y;
 load_timeline("nl_tweedekamer");
 update();
 
@@ -22,17 +22,30 @@ function resize_canvas() {
 	c.height = window.innerHeight;
 }
 
-function highlight(id) {
-	cur_hlt = id;
-
+function table_highlight() {
 	document.querySelectorAll("tr.highlighted").forEach(row => {
 		row.classList.remove("highlighted");
 	});
 
-	const hl_row = document.getElementById(id);
-	if (hl_row && hl_row.tagName === 'TR') {
-		hl_row.classList.add("highlighted");
+	for (const pid of cur_hlt) {
+		const hl_row = document.getElementById(pid);
+		if (hl_row && hl_row.tagName === 'TR') {
+			hl_row.classList.add("highlighted");
+		}
 	}
+}
+
+function highlight(id) {
+	if (id == null) {
+		cur_hlt = [];
+	} else if (cur_hlt.includes(id)) {
+		cur_hlt.splice(cur_hlt.indexOf(id), 1);
+	} else {
+		cur_hlt.push(id);
+	}
+
+	table_highlight();
+	table(cur_plm);
 }
 
 function transform_ctx() {
@@ -102,6 +115,7 @@ function generate_party_imgs() {
 function table(parliament) {
 	let string = "";
 	let total_seats = 0;
+	let total_hlt = 0;
 	string += `<table>`;
 	
 	let fracs = [...parliament.fractions];
@@ -144,12 +158,25 @@ function table(parliament) {
 		string += `<td>${frac.seat_amt} (${diff})</td>`;
 
 		total_seats += frac.seat_amt;
+		if (cur_hlt.includes(frac.party.id)) total_hlt += frac.seat_amt;
 	}
 
 	string += '<tr>';
 	string += '<th>Total</th>';
-	string += '<th></th>';
-	string += '<th>' + total_seats + '</th>';
+	if (total_hlt > 0) {
+		let coalition_comment;
+		if (total_hlt * 2 == total_seats) {
+			coalition_comment = "<span class='chlf'>Half</span>";
+		} else if (total_hlt * 2 < total_seats) {
+			coalition_comment = "<span class='cmin'>Minority</span>";
+			coalition_comment +=  `, ${Math.ceil((total_seats / 2) + 0.2)} needed for majority`;
+		} else {
+			coalition_comment = "<span class='cmaj'>Majority</span>";
+		}
+		string += `<th class="ralign" colspan="2">${total_hlt}/${total_seats} (${coalition_comment})</th>`;
+	} else {
+		string += '<th class="ralign" colspan="2">' + total_seats + '</th>';
+	}
 	string += '</tr>';
 
 	string += "</table>";
@@ -186,7 +213,7 @@ function table(parliament) {
 		document.getElementById("left_plm").innerHTML = '';
 	}
 
-	highlight(cur_hlt);  // re-highlight
+	table_highlight();
 }
 
 // add keyboard controls
@@ -228,7 +255,7 @@ c.addEventListener("mousedown", (e) => {
 	for (const fraction of cur_plm.fractions) {
 		for (const seat of fraction.seat_centers) {
 			const dist = Math.hypot(seat[0] - mouse_x, seat[1] - mouse_y);
-			if (dist <= cur_plm.get_seat_radius() && cur_hlt == null) {
+			if (dist <= cur_plm.get_seat_hitbox_radius()) {
 				highlight(fraction.party.id);
 				return;
 			}
