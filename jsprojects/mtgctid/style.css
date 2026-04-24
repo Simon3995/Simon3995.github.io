@@ -1,0 +1,52 @@
+body {
+    background-color: #28344b;
+    color: #fff;
+    font-family: Beleren;
+}
+
+h1 {
+    color: rgb(201, 171, 4);
+}
+
+#img {
+    max-height: 400px;
+    max-width: 100%;
+}
+
+#div {
+    max-width: 1000px;
+    margin: auto;
+    padding: 15px;
+}
+
+.text {
+    font-size: 20px;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    box-sizing: border-box;
+    border: 1px solid gold;
+    padding: 15px;
+    /* flex-basis: 100%; */
+}
+
+.row {
+    display: flex;
+}
+
+.center {
+    text-align: center;
+}
+
+input[type=file] {
+    max-width: 200px;
+    margin: 10px;
+}
+
+@font-face {
+    src: url(fonts/Beleren2016SmallCaps-Bold.ttf);
+    font-family: Beleren;
+}
