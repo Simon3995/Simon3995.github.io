@@ -109,7 +109,7 @@ T.parties.$ppnl.image.src = "logos/nl/PPNL.png";
 T.parties.$sp.image.src = "logos/nl/SP.png";
 T.parties.$pvdd.image.src = "logos/nl/PvdD.png";
 T.parties.$gl.image.src = "logos/nl/GL.png";
-T.parties.$glpvda.image.src = "logos/nl/GvdL.png";
+T.parties.$glpvda.image.src = "logos/nl/GLPvdA.png";
 T.parties.$pro.image.src = "logos/nl/PRO.png";
 T.parties.$pvda.image.src = "logos/nl/PvdA.png";
 T.parties.$denk.image.src = "logos/nl/DENK.png";
@@ -148,7 +148,7 @@ T.parties.$nsb.image.src = "logos/nl/NSB.png";
 T.add_parliament(new Parliament([
     new Fraction(T.parties.$sp, 3),
     new Fraction(T.parties.$pvdd, 3),
-    new Fraction(T.parties.$pro, 20),
+    new Fraction(T.parties.$glpvda, 20),
     new Fraction(T.parties.$denk, 3),
     new Fraction(T.parties.$volt, 1),
     new Fraction(T.parties.$d66, 26),

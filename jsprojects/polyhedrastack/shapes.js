@@ -69,7 +69,7 @@ const Shapes = {
     ...truncated_tetrahedron,
 
     // catalan
-    ...rhombic_dodecahedron,
+    // ...rhombic_dodecahedron,
 
     // johnson
     ...square_pyramid,
@@ -108,7 +108,5 @@ const Shapes = {
     ...prism_8,
     ...prism_10,
 };
-
-console.log("full catalogue of polyhedra:", Shapes);
 
 export default Shapes;

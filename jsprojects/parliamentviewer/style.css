@@ -15,6 +15,12 @@ a {
     color: #adb5ff;
 }
 
+hr {
+    border: 2px solid hsl(248, 22%, 35%);
+    margin-top: 18px;
+    margin-bottom: 8px;
+}
+
 #sidebar {
     position: fixed;
     top: 0px;
@@ -22,6 +28,10 @@ a {
     height: 100vh;
     width: 33.33vw;
     padding: 10px 15px;
+}
+
+.small {
+    font-size: 15px;
 }
 
 #sidebar h1 {
@@ -135,6 +145,14 @@ tr:nth-child(even) {
     background-color: #3d3574;
 }
 
+.sortable tr:nth-child(odd) {
+    background-color: hsl(200, 39%, 39%);
+}
+
+.sortable tr:nth-child(even) {
+    background-color: hsl(200, 37%, 33%);
+}
+
 button {
     color: white;
     background-color: #483d8b;
@@ -143,15 +161,24 @@ button {
     font-size: 18px;
     filter: drop-shadow(5px 5px 0px #2a273d);
     margin-bottom: 8px;
-    padding: 3px 8px;
+    margin-right: 8px;
+    padding: 6px;
+}
+
+button.wide {
     width: 120px;
 }
 
-button:hover {
+button:disabled {
+    color: #ffffff60;
+    background-color: #332d4c;
+}
+
+button:hover:enabled {
     background-color: #6456be;
 }
 
-button:active {
+button:active:enabled {
     transform: translateY(5px) translateX(5px);
     background-color: #7566da;
     filter: none;
@@ -166,6 +193,12 @@ button:active {
     color: #8bffa4;
 }
 
+.greener {
+    animation-name: pulseColor;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+}
+
 .red {
     color: #ff6b6b;
 }
@@ -173,6 +206,67 @@ button:active {
 .blue {
     color: rgb(93, 174, 255);
     font-weight: bold;
+}
+
+input[type=number] {
+    background-color: #00000020;
+    font-size: 16px;
+    color: white;
+    border: none;
+    text-align: center;
+}
+
+span.icon {
+    background-size: contain !important;
+    float: left;
+    height: 25px;
+    width: 25px;
+}
+
+button:disabled span.icon {
+    opacity: 40%;
+}
+
+span.left {
+    background: url(./icons/left.svg) no-repeat;
+}
+
+span.right {
+    background: url(./icons/right.svg) no-repeat;
+}
+
+span.edit {
+    background: url(./icons/edit.svg) no-repeat;
+}
+
+span.add {
+    background: url(./icons/add.svg) no-repeat;
+}
+
+span.delete {
+    background: url(./icons/delete.svg) no-repeat;
+}
+
+span.reset {
+    background: url(./icons/reset.svg) no-repeat;
+}
+
+span.sort {
+    background: url(./icons/sort.svg) no-repeat;
+}
+
+@keyframes pulseColor {
+    0% {
+        color: #8bffd6;
+    }
+
+    50% {
+        color: #00ddff;
+    }
+
+    100% {
+        color: #8bffd6;
+    }
 }
 
 @font-face {

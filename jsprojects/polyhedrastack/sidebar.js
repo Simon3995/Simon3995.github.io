@@ -1,8 +1,9 @@
 import Shapes from './shapes.js';
 import { Scene } from './main.js';
 import { create_shape } from './model.js';
+import { set_fs_shape } from './face_selector.js';
 
-const category_order = ["Platonic", "Archimedean", "Prisms and Antiprisms", "Johnson", "Catalan", "Miscellaneous"];
+const category_order = ["Platonic", "Archimedean", "Prisms and Antiprisms", "Johnson", "Miscellaneous"];
 const shape_order = {
     "Platonic": [
         "Tetrahedron",
@@ -44,7 +45,7 @@ const shape_order = {
     ]
 };
 
-export const generate_polyhedra_list = function() {
+export const generate_polyhedra_list = function () {
     // clear existing polyhedra list
     const list = document.getElementById("polyhedralist");
     list.innerHTML = "";
@@ -54,21 +55,28 @@ export const generate_polyhedra_list = function() {
         ...value,
         name: key
     }));
-    const grouped_shapes = Object.groupBy(polyhedra_array, ({category}) => category);
+    const grouped_shapes = Object.groupBy(polyhedra_array, ({ category }) => category);
 
     // add all shapes per-category
     for (const category of category_order) {
         let shapes = grouped_shapes[category];
-        
+
+        // We may have empty shape categories, we can just return an empty array for now.
+        // Not doing this results in an error when iterating over shapes later.
+        if (!shapes) {
+            shapes = [];
+            console.warn(`Category "${category}" does not contain any shapes.`);
+        }
+
         // sort shapes by custom order
         if (shape_order[category]) {
             shapes.sort((a, b) => shape_order[category].indexOf(a.name) - shape_order[category].indexOf(b.name));
         }
-        
+
         for (const shape of shapes) {
             // create new button element
             let button = document.createElement("button");
-            
+
             // create button image
             let img = document.createElement("img");
             img.src = `./sprites/solids/${shape.name}.png`;
@@ -79,9 +87,9 @@ export const generate_polyhedra_list = function() {
             if (shape.name == Scene.add_shape) button.classList.add("selected");
 
             // attach onclick event listener
-            button.onclick = function() {
+            button.onclick = function () {
                 Scene.add_shape = shape.name;
-                
+
                 // deselect all buttons
                 let buttons = document.getElementsByClassName("polyhedrabutton");
                 for (let b of buttons) b.classList.remove("selected");
@@ -93,11 +101,18 @@ export const generate_polyhedra_list = function() {
                 if (Scene.scene.children.filter(x => x.type == "LineSegments").length == 0) {
                     Scene.scene.add(create_shape(Scene.add_shape));
                 }
+
+                // set face_selector shape
+                set_fs_shape(Scene.add_shape);
+
+                // move face selector canvas to this button
+                const face_selector = document.getElementById("face_selector");
+                button.appendChild(face_selector);
             }
 
             // add button content and add to polyhedra list
             button.appendChild(img);
-            
+
             // manual override of long names (insert word breaking point manually)
             let button_text = shape.name;
             if (button_text === "Rhombicuboctahedron") button_text = "Rhombi&shy;cuboctahedron";

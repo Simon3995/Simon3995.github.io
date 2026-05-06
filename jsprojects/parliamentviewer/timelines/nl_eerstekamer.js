@@ -82,7 +82,7 @@ T.parties.$ppnl.image.src = "logos/nl/PPNL.png";
 T.parties.$sp.image.src = "logos/nl/SP.png";
 T.parties.$pvdd.image.src = "logos/nl/PvdD.png";
 T.parties.$gl.image.src = "logos/nl/GL.png";
-T.parties.$glpvda.image.src = "logos/nl/GvdL.png";
+T.parties.$glpvda.image.src = "logos/nl/GLPvdA.png";
 T.parties.$pvda.image.src = "logos/nl/PvdA.png";
 T.parties.$denk.image.src = "logos/nl/DENK.png";
 T.parties.$volt.image.src = "logos/nl/Volt.png";
@@ -205,5 +205,31 @@ T.add_parliament(new Parliament([
     new Fraction(T.parties.$sgp, 1),
     new Fraction(T.parties.$pvv, 10)
 ], "Eerste Kamerverkiezingen 2011", new Date("2011-05-25")));
+
+T.add_parliament(new Parliament([
+    new Fraction(T.parties.$sp, 12),
+    new Fraction(T.parties.$pvdd, 1),
+    new Fraction(T.parties.$gl, 4),
+    new Fraction(T.parties.$pvda, 14),
+    new Fraction(T.parties.$d66, 2),
+    new Fraction(T.parties.$cu, 4),
+    new Fraction(T.parties.$osf, 1),
+    new Fraction(T.parties.$cda, 21),
+    new Fraction(T.parties.$vvd, 14),
+    new Fraction(T.parties.$sgp, 2),
+], "Eerste Kamerverkiezingen 2007", new Date("2007-05-29")));
+
+T.add_parliament(new Parliament([
+    new Fraction(T.parties.$sp, 4),
+    new Fraction(T.parties.$gl, 5),
+    new Fraction(T.parties.$pvda, 19),
+    new Fraction(T.parties.$d66, 3),
+    new Fraction(T.parties.$cu, 2),
+    new Fraction(T.parties.$osf, 1),
+    new Fraction(T.parties.$cda, 23),
+    new Fraction(T.parties.$vvd, 15),
+    new Fraction(T.parties.$sgp, 2),
+    new Fraction(T.parties.$lpf, 1),
+], "Eerste Kamerverkiezingen 2003", new Date("2003-05-26")));
 
 Timelines["nl_eerstekamer"] = T;

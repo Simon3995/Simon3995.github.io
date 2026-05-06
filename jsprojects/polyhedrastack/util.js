@@ -48,6 +48,8 @@ export const mesh_to_face_objects = function(shape) {
             "OCTAGON",
             "NONAGON",
             "DECAGON",
+            "UNDECAGON",
+            "DODECAGON",
         ][vertices.length / 3];
         geometry.computeVertexNormals();
         faces.push(geometry);

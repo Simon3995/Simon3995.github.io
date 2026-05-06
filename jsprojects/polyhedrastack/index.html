@@ -1,71 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Polyhedra Stack</title>
-		<link rel="stylesheet" href="style.css">
-	</head>
-	<body>
-		<div class="row">
-			<div id="main" class="column">
-				<div id="clickType">
-					<button class="squarebutton" id="clickType0" title="Add Shapes (A)"></button>
-					<button class="squarebutton" id="clickType1" title="Delete Branch (D)"></button>
-					<button class="squarebutton" id="clickType2" title="Viewing Mode (V)"></button>
-					<button class="squarebutton" id="clickType3" title="Focus on Object (F)"></button>
-					<button class="squarebutton" id="clickType4" title="Rotate Branch (R)"></button>
-				</div>
 
-				<button class="squarebutton" id="resetViewButton" title="Reset View to Default"></button>
+<head>
+	<meta charset="utf-8">
+	<title>Polyhedra Stack</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+	<div class="row">
+		<div id="main" class="column">
+			<div id="clickType">
+				<button class="squarebutton" id="clickType0" title="Add Shapes (A)"></button>
+				<button class="squarebutton" id="clickType1" title="Delete Branch (D)"></button>
+				<button class="squarebutton" id="clickType2" title="Viewing Mode (V)"></button>
+				<button class="squarebutton" id="clickType3" title="Focus on Object (F)"></button>
+				<button class="squarebutton" id="clickType4" title="Rotate Branch (R)"></button>
 			</div>
 
-			<button class="squarebutton" id="sidebarToggle" title="Toggle Sidebar">
+			<button class="squarebutton" id="resetViewButton" title="Reset View to Default"></button>
+		</div>
+
+		<div id="sidebar" class="column">
+			<!-- SIDEBAR TOGGLE BUTTON -->
+			<button class="squarebutton" id="sidebarToggle" title="Toggle Sidebar (S)">
 				<img src="sprites/chevron.png" id="sidebarchevron">
 			</button>
-			<div id="sidebar" class="column">
-				<!-- SIDEBAR TABS -->
-				<div class="nav">
-					<button class="navbutton active">Polyhedra</button>
-					<button class="navbutton">Themes</button>
-					<button class="navbutton">Tools</button>
-					<button class="navbutton">Settings</button>
-				</div>
+			
+			<!-- SIDEBAR TABS -->
+			<div class="nav">
+				<button class="navbutton">Polyhedra</button>
+				<button class="navbutton active">Themes</button>
+				<button class="navbutton">Tools</button>
+				<button class="navbutton">Settings</button>
+			</div>
 
-				<!-- POLYHEDRA MENU -->
-				<div id="Polyhedra" class="tabcontent">
-					<h1>Select Polyhedron</h1>
-					<div id="polyhedralist"></div>
-				</div>
+			<!-- POLYHEDRA MENU -->
+			<div id="Polyhedra" class="tabcontent" style="display: none">
+				<h1>Select Polyhedron</h1>
+				<div id="polyhedralist"></div>
+			</div>
 
-				<!-- THEMES MENU -->
-				<div id="Themes" class="tabcontent" style="display: none">
-					<h1>Select Theme</h1>
-					<select name="Themes" id="themeselect" autocomplete="off">
-						<option selected value="Basic Dark">Basic Dark</option>
-						<option value="Basic Light">Basic Light</option>
-						<option value="Translucent Dark">Translucent Dark</option>
-						<option value="Translucent Light">Translucent Light</option>
-						<option value="Wireframe Dark">Wireframe Dark</option>
-						<option value="Wireframe Light">Wireframe Light</option>
-						<option value="Normal Shading">Normal Shading</option>
-					</select>
-				</div>
+			<!-- THEMES MENU -->
+			<div id="Themes" class="tabcontent" style="display: block">
+				<p>Preset: <select id="theme_preset" autocomplete="off">
+					<option selected disabled hidden>== Select Preset ==</option>
+					<option value="custom" hidden>Custom</option>
+					<optgroup label="Default">
+						<option value="default_dark">Default Dark</option>
+						<option value="default_light">Default Light</option>
+					</optgroup>
+					<optgroup label="Wireframe">
+						<option value="wireframe_dark">Wireframe Dark</option>
+						<option value="wireframe_light">Wireframe Light</option>
+					</optgroup>
+					<optgroup label="Normal Shading">
+						<option value="normal_shading">Normal Shading</option>
+						<option value="translucent_normal">Translucent Normal Shading</option>
+					</optgroup>
+				</select></p>
+				<h2 class="theme">Background</h2>
+					<p class="theme">Color: <input id="theme_bg_col" value="#202020" type="color" autocomplete="off"></p>
+				<h2 class="theme">Faces</h2>
+					<p class="theme"><label><input id="theme_fc" type="checkbox" autocomplete="off"> Enable</label></p>	
+					<p class="theme">Color: <input id="theme_fc_col" type="color" autocomplete="off"></p>
+					<p class="theme">Opacity: <input id="theme_fc_opc" type="number" min="0" max="1" step="0.01" value="1" autocomplete="off"></p>
+					<p class="theme">Shading: <select id="theme_fc_shd" autocomplete="off">
+						<option value="flat" selected>Flat</option>
+						<option value="lambert">Lambert</option>
+						<option value="normal">Normal</option>
+					</select></p>
+				<h2 class="theme">Wireframe</h2>
+					<p class="theme"><label><input id="theme_wr" type="checkbox" autocomplete="off"> Enable</label></p>
+					<p class="theme">Color: <input id="theme_wr_col" type="color" autocomplete="off"></p>
+			</div>
 
-				<!-- TOOLS MENU -->
-				<div id="Tools" class="tabcontent" style="display: none">
-					<h1>Import / Export</h1>
-					<button class="optionsbutton" id="downloadOBJ" title="Export as OBJ">Export as OBJ</button><br>
-					<button class="optionsbutton" id="downloadJSON" title="Export as JSON">Export as JSON</button><br>
-					<button class="optionsbutton" id="importJSON" title="Import from JSON">Import from JSON</button>
-				</div>
+			<!-- TOOLS MENU -->
+			<div id="Tools" class="tabcontent" style="display: none">
+				<h1>Import / Export</h1>
+				<button class="optionsbutton" id="downloadOBJ" title="Export as OBJ">Export as OBJ</button><br>
+				<button class="optionsbutton" id="downloadJSON" title="Export as JSON">Export as JSON</button><br>
+				<button class="optionsbutton" id="importJSON" title="Import from JSON">Import from JSON</button>
+			</div>
 
-				<!-- SETTINGS MENU -->
-				<div id="Settings" class="tabcontent" style="display: none">
-					<p>Settings menu goes here</p>
-				</div>
+			<!-- SETTINGS MENU -->
+			<div id="Settings" class="tabcontent" style="display: none">
+				<p>Settings menu goes here</p>
 			</div>
 		</div>
-	</body>
+	</div>
+
+	<div id="face_selector"></div>
+</body>
+
 </html>
 
 <script type="importmap">

@@ -17,8 +17,9 @@ import {
 	calculate_rotation 
 } from './model.js';
 import Shapes from './shapes.js';
-import Themes from './themes.js';
 import { OBJExporter } from 'three/addons/exporters/OBJExporter.js';
+import { fs_Scene } from './face_selector.js';
+import { def_face_mat, get_hlt_mat } from './themes.js';
 
 let highlighted = undefined;
 let mouse_moved = false;
@@ -105,15 +106,15 @@ export const switch_tab = function(e, tab) {
 const highlight = function(face) {
 	// remove existing highlights
 	if (highlighted) {
-		set_branch_material(highlighted.object.parent, Scene.theme.default);
-		highlighted.object.material = Scene.theme.default;
+		set_branch_material(highlighted.object.parent, def_face_mat());
+		set_shape_material(highlighted.object.parent, def_face_mat());
 	}
 
 	// apply new highlights
 	if (face) {
-		const branch_highlight = Scene.theme.action[Settings.click_type].branch_highlight;
-		const shape_highlight = Scene.theme.action[Settings.click_type].shape_highlight;
-		const face_highlight = Scene.theme.action[Settings.click_type].face_highlight;
+		const branch_highlight = get_hlt_mat("branch");
+		const shape_highlight = get_hlt_mat("shape");
+		const face_highlight = get_hlt_mat("face");
 		const shape = face.parent;
 
 		if (branch_highlight) set_branch_material(shape, branch_highlight);
@@ -138,9 +139,8 @@ export const select_face = function() {
 
 window.addEventListener("mousemove", function(evt) {
 	const bbox = document.getElementById("main").getBoundingClientRect();
-	Scene.pointer.x = ((evt.pageX - document.body.scrollLeft) / bbox.width) * 2 - 1;
-	Scene.pointer.y = - ((evt.pageY - document.body.scrollTop) / bbox.height) * 2 + 1;
-
+	Scene.pointer.x = ((evt.clientX - bbox.left) / bbox.width) * 2 - 1;
+	Scene.pointer.y = - ((evt.clientY - bbox.top) / bbox.height) * 2 + 1;
 	mouse_moved = true;
 }, false);
 
@@ -154,7 +154,7 @@ document.body.onload = () => {
 
 		// add new shape
 		if (Settings.click_type === 0) {
-			let face_index = 0; // TODO: allow selection of face
+			let face_index = fs_Scene.face_index;
 			const shape_name = Scene.add_shape;
 			let shape = create_shape(shape_name);
 
@@ -200,6 +200,10 @@ document.body.onload = () => {
 		}
 
 	}, false);
+
+	// places the face selector canvas on the initial shape after loading the page
+	const button = [...document.querySelectorAll(".polyhedrabutton")].find(x => x.innerText === Scene.add_shape);
+	button.onclick();
 }
 
 window.addEventListener("keydown", function(evt) {
@@ -219,13 +223,16 @@ window.addEventListener("keydown", function(evt) {
 		case "r":
 			set_click_type(4);  // Rotate
 			break;
+		case "s":
+			toggle_sidebar();
+			break;
+
 	}
 }, false);
 
+// export current scene as OBJ file
 document.getElementById("downloadOBJ").onclick = function() {
-	// Instantiate an exporter
 	const exporter = new OBJExporter();
-	// Parse the input and generate the OBJ output
 	const data = exporter.parse(Scene.scene);
 	download_file(data, "model/obj", "polystack_scene.obj");
 }
