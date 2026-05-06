@@ -1,16 +1,3 @@
-// a class for a parliament timeline, containing a series of election results
-class Timeline {
-    constructor (name = null) {
-        this.parliaments = [];
-        this.parties = {};
-        this.name = name;
-    }
-
-    add_parliament(parliament) {
-        this.parliaments.push(parliament);
-    }
-}
-
 // a class for one election result
 class Parliament {
     constructor(fractions = [], description = "Parliament", date = new Date()) {
@@ -21,25 +8,13 @@ class Parliament {
         this.distribute_seats();
     }
 
-    get_party_seats(id) {
-        for (const fraction of this.fractions)
-            if (fraction.party.id == id)
+    get_party_seats(party) {
+        for (const fraction of this.fractions) {
+            if (fraction.party.name == party) {
                 return fraction.seat_amt;
-        return 0;
-    }
-
-    set_party_seats(id, amt) {
-        amt = Number(amt);
-        if (isNaN(amt)) {
-            console.error("Tried to set non-number seat amount.");
-            return;
-        }
-        for (let fraction of this.fractions) {
-            if (fraction.party.id == id) {
-                fraction.seat_amt = amt;
             }
         }
-        this.distribute_seats();
+        return 0;
     }
 
     add_fraction(fraction) {
@@ -47,9 +22,9 @@ class Parliament {
         this.distribute_seats();
     }
 
-    remove_fraction(id) {
+    remove_fraction(name) {
         for (let i = 0; i < this.fractions.length; i++) {
-            if (this.fractions[i].party.id === id) {
+            if (this.fractions[i].party.name === name) {
                 this.fractions.splice(i, 1);
                 this.distribute_seats();
                 return;
@@ -131,25 +106,5 @@ class Parliament {
                 );
             }
         }
-    }
-}
-
-// a class for a party fraction in one election
-class Fraction {
-    constructor(party, seat_amt) {
-        this.party = party;
-        this.seat_amt = seat_amt;
-        this.seat_centers = [];
-    }
-}
-
-// a class for a political party, independent of year or election
-class Party {
-    constructor(name, fullname, id, color = "#000000", image = null) {
-        this.id = id;
-        this.name = name;
-        this.fullname = fullname;
-        this.color = color;
-        this.image = image;
     }
 }
