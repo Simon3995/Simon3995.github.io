@@ -23,6 +23,7 @@ import { def_face_mat, get_hlt_mat } from './themes.js';
 
 let highlighted = undefined;
 let mouse_moved = false;
+let move_dist = 0;
 
 // add eventlisteners to clicktype buttons
 for (let i=0; i<5; i++)
@@ -142,15 +143,17 @@ window.addEventListener("mousemove", function(evt) {
 	Scene.pointer.x = ((evt.clientX - bbox.left) / bbox.width) * 2 - 1;
 	Scene.pointer.y = - ((evt.clientY - bbox.top) / bbox.height) * 2 + 1;
 	mouse_moved = true;
+	move_dist += Math.hypot(evt.movementX, evt.movementY);
 }, false);
 
 window.addEventListener("mousedown", function() {
 	mouse_moved = false;
+	move_dist = 0;
 }, false);
 
 document.body.onload = () => {
 	Scene.renderer.domElement.addEventListener("mouseup", function(evt) {
-		if (mouse_moved || !highlighted) return;
+		if (!highlighted || move_dist > 20) return;
 
 		// add new shape
 		if (Settings.click_type === 0) {
