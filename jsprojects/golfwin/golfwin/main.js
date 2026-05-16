@@ -19,7 +19,7 @@ var winningMoves = [];
 var settled = true;
 
 //other
-const THREAD_AMT = Math.max(1, navigator.hardwareConcurrency - 2); // leave some threads for the rest of us
+const THREAD_AMT = Math.max(1, Math.floor(navigator.hardwareConcurrency / 2)); // leave some threads for the rest of us
 let workersCompleted = 0;
 const workers = [];
 for (let i = 0; i < THREAD_AMT; i++) {
@@ -41,12 +41,14 @@ function handleWorkerMessage(event) {
 		ball.moveFrame(field, true);
 		ball.settle();
 		iterateParticles();
-		
+
 		// dynamically change moveResolution to fix performance
 		let curTime = new Date();
-		if (curTime - startTime > 17) {
+		let time_passed = curTime - startTime;
+		let ratio = (moveResolution + 1) ** 2 / moveResolution ** 2;
+		if (time_passed > 17) {
 			moveResolution++;
-		} else if (curTime - startTime < 15) {
+		} else if (time_passed * ratio < 17) {
 			moveResolution = Math.max(1, moveResolution - 1);
 		}
 		window.requestAnimationFrame(main);
@@ -64,8 +66,10 @@ function main() {
 		const data = {
 			ball,
 			field,
-			startX: i * c.width / THREAD_AMT,
-			endX: (i + 1) * c.width / THREAD_AMT,
+			start: i * 2 * Math.PI / THREAD_AMT,
+			end: (i + 1) * 2 * Math.PI / THREAD_AMT,
+			angle: Math.PI / THREAD_AMT,
+			width: c.width,
 			height: c.height,
 			stepSize: moveResolution,
 			strength,
@@ -76,12 +80,12 @@ function main() {
 }
 
 //event listeners
-window.addEventListener("mousemove", function (evt){
+window.addEventListener("mousemove", function (evt) {
 	mouseX = evt.clientX - c.getBoundingClientRect().left;
 	mouseY = evt.clientY - c.getBoundingClientRect().top;
 });
 
-window.addEventListener("mousedown", function (evt){
+window.addEventListener("mousedown", function (evt) {
 	if (keys[17] ||
 		isHover(document.getElementById("load")))
 		return;
@@ -90,8 +94,8 @@ window.addEventListener("mousedown", function (evt){
 
 //keys
 var keys = [];
-window.onkeyup = function(e) { keys[e.keyCode] = false; }
-window.onkeydown = function(e) { keys[e.keyCode] = true; }
+window.onkeyup = function (e) { keys[e.keyCode] = false; }
+window.onkeydown = function (e) { keys[e.keyCode] = true; }
 
 //buttons
 function loadLevel() {
@@ -102,20 +106,20 @@ function isHover(e) {
 	return (e.parentElement.querySelector(':hover') === e);
 }
 
-input.onchange = e => { 
+input.onchange = e => {
 	// getting a hold of the file reference
-	var file = e.target.files[0]; 
+	var file = e.target.files[0];
 
 	// setting up the reader
 	var reader = new FileReader();
-	reader.readAsText(file,'UTF-8');
+	reader.readAsText(file, 'UTF-8');
 
 	// here we tell the reader what to do when it's done reading...
 	reader.onload = readerEvent => {
 		var content = readerEvent.target.result; // this is the content!
 		//console.log(content);
 		field = JSON.parse(content);
-		for (let i=0; i<field.walls.length; i++) {
+		for (let i = 0; i < field.walls.length; i++) {
 			field.walls[i] = new Wall(field.walls[i].x1, field.walls[i].y1, field.walls[i].x2, field.walls[i].y2);
 		}
 		c.width = field.canvas.width;
@@ -125,18 +129,13 @@ input.onchange = e => {
 		for (goal of field.goals) {
 			goal.r = 10;
 		}
-		
+
 		//set startposition
 		field.startPosition = field.ball;
 		ball.x = field.startPosition.x;
 		ball.y = field.startPosition.y;
 		ball.velX = 0;
 		ball.velY = 0;
-		
-		// keeps speed *roughly* similar no matter the map
-		// this is just an initial guess, it will change dynamically
-		moveResolution = Math.round(moveResolutionConstant * (c.width * c.height * field.walls.length / 800 / 800 / 9) ** (1/3));
-		moveResolution = Math.max(1, moveResolution);
 
 		// clear before loading new webgl context
 		gl.clear(gl.COLOR_BUFFER_BIT);

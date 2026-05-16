@@ -1,11 +1,11 @@
 //this file contains utility functions and variables
 var epsilon = 1e-5;
-var tau = 2*Math.PI;
+var tau = 2 * Math.PI;
 
 //find intersection point between two linesegments, return null if none found
 function findIsct(line, wall) {
 	if (wall.x1 === wall.x2) [wall, line] = [line, wall];
-	
+
 	//find slope and x=0 point of theoretical wall
 	const slope2 = (wall.y2 - wall.y1) / (wall.x2 - wall.x1);
 	const start2 = wall.y1 - slope2 * wall.x1;
@@ -16,7 +16,7 @@ function findIsct(line, wall) {
 		//check if y is in ranges
 		if ((y < line.y1) === (y < line.y2) || (y < wall.y1) === (y < wall.y2)) return null;
 		return {
-			x: line.x1, 
+			x: line.x1,
 			y
 		};
 	}
@@ -27,7 +27,7 @@ function findIsct(line, wall) {
 
 	// normal intersection
 	const x = (start2 - start1) / (slope1 - slope2);
-	
+
 	//check for both linesegments if x is in the segment
 	if ((x < line.x1) === (x < line.x2) || (x < wall.x1) === (x < wall.x2)) return null;
 	return {
@@ -45,38 +45,31 @@ function dist_2(x1, y1, x2, y2) {
 
 //determines whether a line segment and a circle intersect
 function findGoal(line, circle) {
-	return distLinePoint(line, circle) < circle.r;
-	/* if (dist < circle.r * circle.r)
-		return {
-			x: circle.x,
-			y: circle.y,
-			goal: circle,
-		};
-	return null; */
+	return distLinePoint_2(line, circle) < circle.r * circle.r;
 }
 
 //finds the minimum distance between a line segment and a circle
 function distLinePoint(line, point) {
-	let l2 = (line.x1 - line.x2)**2 + (line.y1 - line.y2)**2;
-	if (l2 === 0) return Math.sqrt((line.x1 - point.x)**2 + (line.y1 - point.y)**2);
+	let l2 = (line.x1 - line.x2) ** 2 + (line.y1 - line.y2) ** 2;
+	if (l2 === 0) return Math.sqrt((line.x1 - point.x) ** 2 + (line.y1 - point.y) ** 2);
 	let t = ((point.x - line.x1) * (line.x2 - line.x1) + (point.y - line.y1) * (line.y2 - line.y1)) / l2;
 	t = Math.max(0, Math.min(1, t));
-	let n = {
-		x: line.x1 + t * (line.x2 - line.x1),
-		y: line.y1 + t * (line.y2 - line.y1),
-	}
-	return Math.sqrt((point.x - n.x)**2 + (point.y - n.y)**2);
+	const nx = line.x1 + t * (line.x2 - line.x1);
+	const ny = line.y1 + t * (line.y2 - line.y1);
+	return Math.sqrt((point.x - nx) ** 2 + (point.y - ny) ** 2);
 }
 
 //finds the square of the minimum distance between a line segment and a circle
 function distLinePoint_2(line, point) {
-	let l2 = (line.x1 - line.x2)**2 + (line.y1 - line.y2)**2;
-	if (l2 === 0) return Math.sqrt((line.x1 - point.x)**2 + (line.y1 - point.y)**2);
+	let l2 = (line.x1 - line.x2) ** 2 + (line.y1 - line.y2) ** 2;
+	if (l2 === 0) return (line.x1 - point.x) ** 2 + (line.y1 - point.y) ** 2;
 	let t = ((point.x - line.x1) * (line.x2 - line.x1) + (point.y - line.y1) * (line.y2 - line.y1)) / l2;
 	t = Math.max(0, Math.min(1, t));
-	let n = {
-		x: line.x1 + t * (line.x2 - line.x1),
-		y: line.y1 + t * (line.y2 - line.y1),
-	}
-	return (point.x - n.x)**2 + (point.y - n.y)**2;
+	const nx = line.x1 + t * (line.x2 - line.x1);
+	const ny = line.y1 + t * (line.y2 - line.y1);
+	return (point.x - nx) ** 2 + (point.y - ny) ** 2;
+}
+
+function angle(x1, x2, y1, y2) {
+	return Math.acos((x1 * x2 + y1 * y2) / Math.sqrt(x1 * x1 + y1 * y1) / Math.sqrt(x2 * x2 + y2 * y2));
 }

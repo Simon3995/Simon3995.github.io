@@ -5,21 +5,21 @@ var friction = 1.03;
 var strength = 0.05;
 
 class Ball {
-	
+
 	constructor(x, y) {
 		//variable info
 		this.x = x;
 		this.y = y;
 		this.velX = 0;
 		this.velY = 0;
-		
+
 		//static info
 		this.r = 7;
 	}
-	
+
 	moveFrame(field, real) {
-		if (this.velX === 0 && this.velY === 0) return false;
-		
+		if (Math.abs(this.velX) < 1e-3 && Math.abs(this.velY) < 1e-3) return false;
+
 		//define space to be moved
 		let moveX = this.velX;
 		let moveY = this.velY;
@@ -28,7 +28,7 @@ class Ball {
 
 		//perform move
 		move:
-		while (moveX !== 0 && moveY !== 0) {
+		while (Math.abs(moveX) > 1e-3 || Math.abs(moveY) > 1e-3) {
 			// define route
 			let route = ({
 				x1: this.x,
@@ -36,24 +36,39 @@ class Ball {
 				x2: this.x + moveX,
 				y2: this.y + moveY,
 			});
-			
+
 			//find all potential intersection points
-			let iscts = [];
+			let closest_isct = undefined;
+			let closest_wall = undefined;
+			let isct_dist_2 = Infinity;
+
+			const maxX = Math.max(route.x1, route.x2);
+			const minX = Math.min(route.x1, route.x2);
+			const maxY = Math.max(route.y1, route.y2);
+			const minY = Math.min(route.y1, route.y2);
+
 			findwalls:
-			for (const wall of field.walls) {
-				if (distLinePoint_2(wall, this) - this.r > moveX * moveX + moveY * moveY) continue findwalls;
-				
-				const curIsct = findIsct(wall, route);
+			for (const curWall of field.walls) {
+				// if (distLinePoint_2(curWall, this) - this.r > moveX * moveX + moveY * moveY) continue findwalls;
+
+				if (maxX < curWall.minX) continue findwalls;
+				if (minX > curWall.maxX) continue findwalls;
+				if (maxY < curWall.minY) continue findwalls;
+				if (minY > curWall.maxY) continue findwalls;
+
+				const curIsct = findIsct(curWall, route);
 				if (curIsct === null) continue findwalls;
-				
-				iscts.push({
-					isct: curIsct,
-					wall: wall,
-				});
+
+				const cur_isct_dist_2 = dist_2(this.x, this.y, curIsct.x, curIsct.y);
+				if (cur_isct_dist_2 > isct_dist_2) continue findwalls;
+
+				closest_isct = curIsct;
+				closest_wall = curWall;
+				isct_dist_2 = cur_isct_dist_2;
 			}
 
 			//do actual move
-			if (iscts.length === 0) {
+			if (!closest_isct) {
 				findgoals:
 				for (const goal of field.goals) {
 					if (!findGoal(route, goal)) continue findgoals;
@@ -67,7 +82,7 @@ class Ball {
 						this.velX = 0;
 						this.velY = 0;
 					}
-					
+
 					return true;
 				}
 
@@ -82,22 +97,13 @@ class Ball {
 				hits = true;
 
 				//determine closest intersection point
-				let intersection = iscts[0].isct;
-				let isctWall = iscts[0].wall;
-				let isctDist_2 = Infinity;
-				for (const isct of iscts) {
-					let curIsct = isct.isct;
-					let curIsctDist_2 = dist_2(this.x, this.y, curIsct.x, curIsct.y);
-					if (curIsctDist_2 < isctDist_2) {
-						intersection = curIsct;
-						isctWall = isct.wall;
-						isctDist_2 = curIsctDist_2;
-					}
-				}
+				let intersection = closest_isct;
+				let isctWall = closest_wall;
+				let isctDist_2 = isct_dist_2;
 
 				//check if there's a goal closer than the nearest intersection
 				for (const goal of field.goals) {
-					if (findGoal(route, goal) && dist_2(this.x, this.y, goal.x, goal.y) < isctDist_2) {
+					if (dist_2(this.x, this.y, goal.x, goal.y) < isctDist_2 && findGoal(route, goal)) {
 						if (real) {
 							playSound("win");
 							particleBurst(goal.x, goal.y);
@@ -120,7 +126,7 @@ class Ball {
 
 				//mirror the move and velocity vectors with the following steps:
 				// normalize vectors
-				let moveR = Math.sqrt(moveX**2 + moveY**2);
+				let moveR = Math.sqrt(moveX ** 2 + moveY ** 2);
 				let newDirX = moveX / moveR;
 				let newDirY = moveY / moveR;
 
@@ -128,16 +134,8 @@ class Ball {
 				let wall = isctWall;
 				let wallNormal = wall.getNormal(intersection);
 
-				// make sure the normal points in the direction the ball came from
-				/* if (moveX * wallNormal.x + moveY * wallNormal.y < 0) {
-					wallNormal = {
-						x: -wallNormal.x,
-						y: -wallNormal.y,
-					};
-				} */
-
 				// reflect the move vector
-				let tmp = 2 * (newDirX*wallNormal.x + newDirY*wallNormal.y);
+				let tmp = 2 * (newDirX * wallNormal.x + newDirY * wallNormal.y);
 				let newMoveX = newDirX - tmp * wallNormal.x;
 				let newMoveY = newDirY - tmp * wallNormal.y;
 
@@ -158,21 +156,21 @@ class Ball {
 		this.velY /= friction;
 		return false;
 	}
-	
+
 	//hit the ball
 	hit(x, y) {
 		this.velX += strength * (this.x - x);
 		this.velY += strength * (this.y - y);
 	}
-	
+
 	//return a copy of the ball
 	copy() {
 		return new Ball(this.x, this.y);
 	}
-	
+
 	//stops ball movement if speed is too low
 	settle() {
-		if (Math.sqrt(this.velX**2 + this.velY**2) < 0.05) {
+		if (Math.sqrt(this.velX ** 2 + this.velY ** 2) < 0.05) {
 			this.velX = 0;
 			this.velY = 0;
 		}

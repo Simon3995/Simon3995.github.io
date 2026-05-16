@@ -20,7 +20,7 @@ function loadWebGLProgram() {
 	// Create a WebGL buffer
 	const buffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-	
+
 	// Create a fragment shader
 	const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
 	gl.shaderSource(fragmentShader, `
@@ -30,7 +30,7 @@ function loadWebGLProgram() {
 		}
 	`);
 	gl.compileShader(fragmentShader);
-	
+
 	// Create a vertex shader
 	const vertexShader = gl.createShader(gl.VERTEX_SHADER);
 	gl.shaderSource(vertexShader, `
@@ -40,14 +40,14 @@ function loadWebGLProgram() {
 		}
 	`);
 	gl.compileShader(vertexShader);
-	
+
 	// Create a shader program and attach the shaders
 	const program = gl.createProgram();
 	gl.attachShader(program, vertexShader);
 	gl.attachShader(program, fragmentShader);
 	gl.linkProgram(program);
 	gl.useProgram(program);
-	
+
 	// Enable the vertex position attribute
 	const positionAttribute = gl.getAttribLocation(program, "position");
 	gl.enableVertexAttribArray(positionAttribute);
@@ -78,7 +78,7 @@ function newFrame(ball, field) {
 	//draw ball
 	ctx.fillStyle = "white";
 	ctx.beginPath();
-	ctx.arc(ball.x, ball.y, ball.r, 0, 2*tau);
+	ctx.arc(ball.x, ball.y, ball.r, 0, 2 * tau);
 	ctx.fill();
 
 	//draw hole flags
@@ -109,7 +109,6 @@ function newFrame(ball, field) {
 }
 
 function drawWinningMoves() {
-	// Clear the canvas?
 	let size;
 	if (!settled) gl.clear(gl.COLOR_BUFFER_BIT);
 	if (ball.velX === 0 && ball.velY === 0) {
@@ -120,29 +119,29 @@ function drawWinningMoves() {
 		settled = false;
 	}
 
-	// Generate the vertices for all the points
-	const vertices = [];
-	for (const point of winningMoves) {
-		const x = point.x;
-		const y = point.y;
-		const w = size;
-		const h = size;
+	const vertices = new Float32Array(4 * winningMoves.length);
 
-		// Add the vertices of the rectangle
-		vertices.push(x, y);
-		vertices.push(x + w, y);
-		vertices.push(x, y + h);
+	for (let i = 0; i < winningMoves.length; i++) {
+		const point = winningMoves[i];
 
-		vertices.push(x + w, y);
-		vertices.push(x + w, y + h);
-		vertices.push(x, y + h);
+		// Direction from ball to edge point
+		const dx = point.x - ball.x;
+		const dy = point.y - ball.y;
+
+		const edgeX = ball.x + dx * 1000;
+		const edgeY = ball.y + dy * 1000;
+
+		// Line from the winning move point to the far edge
+		vertices[4 * i] = point.x;
+		vertices[4 * i + 1] = point.y;
+		vertices[4 * i + 2] = edgeX;
+		vertices[4 * i + 3] = edgeY;
 	}
 
-	// Load the vertices into the buffer
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+	gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
 
-	// Draw the points
-	gl.drawArrays(gl.TRIANGLES, 0, vertices.length / 2);
+	// gl.LINES draws one line segment per pair of vertices
+	gl.drawArrays(gl.LINES, 0, vertices.length / 2);
 
 	ctx.globalAlpha = 0.4;
 	ctx.drawImage(m, 0, 0);
