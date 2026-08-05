@@ -82,8 +82,9 @@ export const generate_polyhedra_list = function () {
             img.src = `./sprites/solids/${shape.name}.png`;
             img.classList.add('polyimg');
 
-            // add classes
+            // add classes and IDs
             button.classList.add("polyhedrabutton");
+            button.id = "polyhedrabutton-" + shape.name.toLowerCase();
             if (shape.name == Scene.add_shape) button.classList.add("selected");
 
             // attach onclick event listener

@@ -123,8 +123,8 @@ export const def_line_mat = function () {
 
 export const get_hlt_mat = function (type) {
     const hlt_col = (type === "branch") ?
-        ["#6dc5ff", "#ff6d6d", "#6ee8e2", "#fff0a6", "#ff9f6f"][Settings.click_type] :    
-        ["#47b6ff", "#ff4444", "#6ee8e2", "#ffe354", "#f9844a"][Settings.click_type];
+        ["#6dc5ff", "#ff6d6d", "#6ee8e2", "#fff0a6", "#ff9f6f", "#fa94d8", "#a6eea3", "#a6eea3"][Settings.click_type] :
+        ["#47b6ff", "#ff4444", "#6ee8e2", "#ffe354", "#f9844a", "#ff47c2", "#6cdf68", "#6cdf68"][Settings.click_type];
 
     const settings = {
         color: hlt_col,
@@ -133,9 +133,9 @@ export const get_hlt_mat = function (type) {
         polygonOffsetUnits: 1,
     }
 
-    if ((type === "face" && [0].includes(Settings.click_type)) ||
-        (type === "shape" && [1, 3, 4].includes(Settings.click_type)) ||
-        (type === "branch" && [1, 4].includes(Settings.click_type))) {
+    if ((type === "face" && [0, 7].includes(Settings.click_type)) ||
+        (type === "shape" && [1, 3, 4, 5, 6].includes(Settings.click_type)) ||
+        (type === "branch" && [1, 4, 6].includes(Settings.click_type))) {
             return new THREE.MeshBasicMaterial(settings);
     }
 }

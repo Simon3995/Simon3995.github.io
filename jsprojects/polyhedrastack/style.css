@@ -162,14 +162,9 @@ select {
 	border-radius: 6px;
 	transition-duration: 30ms;
 	background-color: #6ee8e2;
-}
-
-.squarebutton img {
-	position: absolute;
-	height: 20px;
-	top: 50%;
-	left: 55%;
-	transform: translate(-50%, -50%);
+	background-size: 80%;
+	background-position: center;
+	background-repeat: no-repeat;
 }
 
 .squarebutton:active {
@@ -208,7 +203,6 @@ input[type=color] {
 }
 
 #clickType {
-	background-color: #f000;
 	position: absolute;
 	top: 20px;
 	left: 20px;
@@ -217,39 +211,58 @@ input[type=color] {
 }
 
 #clickType:hover {
-	height: 400px;
+	height: 500px;
+	width: 115px;
 }
 
 #clickType0 {
 	background-color: #2fa3d4;
-	background-image: url('sprites/add.png');
+	background-image: url('sprites/add.svg');
 }
 
 #clickType1 {
 	background-color: #f25f5c;
-	background-image: url('sprites/remove.png');
+	background-image: url('sprites/delete.svg');
 }
 
 #clickType2 {
 	background-color: #6ee8e2;
-	background-image: url('sprites/move.png');
+	background-image: url('sprites/view.svg');
 }
 
 #clickType3 {
 	background-color: #ffe066;
-	background-image: url('sprites/center.png');
+	background-image: url('sprites/focus.svg');
 }
 
 #clickType4 {
 	background-color: #f9844a;
-	background-image: url('sprites/rotate.png');
+	background-image: url('sprites/rotate.svg');
+}
+
+#clickType5 {
+	background-color: #ff47c2;
+	background-image: url('sprites/select.svg');
+}
+
+#clickType6 {
+	background-color: #6cdf68;
+	background-image: url('sprites/copy.svg');
+}
+
+#clickType7 {
+	background-color: #6cdf68;
+	background-image: url('sprites/paste.svg');
 }
 
 #clickType0,
 #clickType1,
 #clickType2,
 #clickType3,
-#clickType4 {
+#clickType4,
+#clickType5,
+#clickType6,
+#clickType7 {
 	top: 0px;
 	transition-duration: 150ms;
 }
@@ -270,9 +283,21 @@ input[type=color] {
 	top: 240px;
 }
 
+#clickType:hover #clickType5 {
+	top: 300px;
+}
+
+#clickType:hover #clickType6 {
+	top: 360px;
+}
+
+#clickType:hover #clickType7 {
+	top: 420px;
+}
+
 #resetViewButton {
 	left: 80px;
-	background-image: url('sprites/view.png');
+	background-image: url('sprites/eye.svg');
 }
 
 #sidebarToggle {
@@ -280,6 +305,14 @@ input[type=color] {
 	right: calc(100% + 10px);
 	width: 30px;
 	border-radius: 6px 0px 0px 6px;
+}
+
+#sidebarToggle img {
+	position: absolute;
+	height: 20px;
+	top: 50%;
+	left: 55%;
+	transform: translate(-50%, -50%);
 }
 
 @font-face {

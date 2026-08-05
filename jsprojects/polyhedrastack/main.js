@@ -14,6 +14,7 @@ export const Settings = {
 	 * 2: Rotate View
 	 * 3: Center View on Object
 	 * 4: Rotate Branch
+	 * 5: Pick Shape
 	 */
 	click_type: 0,
 	tree_view: false,

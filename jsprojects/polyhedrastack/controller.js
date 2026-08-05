@@ -17,16 +17,18 @@ import {
 	calculate_rotation 
 } from './model.js';
 import Shapes from './shapes.js';
+import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js';
 import { OBJExporter } from 'three/addons/exporters/OBJExporter.js';
 import { fs_Scene } from './face_selector.js';
 import { def_face_mat, get_hlt_mat } from './themes.js';
 
 let highlighted = undefined;
+let clipboard = undefined;
 let mouse_moved = false;
 let move_dist = 0;
 
 // add eventlisteners to clicktype buttons
-for (let i=0; i<5; i++)
+for (let i=0; i<8; i++)
 	document.getElementById("clickType" + i).onclick = () => { set_click_type(i) }
 
 // changes current function of the mouse
@@ -34,7 +36,7 @@ export const set_click_type = function (type) {
 	Settings.click_type = type;
 	
 	// reset z-index of all clickType buttons
-	for (let i=0; i<5; i++) {
+	for (let i=0; i<8; i++) {
 		document.getElementById("clickType" + i).style.zIndex = "0";
 	}
 
@@ -146,7 +148,7 @@ window.addEventListener("mousemove", function(evt) {
 	move_dist += Math.hypot(evt.movementX, evt.movementY);
 }, false);
 
-window.addEventListener("mousedown", function() {
+window.addEventListener("mousedown", function () {
 	mouse_moved = false;
 	move_dist = 0;
 }, false);
@@ -184,6 +186,7 @@ document.body.onload = () => {
 
 			shape = snap_shape(shape, parent_face, child_face);
 			highlighted.object.parent.add(shape);
+			highlighted.object.userData["child"] = shape.uuid;
 		}
 
 		// remove shape
@@ -202,6 +205,75 @@ document.body.onload = () => {
 			calculate_rotation(highlighted.object, !right_mouse_button);
 		}
 
+		// select shape
+		if (Settings.click_type === 5) {
+			const shape_name = highlighted.object.parent.userData.name;
+			const button = document.getElementById("polyhedrabutton-" + shape_name.toLowerCase());
+			button.onclick();
+		}
+
+		// copy shape
+		if (Settings.click_type === 6) {
+			// We build a simplified representation of the branch
+			// so that we can rebuild it later
+			const traverse = function (node) {
+				const shape = node.userData.name;
+				const faceID = node.children.findIndex(i => i.uuid === node.userData.parent_face);
+				const parentFaceID = node.parent.children.findIndex(i => i.userData.child === node.uuid);
+				const children = [];
+				for (const child of node.children) {
+					if (child.type === "LineSegments") {
+						children.push(traverse(child));
+					}
+				}
+				return {
+					shape,
+					faceID,
+					parentFaceID,
+					children
+				};
+			}
+
+			const shape = highlighted.object.parent;
+			if (shape.parent.type === "Scene") {
+				console.warn("Cannot copy root to clipboard");
+				return;
+			}
+
+			clipboard = traverse(shape);
+		}
+
+		// paste shape
+		if (Settings.click_type === 7) {
+			if (clipboard === undefined) return;
+			
+			const build = function (face, branch) {
+				// Step 1: create shape
+				let shape = create_shape(branch.shape);
+				const parent_face_name = highlighted.object.geometry.userData.face_type;
+				const child_face_name = shape.children[branch.faceID].geometry.userData.face_type;
+				if (parent_face_name !== child_face_name) return; // abort if faces aren't equal
+
+				// Step 2: snape to face
+				const parent_face = face.geometry.userData.vertices;
+				const child_face = get_face(Shapes[branch.shape], branch.faceID);
+				shape = snap_shape(shape, parent_face, child_face);
+				face.parent.add(shape);
+
+				// Step 3: fill in metadata
+				face.userData.child = shape.uuid;
+				shape.userData.parent_face = shape.children[branch.faceID].uuid;
+				shape.children[branch.faceID].geometry.userData.parent_face = face.uuid;
+
+				// Step 4: recurse
+				for (const child of branch.children) {
+					build(shape.children[child.parentFaceID], child);
+				}
+			}
+
+			build(highlighted.object, clipboard);
+		}
+
 	}, false);
 
 	// places the face selector canvas on the initial shape after loading the page
@@ -217,8 +289,8 @@ window.addEventListener("keydown", function(evt) {
 		case "d":
 			set_click_type(1);  // Delete
 			break;
-		case "v":
-			set_click_type(2);  // View Mode
+		case "w":
+			set_click_type(2);  // Viewing Mode
 			break;
 		case "f":
 			set_click_type(3);  // Focus
@@ -227,6 +299,15 @@ window.addEventListener("keydown", function(evt) {
 			set_click_type(4);  // Rotate
 			break;
 		case "s":
+			set_click_type(5);	// Select Shape
+			break;
+		case "c":
+			set_click_type(6);	// Copy
+			break;
+		case "v":
+			set_click_type(7);	// Paste
+			break;
+		case "tab":
 			toggle_sidebar();
 			break;
 
@@ -234,9 +315,38 @@ window.addEventListener("keydown", function(evt) {
 }, false);
 
 // export current scene as OBJ file
-document.getElementById("downloadOBJ").onclick = function() {
+document.getElementById("downloadOBJ").onclick = function () {
+	// build a temporary scene that joins polyhedra into individual meshes
+	const temp_scene = new THREE.Group();
+	const traverse_scene = function (node) {
+		// find all polyhedra connected to node
+		const polyhedra = node.children.filter(x => x.type === "LineSegments");
+		if (!polyhedra.length) return [];
+
+		for (const polyhedron of polyhedra) {
+			// for each polyhedron, produce a merged shape
+			let faces = polyhedron
+				.children
+				.filter(x => x.type === "Mesh")
+				.map(mesh => {
+					const out = mesh.geometry.clone().applyMatrix4(mesh.matrixWorld);
+					out.deleteAttribute("normal");
+					return out;
+				});
+			const merged = BufferGeometryUtils.mergeGeometries(faces, false);
+			const welded = BufferGeometryUtils.mergeVertices(merged, 1e-4);
+			const mesh = new THREE.Mesh(welded);
+			temp_scene.add(mesh);
+
+			// recursively build shapes of child polyhedra too
+			traverse_scene(polyhedron);
+		}
+	}
+	traverse_scene(Scene.scene);
+
+	// export the temporary scene
 	const exporter = new OBJExporter();
-	const data = exporter.parse(Scene.scene);
+	const data = exporter.parse(temp_scene);
 	download_file(data, "model/obj", "polystack_scene.obj");
 }
 
@@ -280,3 +390,8 @@ document.getElementById("importJSON").onclick = function () {
 			Scene.scene.add(tree);
 		});
 }
+
+window.addEventListener("keydown", function(e) {
+	if (e.key.toLowerCase() === "tab")
+		e.preventDefault();
+});
