@@ -1,0 +1,50 @@
+body, html {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+#map-container {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#name-input {
+	font-size: 20px;
+	border: 2px solid black;
+	border-radius: 5px;
+	position: absolute;
+	padding: 5px 8px;
+	bottom: 20px;
+	left: 0;
+	right: 0;
+	margin-inline: auto;
+	width: fit-content;
+
+	transition: background-color 1s ease;
+}
+
+#name-input.correct {
+	background-color: #0f8f !important;
+	transition: none;
+}
+
+#name-input.incorrect {
+	background-color: #f22f !important;
+	transition: none;
+}
+
+#map-container svg {
+	width: 100%;
+	height: 100%;
+}
+
+.highlighted {
+	fill: #ff9900 !important;
+	stroke: #000000 !important;
+}
