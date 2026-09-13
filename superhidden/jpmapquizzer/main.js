@@ -2,15 +2,24 @@ const MAP_NAME = "nl_gemeenten";
 
 const regionNames = {};
 const nameInput = document.getElementById("name-input");
+const answerDisplay = document.getElementById("answer");
+
+const MIN_ZOOM = 1.0;
+const MAX_ZOOM = 3.0;
+
+// for questions that have been answered incorrectly
+const REPEAT_DELAY = 10; // how long to wait before asking again
+const REPEAT_AMT = 2; // how many times to ask before marking as known
 
 let originalViewBox = null;
 let activeAnimationId = null;
 let currentPathId = null;
+let answerLog = [];
 
 async function loadMap() {
 	try {
 		// 1 - fetch and parse tab-separated txt file
-		const txtResponse = await fetch(`/maps/${MAP_NAME}.txt`);
+		const txtResponse = await fetch(`./maps/${MAP_NAME}.txt`);
 		const txtData = await txtResponse.text();
 
 		txtData.split('\n').forEach(line => {
@@ -23,7 +32,7 @@ async function loadMap() {
 		});
 
 		// 2 - fetch and inject svg file
-		const svgResponse = await fetch(`/maps/${MAP_NAME}.svg`);
+		const svgResponse = await fetch(`./maps/${MAP_NAME}.svg`);
 		const svgData = await svgResponse.text();
 		const container = document.getElementById("map-container");
 		container.innerHTML = svgData;
@@ -96,17 +105,28 @@ function zoomTo(path_id) {
 	const svgElement = document.querySelector("#map-container svg");
 
 	if (target && svgElement) {
+		const mapBBox = svgElement.getBBox();
+		const defaultW = mapBBox.width * 1.1;
+		const defaultH = mapBBox.height * 1.1;
+		
 		const bbox = target.getBBox();
+		const regionCenterX = bbox.x + (bbox.width / 2);
+		const regionCenterY = bbox.y + (bbox.height / 2);
 
-		const paddingX = bbox.width * 5;
-		const paddingY = bbox.height * 5;
+		const targetW = bbox.width * 8;
+		const targetH = bbox.height * 8;
 
-		const newX = bbox.x - paddingX;
-		const newY = bbox.y - paddingY;
-		const newWidth = bbox.width + (paddingX * 2);
-		const newHeight = bbox.height + (paddingY * 2);
+		const scaleW = defaultW / targetW;
+		const scaleH = defaultH / targetH;
+		const targetScale = Math.min(scaleW, scaleH);
+		const clampedScale = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, targetScale));
 
-		animateViewBox(newX, newY, newWidth, newHeight);
+		const finalW = defaultW / clampedScale;
+		const finalH = defaultH / clampedScale;
+		const finalX = regionCenterX - (finalW / 2);
+		const finalY = regionCenterY - (finalH / 2);
+
+		animateViewBox(finalX, finalY, finalW, finalH);
 	} else {
 		console.warn(`Cannot zoom: Region ${path_id} or SVG not found.`);
 	}
@@ -131,7 +151,9 @@ function resetZoom() {
 }
 
 function normalizeName(str) {
-	return str ? str.trim().toLowerCase() : '';
+    return str 
+        ? str.normalize("NFD").toLowerCase().replace(/[^a-z0-9]/g, '') 
+        : '';
 }
 
 function nextQuestion() {
@@ -154,6 +176,16 @@ function triggerFeedback(type) {
 	nameInput.classList.add(type);
 	requestAnimationFrame(() => {
 		nameInput.classList.remove(type);
+	});
+}
+
+function showAnswer() {
+	answerDisplay.innerHTML = regionNames[currentPathId];
+	answerDisplay.classList.remove('visible');
+	void answerDisplay.offsetWidth; // force DOM reflow so transition resets cleanly if triggered twice quickly
+	answerDisplay.classList.add('visible');
+	requestAnimationFrame(() => {
+		answerDisplay.classList.remove('visible');
 	})
 }
 
@@ -162,16 +194,25 @@ function checkAnswer() {
 
 	const userGuess = normalizeName(nameInput.value);
 	const correctAnswer = normalizeName(regionNames[currentPathId]);
+	const correct = userGuess === correctAnswer;
 
 	if (!userGuess) return; // ignore empty submission
 
-	if (userGuess === correctAnswer) {
+	if (correct) {
 		triggerFeedback('correct');
-		setTimeout(nextQuestion, 400);
+		setTimeout(nextQuestion, 1000);
 	} else {
 		triggerFeedback('incorrect');
-		setTimeout(nextQuestion, 400);
+		showAnswer();
+		setTimeout(nextQuestion, 1000);
 	}
+
+	answerLog.push({
+		pathId: currentPathId,
+		correctAnswer,
+		userGuess,
+		correct
+	})
 }
 
 nameInput.addEventListener('keydown', (e) => {

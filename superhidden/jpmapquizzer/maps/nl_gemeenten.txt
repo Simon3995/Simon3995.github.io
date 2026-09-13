@@ -9,7 +9,7 @@ path8	Westerveld
 path9	Twenterand
 path10	Bergen
 path11	Teylingen
-path12	's-Gravenhage
+path12	Den Haag
 path13	Staphorst
 path14	Purmerend
 path15	Rozendaal
