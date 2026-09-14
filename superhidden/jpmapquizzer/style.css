@@ -55,7 +55,6 @@ body, html {
 	font-size: 40px;
 	text-shadow: 2px 2px 5px #00000080;
 	opacity: 0%;
-
 	transition: opacity 1.7s ease;
 }
 
@@ -64,7 +63,28 @@ body, html {
 	transition: none;
 }
 
+#stats {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	backdrop-filter: blur(10px);
+	background-color: #ffffffb0;
+	border-radius: 5px;
+	border: 1px solid black;
+	padding: 0px 12px;
+}
+
+#stats p {
+	line-height: 2px;
+	font-family: monospace;
+	font-size: 14px;
+}
+
 .highlighted {
 	fill: #ff9900 !important;
 	stroke: #333 !important;
+}
+
+.known {
+	fill: #2ed344 !important;
 }

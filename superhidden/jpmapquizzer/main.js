@@ -3,6 +3,7 @@ const MAP_NAME = "nl_gemeenten";
 const regionNames = {};
 const nameInput = document.getElementById("name-input");
 const answerDisplay = document.getElementById("answer");
+const statsDisplay = document.getElementById("stats");
 
 const MIN_ZOOM = 1.0;
 const MAX_ZOOM = 3.0;
@@ -88,20 +89,20 @@ function animateViewBox(targetX, targetY, targetW, targetH, duration=500) {
 	activeAnimationId = requestAnimationFrame(step);
 }
 
-function highlight(path_id) {
+function highlight(pathId) {
 	// remove current highlights
 	const currentHighlights = document.querySelectorAll('.highlighted');
 	currentHighlights.forEach(el => el.classList.remove('highlighted'));
 
 	// add highlight to target
-	const target = document.getElementById(path_id);
+	const target = document.getElementById(pathId);
 	if (target) {
 		target.classList.add('highlighted');
 	}
 }
 
-function zoomTo(path_id) {
-	const target = document.getElementById(path_id);
+function zoomTo(pathId) {
+	const target = document.getElementById(pathId);
 	const svgElement = document.querySelector("#map-container svg");
 
 	if (target && svgElement) {
@@ -128,7 +129,7 @@ function zoomTo(path_id) {
 
 		animateViewBox(finalX, finalY, finalW, finalH);
 	} else {
-		console.warn(`Cannot zoom: Region ${path_id} or SVG not found.`);
+		console.warn(`Cannot zoom: Region ${pathId} or SVG not found.`);
 	}
 }
 
@@ -157,17 +158,23 @@ function normalizeName(str) {
 }
 
 function nextQuestion() {
-	const pathIds = Object.keys(regionNames);
-	if (pathIds.length === 0) return;
+	currentPathId = getNextRegionId();
 
-	const randomIndex = Math.floor(Math.random() * pathIds.length);
-	currentPathId = pathIds[randomIndex];
+	if (!currentPathId) {
+		// game complete
+		nameInput.disabled = true;
+		nameInput.value = "congration";
+		resetZoom();
+		return;
+	}
 
 	highlight(currentPathId);
 	zoomTo(currentPathId);
 
 	nameInput.value = '';
 	nameInput.focus();
+
+	showStats();
 }
 
 function triggerFeedback(type) {
@@ -194,25 +201,100 @@ function checkAnswer() {
 
 	const userGuess = normalizeName(nameInput.value);
 	const correctAnswer = normalizeName(regionNames[currentPathId]);
-	const correct = userGuess === correctAnswer;
+	const isCorrect = userGuess === correctAnswer;
 
 	if (!userGuess) return; // ignore empty submission
-
-	if (correct) {
-		triggerFeedback('correct');
-		setTimeout(nextQuestion, 1000);
-	} else {
-		triggerFeedback('incorrect');
-		showAnswer();
-		setTimeout(nextQuestion, 1000);
-	}
 
 	answerLog.push({
 		pathId: currentPathId,
 		correctAnswer,
 		userGuess,
-		correct
-	})
+		isCorrect
+	});
+
+	triggerFeedback(isCorrect ? 'correct' : 'incorrect');
+	if (!isCorrect) showAnswer();
+
+	if (isKnown(currentPathId)) {
+		const pathEl = document.getElementById(currentPathId);
+		if (pathEl) pathEl.classList.add('known');
+	}
+
+	setTimeout(nextQuestion, isCorrect ? 0 : 1200);
+}
+
+function getHistory(pathId) {
+	return answerLog.filter(e => e.pathId === pathId);
+}
+
+function isKnown(pathId) {
+	const history = getHistory(pathId);
+	if (history.length === 0) return false;
+
+	const hasFailed = history.some(e => !e.isCorrect);
+	if (!hasFailed) return true;
+
+	const correctCount = history.filter(e => e.isCorrect).length;
+	return correctCount >= REPEAT_AMT;
+	// TODO: not just N total correct, but N in a row to mark as known
+}
+
+function isDue(pathId) {
+	if (isKnown(pathId)) return false;
+
+	const history = getHistory(pathId);
+	if (history.length === 0) return false;
+
+	const lastAttemptIndex = answerLog.findLastIndex(e => e.pathId === pathId);
+	const questionsPassed = answerLog.length - lastAttemptIndex;
+
+	return questionsPassed >= REPEAT_DELAY;
+}
+
+function getNextRegionId() {
+	const allIds = Object.keys(regionNames);
+	const unlearnedIds = allIds.filter(id => !isKnown(id));
+
+	// game complete
+	if (unlearnedIds.length === 0) return null;
+
+	// 1 - pick region due for review (oldest first)
+	const dueIds = unlearnedIds.filter(id => isDue(id));
+	if (dueIds.length > 0) {
+		dueIds.sort((a, b) => {
+			const idxA = answerLog.findLastIndex(e => e.pathId === a);
+			const idxB = answerLog.findLastIndex(e => e.pathId === b);
+			return idxA - idxB;
+		});
+		return dueIds[0];
+	}
+
+	// 2 - pick never before asked region
+	const freshIds = unlearnedIds.filter(id => getHistory(id).length === 0);
+	if (freshIds.length > 0) {
+		const randomIndex = Math.floor(Math.random() * freshIds.length);
+		return freshIds[randomIndex];
+	}
+
+	// 3 - fallback: pick longest ago asked region
+	unlearnedIds.sort((a, b) => {
+		const idxA = answerLog.findLastIndex(e => e.pathId === a);
+		const idxB = answerLog.findLastIndex(e => e.pathId === b);
+		return idxA - idxB;
+	});
+	return unlearnedIds[0];
+}
+
+function showStats() {
+	let content = "";
+
+	content += `<p>Total guesses: ${answerLog.length}</p>`;
+	const correctGuesses = answerLog.filter(e => e.isCorrect).length;
+	content += `<p>Correct guesses: ${correctGuesses} (${(100*correctGuesses/(answerLog.length||1)).toFixed(0)}%)</p>`;
+	const knownRegions = answerLog.filter(e => isKnown(e.pathId)).length;
+	content += `<p>Known regions: ${knownRegions} (${(100*knownRegions/Object.keys(regionNames).length).toFixed(0)}%)</p>`;
+
+	statsDisplay.innerHTML = content;
 }
 
 nameInput.addEventListener('keydown', (e) => {
